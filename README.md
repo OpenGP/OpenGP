@@ -31,6 +31,7 @@ To build the documentation, execute the following
 Then after adding the files to the commit list, (force) push the changes to the github server:
 
 	user @ host ~/Developer/OpenGeometry.github.io: git add --all .
+	user @ host ~/Developer/OpenGeometry.github.io: git commit -m "recompiled doc"
 	user @ host ~/Developer/OpenGeometry.github.io: git push --force
 
  
