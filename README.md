@@ -10,3 +10,27 @@ install Surface_mesh.
 ## Changes
 See the CHANGES file for a concise overview about recent changes
 to Surface_mesh.
+
+
+## Building Documentation
+Assume that you have cloned the repositories from GitHub with the structure:
+
+	~/Developer
+	  --> OpenGeometry
+	  --> OpenGeometry.github.io
+
+To build the documentation, execute the following 
+
+	user @ host ~/Developer/OpenGeometry.github.io: doxygen ../OpenGeometry/doc/Doxyfile 
+	Searching for include files...
+	Searching for example files...
+	Searching for images...
+	Searching for dot files...
+	... 
+ 
+Then after adding the files to the commit list, (force) push the changes to the github server:
+
+	user @ host ~/Developer/OpenGeometry.github.io: git add --all .
+	user @ host ~/Developer/OpenGeometry.github.io: git push --force
+
+ 
