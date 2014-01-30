@@ -36,15 +36,6 @@ namespace surface_mesh {
 //== IMPLEMENTATION ===========================================================
 
 
-// helper function
-template <typename T> void read(FILE* in, T& t)
-{
-    size_t n_items(0);
-    n_items = fread((char*)&t, 1, sizeof(t), in);
-    assert(n_items > 0);
-}
-
-
 //-----------------------------------------------------------------------------
 
 

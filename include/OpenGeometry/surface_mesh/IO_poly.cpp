@@ -19,6 +19,7 @@
 
 //== INCLUDES =================================================================
 
+
 #include <surface_mesh/Surface_mesh.h>
 #include <surface_mesh/IO.h>
 #include <cstdio>
@@ -31,13 +32,6 @@ namespace surface_mesh {
 
 
 //== IMPLEMENTATION ===========================================================
-
-
-// helper function
-template <typename T> size_t read(FILE* in, T& t)
-{
-    return fread((char*)&t, 1, sizeof(t), in);
-}
 
 
 //-----------------------------------------------------------------------------
