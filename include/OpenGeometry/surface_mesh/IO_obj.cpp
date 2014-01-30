@@ -19,8 +19,8 @@
 
 //== INCLUDES =================================================================
 
+#include <surface_mesh/Surface_mesh.h>
 #include <surface_mesh/IO.h>
-
 #include <cstdio>
 
 
