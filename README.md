@@ -1,69 +1,59 @@
 # OpenGeometry
-TODO
+OpenGeometry is a *C++11* open source library for geometry processing. It has been designed and implemented with a focus on ease of use and performance while maintaining high flexibility. It follows the design principles of <a href="https://opensource.cit-ec.de/projects/surface_mesh">Surface_mesh</a>, a mesh data structure developed by the <a href="http://graphics.uni-bielefeld.de/">Bielefeld Graphics & Geometry Group</a> as a simpler to use version of <a href="http://www.openmesh.org/">OpenMesh</a>. The Reference Manual provides detailed information on the classes and functions provided by OpenGeometry. Code examples can be found in the respective tutorials. Installation instructions are reported below.
 
-- **Surface_mesh**: a simple and efficient halfedge-based mesh data structure for representing and processing 2-manifold polygonal surface meshes.
+# System requirements
+OpenGeometry uses <a href="http://www.cmake.org">CMake</a> as its build system. Version 2.8 or greater is required. OpenGeometry has been tested to build with the following compilers:
 
-## 1) Compiling / Installing
-OpenGeometry uses CMake as its build configuration system. The library can be used both as header-only (slower compile on larger systems, but simpler setup) or as a compiled library (faster to compile, but more complex compile/link setup).
+<table>
+  <tr><th> Operating System </th> <th> Compiler </th></tr>
+  <tr><td> Linux </td> <td> gcc </td> </tr>
+  <tr><td> Mac OS-X </td> <td> gcc, clang </td> </tr>
+  <tr><td> Windows </td> <td> Visual Studio 2008 </td> </tr>
+</table>
 
-### 1.1) Installing "header-only" Library
-The header only library can be either installed locally (within your project) or globally (shared across your projects). The global install is suitable only for UNIX systems.
+# Installing OpenGeometry
+The latest release is available from the GitHub at https://github.com/OpenGeometry. You can checkout a snapshot of the sources, compile them with <a href="http://www.cmake.org/">CMake</a>, and install them as follows:
 
-**Local Install.** Add the "include" subfolder in this project to your project's include path: 
+	$ ~/Developer: git clone https://github.com/OpenGeometry/OpenGeometry.git
+	$ ~/Developer: cd OpenGeometry && mkdir build && cd build
+	$ ~/Developer/OpenGeometry/build: cmake ..
+	$ ~/Developer/OpenGeometry/build: make
+	$ ~/Developer/OpenGeometry/build: sudo make install
 
-	g++ -I/path/to/include/OpenGeometry main.cpp 
+The documentation for this library is available at <a href="http://opengeometry.github.io/">http://opengeometry.github.io/</a>, but you can also generate a local copy by executing the following command and opening the file "build/index.html":
 
-**Global Install.** Simply copy the OpenGeometry folder found in "include" subfolder into your system include subfolder (e.g. /usr/local/include, /opt/local/include, etc...):
+	$ ~/Developer/OpenGeometry/build: make doxygen
 
-	mv ./include/OpenGeometry /usr/local/include 
+## Configuring the library
 
-### 1.2) Installing "compiled" Library
-For unix-like system follow these instructions to configure and the library:
+The configuration procedure can be fine-tuned by specifying flags using the -D option of cmake, for example:
 
-	user @ host ~/Developer/OpenGeometry: mkdir build
-	user @ host ~/Developer/OpenGeometry: cd build
-	user @ host ~/Developer/OpenGeometry/build: cmake ..
-	user @ host ~/Developer/OpenGeometry/build: make
-	user @ host ~/Developer/OpenGeometry/build: sudo make install
+	$ ~/Developer/OpenGeometry/build: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/usr/bin/g++
 
-Upon installation, both the library and headers will be installed to the directory given via *CMAKE_INSTALL_PREFIX*, which defaults to /usr/local/ on Unix-like systems. If you need to install to a
-custom location set the install prefix during build configuration:
+The command above would configure CMake to use release mode as its build type and /usr/bin/g++ as its C++ compiler. To build the examples, configure CMake with:
 
-	user @ host ~/Developer/OpenGeometry/build: cmake -DCMAKE_INSTALL_PREFIX=your/custom/path ..
+	$ ~/Developer/OpenGeometry/build: cmake -DWITH_EXAMPLES=true ..
 
+These are a few useful flags, but for additional information on using <code>cmake</code> and
+customizing its configuration see the <a href="http://cmake.org/cmake/help/documentation.html">CMake
+documentation</a>.
 
-## 2) Examples
-TODO 
-
-
-## 3) Building Documentation
-Assume that you have cloned the repositories from GitHub with the structure:
-
-	~/Developer
-	  --> OpenGeometry
-	  --> OpenGeometry.github.io
-
-To build the documentation, execute the following 
-
-	user @ host ~/Developer/OpenGeometry.github.io: doxygen ../OpenGeometry/doc/Doxyfile 
-	Searching for include files...
-	Searching for example files...
-	Searching for images...
-	Searching for dot files...
-	... 
- 
-Then after adding the files to the commit list, (force) push the changes to the github server:
-
-	user @ host ~/Developer/OpenGeometry.github.io: git add --all .
-	user @ host ~/Developer/OpenGeometry.github.io: git commit -m "recompiled doc"
-	user @ host ~/Developer/OpenGeometry.github.io: git push --force
+<table>
+<tr><th>Flag</th><th>Description</th></tr>
+<tr>
+  <td>CMAKE_BUILD_TYPE</td>
+  <td>{DEBUG | RELEASE} Specify the build type</td>
+</tr>
+<tr>
+  <td>CMAKE_CXX_COMPILER</td>
+  <td>{clang, g++, ...} Specify the compiler to be used</td>
+</tr>
+<tr>
+  <td>CMAKE_CXX_FLAGS</td>
+  <td>Specify additional compiler flags, e.g. "-DNDEBUG" disables standard-C assertions</td>
+</tr>
+</table>
 
 
-## 4) Changes
-* Release 1.1:
-Release date: ????
-Initial release of the OpenGeometry library.
 
-* Release 1.0
-Release date: November 2013
-Initial release of the Surface_mesh library.
+
