@@ -262,7 +262,7 @@ property_stats() const
 
 //-----------------------------------------------------------------------------
 
-HEADERONLY
+HEADERONLY_INLINE
 Surface_mesh::Vertex
 Surface_mesh::
 add_vertex(const Point& p)

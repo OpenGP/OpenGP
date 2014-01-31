@@ -1,5 +1,5 @@
 # OpenGeometry
-OpenGeometry is 
+TODO
 
 - **Surface_mesh**: a simple and efficient halfedge-based mesh data structure for representing and processing 2-manifold polygonal surface meshes.
 
