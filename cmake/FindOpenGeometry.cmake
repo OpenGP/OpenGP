@@ -9,8 +9,12 @@
 # INCLUDE_DIRECTORIES (${OpenGeometry_INCLUDE_DIRS})
 # ADD_EXECUTABLE (executable ${YOUR_EXECUTABLE_SRCS})
 #
+
+# DEBUG: outputs given environment variable
+#message(STATUS OpenGeometryDIR $ENV{OpenGeometryDIR})
+
 FIND_PATH( OpenGeometry_INCLUDE_DIRS OpenGeometry/Surface_mesh/Surface_mesh.h
-    $ENV{OpenGeometryDIR}/include
+    $ENV{OpenGeometryDIR}
     /usr/local/include
     /usr/local/X11R6/include
     /usr/X11R6/include

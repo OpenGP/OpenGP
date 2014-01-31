@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 project(examples)
 
 #--- Tell Cmake where the FindOpenGeometry.cmake file is 
-#--- Tell where the source directory is w.r.t. examples folder
 set(CMAKE_MODULE_PATH ../cmake)
-SET(ENV{OpenGeometryDIR} ../)
+#--- Tell where the source directory is w.r.t. examples folder
+set(ENV{OpenGeometryDIR} ../src)
 
 #--- Load OpenGeometry
 find_package(OpenGeometry REQUIRED)
@@ -15,6 +15,8 @@ endif(NOT OpenGeometry_FOUND)
 
 #--- Define header only library
 add_definitions( -DHEADERONLY )
+
+message(STATUS OpenGeometry_INCLUDE_DIRS ${OpenGeometry_INCLUDE_DIRS})
 
 #--- Compile exercises one by one
 add_executable(surface_mesh_basics      surface_mesh_basics.cpp)
