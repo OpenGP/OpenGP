@@ -6,6 +6,7 @@
     <tab type="user" url="@ref tutorial" title="Tutorial"/>
     <tab type="user" url="@ref devel" title="Development"/>
     <tab type="classlist" visible="yes" title="Reference Manual" intro=""/>
+    <tab type="user" url="https://github.com/OpenGeometry/OpenGeometry/issues" visible="yes" title="Report Bug" intro=""/>
     <!-- Disabled -->
     <tab type="pages" visible="no" title="Related Pages" intro=""/>
     <tab type="modules" visible="no" title="" intro=""/>
