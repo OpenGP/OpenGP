@@ -17,10 +17,10 @@ add_custom_target(doxygen ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxy
 # create rule for "make publish_doc"
 add_custom_target(publish_doc 
 	COMMAND doxygen ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile 
+	COMMAND ${CMAKE_COMMAND} -E remove_directory ./.git
 	COMMAND git init
 	COMMAND git add .
 	COMMAND git commit -m "updated doc"
-	COMMAND git remote rm origin
 	COMMAND git remote add origin https://github.com/OpenGeometry/OpenGeometry.github.io.git
 	COMMAND git push origin master --force
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
