@@ -54,6 +54,7 @@ documentation</a>.
 </tr>
 </table>
 
-
-
-
+## Changes
+* Release 1.0:
+Release date: February 2014
+Initial release of the OpenGeometry library.
