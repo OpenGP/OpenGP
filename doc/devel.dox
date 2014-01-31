@@ -160,13 +160,23 @@ class Example_class
 <!-- ---------------------------------------------------------------------- -->
 \section update_doxygen Updating Published Doxygen
 <!-- ---------------------------------------------------------------------- -->
+These commands will re-compile and then update the documentation published on GitHub: 
 \code
+~/Developer/OpenGeometry/build: make doxygen
+~/Developer/OpenGeometry/build: cd doc
 ~/Developer/OpenGeometry/build/doc: git init
 ~/Developer/OpenGeometry/build/doc: git add .
 ~/Developer/OpenGeometry/build/doc: git commit -m "updated doc"
+~/Developer/OpenGeometry/build/doc:	git remote rm origin
 ~/Developer/OpenGeometry/build/doc: git remote add origin https://github.com/OpenGeometry/OpenGeometry.github.io.git
 ~/Developer/OpenGeometry/build/doc: git push origin master --force
 \endcode
+Alternatively, this is conveniently wrapped by the following:
+\code
+~/Developer/OpenGeometry/build: make publish_doc
+\endcode
+
+
 
 <!-- ====================================================================== -->
 */

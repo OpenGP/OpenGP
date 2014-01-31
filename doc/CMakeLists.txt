@@ -8,14 +8,23 @@ if("${DOXYGEN_VERSION}" VERSION_LESS 1.8.3.1)
   message(STATUS "Doxygen version too old. Please get a copy http://www.doxygen.org")
 endif()
 
-
 # prepare doxygen configuration file
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-# copy the README page to the doc build folder
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../README.md ${CMAKE_CURRENT_BINARY_DIR}/README.md)
 
-# add doxygen as target
+# create rule for "make doxygen"
 add_custom_target(doxygen ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+# create rule for "make publish_doc"
+add_custom_target(publish_doc 
+	COMMAND doxygen ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile 
+	COMMAND git init
+	COMMAND git add .
+	COMMAND git commit -m "updated doc"
+	COMMAND git remote rm origin
+	COMMAND git remote add origin https://github.com/OpenGeometry/OpenGeometry.github.io.git
+	COMMAND git push origin master --force
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 # cleanup $build/html on "make clean"
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES html)
+
