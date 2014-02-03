@@ -36,7 +36,7 @@ namespace surface_mesh {
 //-----------------------------------------------------------------------------
 
 
-bool read_off_ascii(Surface_mesh& mesh,
+inline bool read_off_ascii(Surface_mesh& mesh,
                     FILE* in,
                     const bool has_normals,
                     const bool has_texcoords,
@@ -146,7 +146,7 @@ bool read_off_ascii(Surface_mesh& mesh,
 //-----------------------------------------------------------------------------
 
 
-bool read_off_binary(Surface_mesh& mesh,
+inline bool read_off_binary(Surface_mesh& mesh,
                      FILE* in,
                      const bool has_normals,
                      const bool has_texcoords,

@@ -881,19 +881,19 @@ public: //-------------------------------------------- constructor / destructor
     //@{
 
     /// default constructor
-    Surface_mesh();
+    HEADERONLY_INLINE Surface_mesh();
 
     // destructor (is virtual, since we inherit from Geometry_representation)
-    virtual ~Surface_mesh();
+    HEADERONLY_INLINE virtual ~Surface_mesh();
 
     /// copy constructor: copies \c rhs to \c *this. performs a deep copy of all properties.
     Surface_mesh(const Surface_mesh& rhs) { operator=(rhs); }
 
     /// assign \c rhs to \c *this. performs a deep copy of all properties.
-    Surface_mesh& operator=(const Surface_mesh& rhs);
+    HEADERONLY_INLINE Surface_mesh& operator=(const Surface_mesh& rhs);
 
     /// assign \c rhs to \c *this. does not copy custom properties.
-    Surface_mesh& assign(const Surface_mesh& rhs);
+    HEADERONLY_INLINE Surface_mesh& assign(const Surface_mesh& rhs);
 
     //@}
 
@@ -907,11 +907,11 @@ public: //------------------------------------------------------------- file IO
 
     /// read mesh from file \c filename. file extension determines file type.
     /// \sa write(const std::string& filename)
-    bool read(const std::string& filename);
+    HEADERONLY_INLINE bool read(const std::string& filename);
 
     /// write mesh to file \c filename. file extensions determines file type.
     /// \sa read(const std::string& filename)
-    bool write(const std::string& filename) const;
+    HEADERONLY_INLINE bool write(const std::string& filename) const;
 
     //@}
 
@@ -924,19 +924,19 @@ public: //----------------------------------------------- add new vertex / face
     //@{
 
     /// add a new vertex with position \c p
-    Vertex add_vertex(const Point& p);
+    HEADERONLY_INLINE Vertex add_vertex(const Point& p);
 
     /// add a new face with vertex list \c vertices
     /// \sa add_triangle, add_quad
-    Face add_face(const std::vector<Vertex>& vertices);
+    HEADERONLY_INLINE Face add_face(const std::vector<Vertex>& vertices);
 
     /// add a new triangle connecting vertices \c v1, \c v2, \c v3
     /// \sa add_face, add_quad
-    Face add_triangle(Vertex v1, Vertex v2, Vertex v3);
+    HEADERONLY_INLINE Face add_triangle(Vertex v1, Vertex v2, Vertex v3);
 
     /// add a new quad connecting vertices \c v1, \c v2, \c v3, \c v4
     /// \sa add_triangle, add_face
-    Face add_quad(Vertex v1, Vertex v2, Vertex v3, Vertex v4);
+    HEADERONLY_INLINE Face add_quad(Vertex v1, Vertex v2, Vertex v3, Vertex v4);
 
     //@}
 
@@ -973,19 +973,19 @@ public: //--------------------------------------------------- memory management
 
 
     /// clear mesh: remove all vertices, edges, faces
-    void clear();
+    HEADERONLY_INLINE void clear();
 
     /// remove unused memory from vectors
-    void free_memory();
+    HEADERONLY_INLINE void free_memory();
 
     /// reserve memory (mainly used in file readers)
-    void reserve(unsigned int nvertices,
-                 unsigned int nedges,
-                 unsigned int nfaces );
+    HEADERONLY_INLINE void reserve(unsigned int nvertices,
+                                   unsigned int nedges,
+                                   unsigned int nfaces );
 
 
     /// remove deleted vertices/edges/faces
-    void garbage_collection();
+    HEADERONLY_INLINE void garbage_collection();
 
 
     /// returns whether vertex \c v is deleted
@@ -1385,7 +1385,7 @@ public: //--------------------------------------------------- property handling
         return fprops_.properties();
     }
     /// prints the names of all properties
-    void property_stats() const;
+    HEADERONLY_INLINE void property_stats() const;
 
     //@}
 
@@ -1513,24 +1513,24 @@ public: //--------------------------------------------- higher-level operations
     /// returns whether the mesh a triangle mesh. this function simply tests
     /// each face, and therefore is not very efficient.
     /// \sa trianglate(), triangulate(Face)
-    bool is_triangle_mesh() const;
+    HEADERONLY_INLINE bool is_triangle_mesh() const;
 
     /// returns whether the mesh a quad mesh. this function simply tests
     /// each face, and therefore is not very efficient.
-    bool is_quad_mesh() const;
+    HEADERONLY_INLINE bool is_quad_mesh() const;
 
     /// triangulate the entire mesh, by calling triangulate(Face) for each face.
     /// \sa trianglate(Face)
-    void triangulate();
+    HEADERONLY_INLINE void triangulate();
 
     /// triangulate the face \c f
     /// \sa trianglate()
-    void triangulate(Face f);
+    HEADERONLY_INLINE void triangulate(Face f);
 
 
     /// returns whether collapsing the halfedge \c h is topologically legal.
     /// \attention This function is only valid for triangle meshes.
-    bool is_collapse_ok(Halfedge h);
+    HEADERONLY_INLINE bool is_collapse_ok(Halfedge h);
 
     /** Collapse the halfedge \c h by moving its start vertex into its target
      vertex. For non-boundary halfedges this function removes one vertex, three
@@ -1542,7 +1542,7 @@ public: //--------------------------------------------- higher-level operations
      \attention The removed items are only marked as deleted. You have
      to call garbage_collection() to finally remove them.
      */
-    void collapse(Halfedge h);
+    HEADERONLY_INLINE void collapse(Halfedge h);
 
 
     /** Split the face \c f by first adding point \c p to the mesh and then
@@ -1550,13 +1550,13 @@ public: //--------------------------------------------- higher-level operations
      this is a standard one-to-three split.
      \sa split(Face, Vertex)
      */
-    Vertex split(Face f, const Point& p) { Vertex v=add_vertex(p); split(f,v); return v; }
+    HEADERONLY_INLINE Vertex split(Face f, const Point& p) { Vertex v=add_vertex(p); split(f,v); return v; }
 
     /** Split the face \c f by inserting edges between \c p and the vertices
      of \c f. For a triangle this is a standard one-to-three split.
      \sa split(Face, const Point&)
      */
-    void split(Face f, Vertex v);
+    HEADERONLY_INLINE void split(Face f, Vertex v);
 
 
     /** Split the edge \c e by first adding point \c p to the mesh and then
@@ -1565,14 +1565,14 @@ public: //--------------------------------------------- higher-level operations
      \attention This function is only valid for triangle meshes.
      \sa split(Edge, Vertex)
      */
-    Vertex split(Edge e, const Point& p) { Vertex v=add_vertex(p); split(e,v); return v; }
+    HEADERONLY_INLINE Vertex split(Edge e, const Point& p) { Vertex v=add_vertex(p); split(e,v); return v; }
 
     /** Split the edge \c e by connecting vertex \c v it to the two vertices
      of the adjacent triangles that are opposite to edge \c e.
      \attention This function is only valid for triangle meshes.
      \sa split(Edge, Point)
      */
-    void split(Edge e, Vertex v);
+    HEADERONLY_INLINE void split(Edge e, Vertex v);
 
 
     /** Subdivide the edge \c e = (v0,v1) by splitting it into the two edge
@@ -1603,50 +1603,50 @@ public: //--------------------------------------------- higher-level operations
      \sa insert_vertex(Edge, Point)
      \sa insert_vertex(Edge, Vertex)
      */
-    Halfedge insert_vertex(Halfedge h, Vertex v);
+    HEADERONLY_INLINE Halfedge insert_vertex(Halfedge h, Vertex v);
 
 
     /// insert edge between the to-vertices v0 of h0 and v1 of h1.
     /// returns the new halfedge from v0 to v1.
     /// \attention h0 and h1 have to belong to the same face
-    Halfedge insert_edge(Halfedge h0, Halfedge h1);
+    HEADERONLY_INLINE Halfedge insert_edge(Halfedge h0, Halfedge h1);
 
 
     /** Check whether flipping edge \c e is topologically
      \attention This function is only valid for triangle meshes.
      \sa flip(Edge)
      */
-    bool is_flip_ok(Edge e) const;
+    HEADERONLY_INLINE bool is_flip_ok(Edge e) const;
 
     /** Flip edge \c e: Remove edge \c e and add an edge between the two vertices
      opposite to edge \c e of the two incident triangles.
      \attention This function is only valid for triangle meshes.
      \sa is_flip_ok(Edge)
      */
-    void flip(Edge e);
+    HEADERONLY_INLINE void flip(Edge e);
 
 
     /** returns the valence (number of incident edges or neighboring vertices)
      of vertex \c v. */
-    unsigned int valence(Vertex v) const;
+    HEADERONLY_INLINE unsigned int valence(Vertex v) const;
 
     /// returns the valence of face \c f (its number of vertices)
-    unsigned int valence(Face f) const;
+    HEADERONLY_INLINE unsigned int valence(Face f) const;
 
     /// find the halfedge from start to end
-    Halfedge find_halfedge(Vertex start, Vertex end) const;
+    HEADERONLY_INLINE Halfedge find_halfedge(Vertex start, Vertex end) const;
 
     /// find the edge (a,b)
-    Edge find_edge(Vertex a, Vertex b) const;
+    HEADERONLY_INLINE Edge find_edge(Vertex a, Vertex b) const;
 
     /// deletes the vertex \c v from the mesh
-    void delete_vertex(Vertex v);
+    HEADERONLY_INLINE void delete_vertex(Vertex v);
 
     /// deletes the edge \c e from the mesh
-    void delete_edge(Edge e);
+    HEADERONLY_INLINE void delete_edge(Edge e);
 
     /// deletes the face \c f from the mesh
-    void delete_face(Face f);
+    HEADERONLY_INLINE void delete_face(Face f);
 
     //@}
 
@@ -1666,19 +1666,19 @@ public: //------------------------------------------ geometry-related functions
     std::vector<Point>& points() { return vpoint_.vector(); }
 
     /// compute face normals by calling compute_face_normal(Face) for each face.
-    void update_face_normals();
+    HEADERONLY_INLINE void update_face_normals();
 
     /// compute normal vector of face \c f.
-    Normal compute_face_normal(Face f) const;
+    HEADERONLY_INLINE Normal compute_face_normal(Face f) const;
 
     /// compute vertex normals by calling compute_vertex_normal(Vertex) for each vertex.
-    void update_vertex_normals();
+    HEADERONLY_INLINE void update_vertex_normals();
 
     /// compute normal vector of vertex \c v.
-    Normal compute_vertex_normal(Vertex v) const;
+    HEADERONLY_INLINE Normal compute_vertex_normal(Vertex v) const;
 
     /// compute the length of edge \c e.
-    Scalar edge_length(Edge e) const;
+    HEADERONLY_INLINE Scalar edge_length(Edge e) const;
 
     //@}
 
@@ -1726,13 +1726,13 @@ private: //--------------------------------------------------- helper functions
 
     /** make sure that the outgoing halfedge of vertex v is a boundary halfedge
      if v is a boundary vertex. */
-    void adjust_outgoing_halfedge(Vertex v);
+    HEADERONLY_INLINE void adjust_outgoing_halfedge(Vertex v);
 
     /// Helper for halfedge collapse
-    void remove_edge(Halfedge h);
+    HEADERONLY_INLINE void remove_edge(Halfedge h);
 
     /// Helper for halfedge collapse
-    void remove_loop(Halfedge h);
+    HEADERONLY_INLINE void remove_loop(Halfedge h);
 
     /// are there deleted vertices, edges or faces?
     bool garbage() const { return garbage_; }
@@ -1741,7 +1741,7 @@ private: //--------------------------------------------------- helper functions
 
 private: //------------------------------------------------------- private data
 
-    friend bool read_poly(Surface_mesh& mesh, const std::string& filename);
+    HEADERONLY_INLINE friend bool read_poly(Surface_mesh& mesh, const std::string& filename);
 
     Property_container vprops_;
     Property_container hprops_;

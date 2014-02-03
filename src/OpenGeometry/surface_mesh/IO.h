@@ -37,14 +37,14 @@ namespace surface_mesh {
 //=============================================================================
 
 
-bool read_mesh(Surface_mesh& mesh, const std::string& filename);
-bool read_off(Surface_mesh& mesh, const std::string& filename);
-bool read_obj(Surface_mesh& mesh, const std::string& filename);
-bool read_stl(Surface_mesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool read_mesh(Surface_mesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool read_off(Surface_mesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool read_obj(Surface_mesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool read_stl(Surface_mesh& mesh, const std::string& filename);
 
-bool write_mesh(const Surface_mesh& mesh, const std::string& filename);
-bool write_off(const Surface_mesh& mesh, const std::string& filename);
-bool write_obj(const Surface_mesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool write_mesh(const Surface_mesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool write_off(const Surface_mesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool write_obj(const Surface_mesh& mesh, const std::string& filename);
 
 /// Private helper function
 template <typename T> void read(FILE* in, T& t)
