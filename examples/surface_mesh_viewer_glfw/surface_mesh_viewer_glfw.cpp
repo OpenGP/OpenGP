@@ -26,7 +26,8 @@ void init(){
         for(auto v: mesh.vertices(f))
             triangles.push_back(v.idx());
     
-    /// Enable desired OpenGL states    
+    ///---------------------- OPENGL GLOBALS--------------------
+    glClearColor(1.0f, 1.0f, 1.0f, 0.0f); ///< background
     // glEnable(GL_DEPTH_TEST); // Enable depth test
     // glDepthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
     // glEnable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
@@ -95,26 +96,23 @@ void init(){
     ///---------------------- SHADER ATTRIBUTES ----------------------------    
     {
         /// Readability constants
-        enum ATTRIBUTES{VPOS=0, VNOR=1};
-        const bool UNNORMALIZED = false;
-        const int STRIDE = 0;
-        const void* BUFFER_OFFSET = 0;
+        enum ATTRIBUTES{VPOS=0, VNOR=1};      
         
         /// Vertex positions in VPOS
         glEnableVertexAttribArray(VPOS);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glVertexAttribPointer(VPOS, 3, GL_FLOAT, UNNORMALIZED, STRIDE, BUFFER_OFFSET);
+        glVertexAttribPointer(VPOS, 3, GL_FLOAT, NOT_NORMALIZED, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
         
         /// Vertex normals in VNOR
         glEnableVertexAttribArray(VNOR);
         glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-        glVertexAttribPointer(VNOR, 3, GL_FLOAT, UNNORMALIZED, STRIDE, BUFFER_OFFSET);
+        glVertexAttribPointer(VNOR, 3, GL_FLOAT, NOT_NORMALIZED, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
     }
 }
 
 void display(){
-    glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, triangles.size());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDrawElements(GL_TRIANGLES, triangles.size(), GL_UNSIGNED_INT, ZERO_BUFFER_OFFSET);
 }
 
 int main(int argc, char** argv){
@@ -122,6 +120,6 @@ int main(int argc, char** argv){
     mesh.read(argv[1]);
     mesh.update_vertex_normals();
     // mesh.property_stats();
-    std::cout << "num vertices " << mesh.vertices_size() << std::endl;
+    std::cout << "input: '" << argv[1] << "' num vertices " << mesh.vertices_size() << std::endl;
     simple_glfw_window("mesh viewer", 640, 480, init, display);
 }

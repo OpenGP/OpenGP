@@ -1,6 +1,12 @@
+#pragma once
 #include "GL/glew.h" ///< must be included before GLFW
 #include "GL/glfw.h"
 #include "./load_shaders.h"
+
+/// Some constants used in OpenGL applications
+#define ZERO_BUFFER_OFFSET ((void*) 0)
+#define ZERO_STRIDE 0
+#define NOT_NORMALIZED GL_FALSE
 
 int simple_glfw_window(const char* title, int width, int height, void (*init)(void), void(*display)(void)){  
     // GLFW Initialization
