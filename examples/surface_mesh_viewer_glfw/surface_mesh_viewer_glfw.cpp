@@ -10,17 +10,21 @@
 
 using namespace surface_mesh;
 
-const int VPOS_NUMELS = 3;       ///< Vertex position attribute (x,y,z)
-const int NUM_VERTS = 3;         ///< Number of vertices to draw
-
 Surface_mesh mesh;
-       
+std::vector<unsigned int> triangles; 
+
 void init(){
-    ///---------------------- DATA ----------------------------
+    ///----------------------- DATA ----------------------------
     auto vpoints = mesh.get_vertex_property<Vec3>("v:point");
     auto vnormals = mesh.get_vertex_property<Vec3>("v:normal");
     assert(vpoints);
     assert(vnormals);    
+    
+    ///---------------------- TRIANGLES ------------------------
+    triangles.clear();
+    for(auto f: mesh.faces())
+        for(auto v: mesh.vertices(f))
+            triangles.push_back(v.idx());
     
     /// Enable desired OpenGL states    
     // glEnable(GL_DEPTH_TEST); // Enable depth test
@@ -38,22 +42,20 @@ void init(){
         typedef Eigen::Matrix4f mat4;
         
         /// Define projection matrix (FOV, aspect, near, far)
-        mat4 projection = Eigen::perspective(45.0f, 4.0f/3.0f, -10.f, 10.f);
-        // std::cout << projection << std::endl;
-    
+        mat4 projection = Eigen::perspective(45.0f, 4.0f/3.0f, 0.f, 10.f);
+        
         /// Define the view matrix (camera extrinsics)
-        vec3 cam_pos(0,0,5);
-        vec3 cam_look(0,0,1);
+        vec3 cam_pos(0,0,3);
+        vec3 cam_look(0,0,-1); /// Remember: GL swaps viewdir
         vec3 cam_up(0,1,0);
         mat4 view = Eigen::lookAt(cam_pos, cam_look, cam_up);
-        // std::cout << view << std::endl;
         
         /// Define the modelview matrix
         mat4 model = mat4::Identity();
         
         /// Assemble the "Model View Projection" matrix
-        // mat4 mvp = projection * view * model;
-        mat4 mvp = mat4::Identity();
+        mat4 mvp = projection * view * model; 
+        // std::cout << mvp << std::endl;
          
         /// Pass the matrix to the shader
         /// The glUniform call below is equivalent to the OpenGL function call:
@@ -81,7 +83,13 @@ void init(){
         /// Load mesh normals    
         glGenBuffers(1, &normalbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(mesh.n_vertices()) * sizeof(Vec3f), vnormals.data(), GL_STATIC_DRAW);        
+        glBufferData(GL_ARRAY_BUFFER, sizeof(mesh.n_vertices()) * sizeof(Vec3f), vnormals.data(), GL_STATIC_DRAW);     
+        
+        /// Triangle indexes buffer
+        GLuint trianglebuffer;
+        glGenBuffers(1, &trianglebuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, trianglebuffer);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size() * sizeof(unsigned int), &triangles[0], GL_STATIC_DRAW);
     }
 
     ///---------------------- SHADER ATTRIBUTES ----------------------------    
@@ -106,7 +114,7 @@ void init(){
 
 void display(){
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, mesh.n_vertices());
+    glDrawArrays(GL_TRIANGLES, 0, triangles.size());
 }
 
 int main(int argc, char** argv){
