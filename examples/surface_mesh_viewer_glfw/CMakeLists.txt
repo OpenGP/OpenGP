@@ -26,7 +26,7 @@ link_directories(${GLEW_LIBRARY_DIRS})
 
 find_package(Eigen3) # OPTIONAL
 include_directories(${EIGEN3_INCLUDE_DIR})
-#add_definitions(-DUSE_EIGEN)
+add_definitions(-DUSE_EIGEN)
 
 set(ALL_FOUND ${GLFW_FOUND} AND ${OPENGL_FOUND} AND ${EIGEN_FOUND} AND ${GLEW_FOUND})
 if(NOT ALL_FOUND)

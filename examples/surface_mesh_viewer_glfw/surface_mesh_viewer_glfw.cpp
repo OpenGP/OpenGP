@@ -3,7 +3,7 @@
 // @see https://code.google.com/p/opengl-tutorial-org/source/browse/tutorial08_basic_shading/tutorial08.cpp
 
 #include <OpenGeometry/surface_mesh/Surface_mesh.h>
-//#include <OpenGeometry/surface_mesh/bounding_box.h>
+#include <OpenGeometry/surface_mesh/bounding_box.h>
 #include <OpenGeometry/GL/simple_glfw_window.h>
 
 /// @todo update once Eigen integrates the changes
@@ -118,7 +118,7 @@ int main(int argc, char** argv){
     assert(argc==2);
     mesh.read(argv[1]);
     mesh.update_vertex_normals();
-    // std::cout << bounding_box(mesh) << std::endl;
+    bounding_box(mesh);
     // mesh.property_stats();
     std::cout << "input: '" << argv[1] << "' num vertices " << mesh.vertices_size() << std::endl;
     simple_glfw_window("mesh viewer", 640, 480, init, display);
