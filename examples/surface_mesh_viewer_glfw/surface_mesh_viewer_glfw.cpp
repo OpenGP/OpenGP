@@ -8,15 +8,19 @@
 
 /// @todo update once Eigen integrates the changes
 #include <OpenGeometry/GL/EigenOpenGLSupport3.h> 
-using namespace surface_mesh;
 
+using namespace surface_mesh;
+using namespace std;
+
+/// Viewer global status
 Surface_mesh mesh;
 std::vector<unsigned int> triangles; 
 
+/// OpenGL initialization
 void init(){
     ///----------------------- DATA ----------------------------
-    auto vpoints = mesh.get_vertex_property<Vec3>("v:point");
-    auto vnormals = mesh.get_vertex_property<Vec3>("v:normal");
+    auto vpoints = mesh.get_vertex_property<Point>("v:point");
+    auto vnormals = mesh.get_vertex_property<Normal>("v:normal");
     assert(vpoints);
     assert(vnormals);    
     
@@ -29,7 +33,7 @@ void init(){
     ///---------------------- OPENGL GLOBALS--------------------
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f); ///< background
     glEnable(GL_DEPTH_TEST); // Enable depth test
-    glDisable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
+    // glDisable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
         
     /// Compile the shaders
     GLuint programID = load_shaders( "vshader.glsl", "fshader.glsl" );
@@ -43,19 +47,23 @@ void init(){
         
         /// Define projection matrix (FOV, aspect, near, far)
         mat4 projection = Eigen::perspective(45.0f, 4.0f/3.0f, 0.1f, 10.f);
-        
+        // cout << projection << endl;
+
         /// Define the view matrix (camera extrinsics)
-        vec3 cam_pos(0,0,3);
+        vec3 cam_pos(0,0,5);
         vec3 cam_look(0,0,-1); /// Remember: GL swaps viewdir
         vec3 cam_up(0,1,0);
         mat4 view = Eigen::lookAt(cam_pos, cam_look, cam_up);
+        // cout << view << endl;
         
         /// Define the modelview matrix
-        mat4 model = mat4::Identity();
+        mat4 model = Eigen::scale(.5f,.5f,.5f) * Eigen::translate(-.5f,-.5f,.0f);
+        // mat4 model = mat4::Identity();
+        // cout << model << endl;
         
         /// Assemble the "Model View Projection" matrix
         mat4 mvp = projection * view * model; 
-        // std::cout << mvp << std::endl;
+        // cout << mvp << endl;
          
         /// Pass the matrix to the shader
         /// The glUniform call below is equivalent to the OpenGL function call:
@@ -73,7 +81,7 @@ void init(){
     }
         
     ///---------------------- BUFFERS ----------------------------    
-    GLuint vertexbuffer, normalbuffer; 
+    GLuint vertexbuffer, normalbuffer, trianglebuffer; 
     {
         /// Load mesh vertices
         glGenBuffers(1, &vertexbuffer); 
@@ -86,7 +94,6 @@ void init(){
         glBufferData(GL_ARRAY_BUFFER, sizeof(mesh.n_vertices()) * sizeof(Vec3f), vnormals.data(), GL_STATIC_DRAW);     
         
         /// Triangle indexes buffer
-        GLuint trianglebuffer;
         glGenBuffers(1, &trianglebuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, trianglebuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size() * sizeof(unsigned int), &triangles[0], GL_STATIC_DRAW);
@@ -107,19 +114,26 @@ void init(){
         glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
         glVertexAttribPointer(VNOR, 3, GL_FLOAT, NOT_NORMALIZED, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
     }
+    
+    ///---------------------- ENABLE BUFFER ----------------------------
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, trianglebuffer); //< used by glDrawElements
 }
 
+/// OpenGL render loop
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDrawElements(GL_TRIANGLES, triangles.size(), GL_UNSIGNED_INT, ZERO_BUFFER_OFFSET);
 }
 
+/// Entry point
 int main(int argc, char** argv){
     assert(argc==2);
     mesh.read(argv[1]);
+    mesh.triangulate();
     mesh.update_vertex_normals();
-    bounding_box(mesh);
+    cout << "input: '" << argv[1] << "' num vertices " << mesh.vertices_size() << endl;
+    cout << "BBOX: " << bounding_box(mesh) << endl;
     // mesh.property_stats();
-    std::cout << "input: '" << argv[1] << "' num vertices " << mesh.vertices_size() << std::endl;
     simple_glfw_window("mesh viewer", 640, 480, init, display);
+    return EXIT_SUCCESS;
 }
