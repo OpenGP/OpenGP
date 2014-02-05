@@ -727,7 +727,7 @@ update_face_normals()
 Normal
 Surface_mesh::
 compute_face_normal(Face f) const
-{
+{    
     Halfedge h = halfedge(f);
     Halfedge hend = h;
 
@@ -739,7 +739,11 @@ compute_face_normal(Face f) const
 
     if (next_halfedge(h) == hend) // face is a triangle
     {
-        return cross(p2-=p1, p0-=p1).normalize();
+#if !defined(USE_EIGEN) || defined(TODO_SURFACEMESH_DOT_CROSS) 
+        return cross(p2-=p1, p0-=p1).normalized();
+#else
+        return ((p2-=p1).cross(p0-=p1)).normalized();
+#endif
     }
 
     else // face is a general polygon
@@ -749,7 +753,11 @@ compute_face_normal(Face f) const
         hend = h;
         do
         {
+#if !defined(USE_EIGEN) || defined(TODO_SURFACEMESH_DOT_CROSS) 
             n += cross(p2-p1, p0-p1);
+#else
+            n += (p2-p1).cross(p0-p1);
+#endif
             h  = next_halfedge(h);
             p0 = p1;
             p1 = p2;
@@ -757,7 +765,7 @@ compute_face_normal(Face f) const
         }
         while (h != hend);
 
-        return n.normalize();
+        return n.normalized();
     }
 }
 
@@ -808,7 +816,7 @@ compute_vertex_normal(Vertex v) const
                 p2 -= p0;
 
                 // check whether we can robustly compute angle
-                denom = sqrt(dot(p1,p1)*dot(p2,p2));
+                denom = std::sqrt(dot(p1,p1)*dot(p2,p2));
                 if (denom > std::numeric_limits<Scalar>::min())
                 {
                     cosine = dot(p1,p2) / denom;
@@ -816,8 +824,12 @@ compute_vertex_normal(Vertex v) const
                     else if (cosine >  1.0) cosine =  1.0;
                     angle = acos(cosine);
 
-                    n   = cross(p1,p2);
 
+#if !defined(USE_EIGEN) || defined(TODO_SURFACEMESH_DOT_CROSS) 
+                    n   = cross(p1,p2);
+#else
+                    n   = p1.cross(p2);
+#endif
                     // check whether normal is != 0
                     denom = norm(n);
                     if (denom > std::numeric_limits<Scalar>::min())
@@ -832,7 +844,7 @@ compute_vertex_normal(Vertex v) const
         }
         while (h != hend);
 
-        nn.normalize();
+        nn.normalized();
     }
 
     return nn;
