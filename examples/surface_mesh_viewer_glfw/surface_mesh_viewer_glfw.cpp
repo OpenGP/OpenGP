@@ -16,6 +16,12 @@ using namespace std;
 Surface_mesh mesh;
 std::vector<unsigned int> triangles; 
 
+template <class Derived>
+void set_uniform_variable(GLuint programID, const char* NAME, Derived& value){
+    GLuint mvp_id = glGetUniformLocation(programID, NAME);
+    Eigen::glUniform(mvp_id, value);  
+}
+
 /// OpenGL initialization
 void init(){
     ///----------------------- DATA ----------------------------
@@ -57,7 +63,7 @@ void init(){
         // cout << view << endl;
         
         /// Define the modelview matrix
-        mat4 model = Eigen::scale(.5f,.5f,.5f) * Eigen::translate(.0f,.0f,.0f);
+        mat4 model = mat4::Identity();
         // mat4 model = mat4::Identity();
         // cout << model << endl;
         
@@ -65,12 +71,16 @@ void init(){
         mat4 mvp = projection * view * model; 
         // cout << mvp << endl;
          
-        /// Pass the matrix to the shader
-        /// The glUniform call below is equivalent to the OpenGL function call:
-        /// \code glUniformMatrix4fv(MVP_id, 1, GL_FALSE, &mvp[0][0]); \endcode
-        const char* MVP = "MVP"; ///< Name of variable in the shader
-        GLuint mvp_id = glGetUniformLocation(programID, MVP);
-        Eigen::glUniform(mvp_id, mvp);
+        /// Pass the MVP to the shader
+        set_uniform_variable(programID,"MVP",mvp); ///< to get clip coordinates 
+        set_uniform_variable(programID,"M",model); ///< to get world coordinates
+        set_uniform_variable(programID,"MV",view*model); ///< to get camera coordinates
+    }
+    
+    ///---------------------- LIGHT -----------------------------
+    {
+        Vec3f light_dir(0,0,1);
+        set_uniform_variable(programID,"LDIR",light_dir); ///< to get camera coordinates
     }
     
     ///---------------------- VARRAY ----------------------------    
