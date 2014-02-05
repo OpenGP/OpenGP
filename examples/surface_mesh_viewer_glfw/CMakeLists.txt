@@ -16,9 +16,6 @@ add_definitions(${OpenGL_DEFINITIONS})
 find_package(GLFW) # OPTIONAL
 include_directories(${GLFW_INCLUDE_DIRS})
 add_definitions(${GLFW_DEFINITIONS})
-#--- Specify we want OpenGL3
-#add_definitions(-DGLFW_INCLUDE_GL3)
-#add_definitions(-DGLFW_NO_GLU)
 
 find_package(GLEW) # OPTIONAL
 include_directories(${GLEW_INCLUDE_DIRS})
@@ -48,22 +45,18 @@ message(STATUS "Found Eigen3 at: " ${Eigen3_INCLUDE_DIRS})
 add_executable(surface_mesh_viewer_glfw surface_mesh_viewer_glfw.cpp vshader.glsl fshader.glsl)
 target_link_libraries(surface_mesh_viewer_glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
 
-#--- Deploy the shaders to the build folder all the time
-add_custom_command(TARGET surface_mesh_viewer_glfw 
-    COMMAND ${CMAKE_COMMAND} -E copy 
-    ${CMAKE_CURRENT_SOURCE_DIR}/vshader.glsl 
-    ${CMAKE_BINARY_DIR})
-add_custom_command(TARGET surface_mesh_viewer_glfw 
-    COMMAND ${CMAKE_COMMAND} -E copy 
-    ${CMAKE_CURRENT_SOURCE_DIR}/fshader.glsl 
-    ${CMAKE_BINARY_DIR})
+#--- Wraps file deployments
+macro(deploy_file MYTARGET FILENAME)
+    add_custom_command(TARGET ${MYTARGET}
+        COMMAND ${CMAKE_COMMAND} -E copy ${FILENAME} ${CMAKE_BINARY_DIR}
+        COMMENT "Deploying file '${FILENAME}'"
+        DEPENDS ${FILENAME})
+endmacro()
 
-#--- Deploy the data to the build folder
-add_custom_command(TARGET surface_mesh_viewer_glfw 
-    COMMAND ${CMAKE_COMMAND} -E copy 
-    ${CMAKE_SOURCE_DIR}/examples/data/bunny.obj
-    ${CMAKE_BINARY_DIR})
-add_custom_command(TARGET surface_mesh_viewer_glfw 
-    COMMAND ${CMAKE_COMMAND} -E copy 
-    ${CMAKE_SOURCE_DIR}/examples/data/triangle.obj
-    ${CMAKE_BINARY_DIR})
+deploy_file(surface_mesh_viewer_glfw ${CMAKE_CURRENT_SOURCE_DIR}/vshader.glsl)
+deploy_file(surface_mesh_viewer_glfw ${CMAKE_CURRENT_SOURCE_DIR}/fshader.glsl)
+deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/square.off)
+deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/bunny.obj)
+deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/tet.obj)
+deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/sphere.obj)
+deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/triangle.obj)
