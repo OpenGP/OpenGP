@@ -565,7 +565,7 @@ public:
         return *this;
     }
 
-    Vector<Scalar,3>& normalize()
+    Vector<Scalar,3>& normalized()
     {
         Scalar n = norm(*this);
         n = (n > std::numeric_limits<Scalar>::min()) ? 1.0/n : 0.0;
