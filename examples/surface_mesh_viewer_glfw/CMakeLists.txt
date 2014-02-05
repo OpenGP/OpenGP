@@ -46,17 +46,19 @@ add_executable(surface_mesh_viewer_glfw surface_mesh_viewer_glfw.cpp vshader.gls
 target_link_libraries(surface_mesh_viewer_glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
 
 #--- Wraps file deployments
-macro(deploy_file MYTARGET FILENAME)
-    add_custom_command(TARGET ${MYTARGET}
-        COMMAND ${CMAKE_COMMAND} -E copy ${FILENAME} ${CMAKE_BINARY_DIR}
-        COMMENT "Deploying file '${FILENAME}'"
-        DEPENDS ${FILENAME})
+macro(deploy_file MYTARGET FILEPATH)
+    get_filename_component(FILENAME ${FILEPATH} NAME)
+    set(TARGETNAME deployfile_${FILENAME})
+    add_custom_target(${TARGETNAME}
+        COMMAND ${CMAKE_COMMAND} -E copy ${FILEPATH} ${CMAKE_BINARY_DIR}
+        DEPENDS ${FILEPATH})
+    add_dependencies(${MYTARGET} ${TARGETNAME})
 endmacro()
 
 deploy_file(surface_mesh_viewer_glfw ${CMAKE_CURRENT_SOURCE_DIR}/vshader.glsl)
 deploy_file(surface_mesh_viewer_glfw ${CMAKE_CURRENT_SOURCE_DIR}/fshader.glsl)
-deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/square.off)
-deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/bunny.obj)
-deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/tet.obj)
+#deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/triangle.obj)
+#deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/square.off)
+#deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/tet.obj)
 deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/sphere.obj)
-deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/triangle.obj)
+#deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/bunny.obj)
