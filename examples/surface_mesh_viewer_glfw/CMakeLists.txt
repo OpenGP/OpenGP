@@ -26,6 +26,7 @@ link_directories(${GLEW_LIBRARY_DIRS})
 
 find_package(Eigen3) # OPTIONAL
 include_directories(${EIGEN3_INCLUDE_DIR})
+#add_definitions(-DUSE_EIGEN)
 
 set(ALL_FOUND ${GLFW_FOUND} AND ${OPENGL_FOUND} AND ${EIGEN_FOUND} AND ${GLEW_FOUND})
 if(NOT ALL_FOUND)
@@ -60,7 +61,7 @@ add_custom_command(TARGET surface_mesh_viewer_glfw
 #--- Deploy the data to the build folder
 add_custom_command(TARGET surface_mesh_viewer_glfw 
     COMMAND ${CMAKE_COMMAND} -E copy 
-    ${CMAKE_SOURCE_DIR}/examples/data/bunny.off
+    ${CMAKE_SOURCE_DIR}/examples/data/bunny.obj
     ${CMAKE_BINARY_DIR})
 add_custom_command(TARGET surface_mesh_viewer_glfw 
     COMMAND ${CMAKE_COMMAND} -E copy 
