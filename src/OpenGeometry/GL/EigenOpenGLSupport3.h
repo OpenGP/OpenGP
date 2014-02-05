@@ -239,6 +239,27 @@ Eigen::Matrix<Scalar,4,4> perspective(Scalar fovy, Scalar aspect, Scalar zNear, 
   return tr.matrix();
 }
 
+template<typename Scalar>
+Eigen::Matrix<Scalar,4,4> scale(Scalar x, Scalar y, Scalar z){
+  Transform<Scalar,3,Affine> tr;
+  tr.matrix().setZero();
+  tr(0,0) = x;
+  tr(1,1) = y;
+  tr(2,2) = z;
+  tr(3,3) = 1;
+  return tr.matrix();
+}
+
+template<typename Scalar>
+Eigen::Matrix<Scalar,4,4> translate(Scalar x, Scalar y, Scalar z){
+  Transform<Scalar,3,Affine> tr;
+  tr.matrix().setIdentity();
+  tr(0,3) = x;
+  tr(1,3) = y;
+  tr(2,3) = z;
+  return tr.matrix();
+}
+
 /// @brief Returns a view transformation matrix like the one from glu's lookAt
 /// @see http://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml
 /// @see glm::lookAt
