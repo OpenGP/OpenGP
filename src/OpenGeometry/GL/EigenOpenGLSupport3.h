@@ -228,6 +228,7 @@ Eigen::Matrix<Scalar,4,4> perspective(Scalar fovy, Scalar aspect, Scalar zNear, 
   tr.matrix().setZero();
   assert(aspect > 0);
   assert(zFar > zNear);
+  assert(zNear > 0);
   Scalar radf = M_PI * fovy / 180.0;
   Scalar tan_half_fovy = std::tan(radf / 2.0);
   tr(0,0) = 1.0 / (aspect * tan_half_fovy);

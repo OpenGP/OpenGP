@@ -3,11 +3,11 @@
 // @see https://code.google.com/p/opengl-tutorial-org/source/browse/tutorial08_basic_shading/tutorial08.cpp
 
 #include <OpenGeometry/surface_mesh/Surface_mesh.h>
+//#include <OpenGeometry/surface_mesh/bounding_box.h>
 #include <OpenGeometry/GL/simple_glfw_window.h>
 
 /// @todo update once Eigen integrates the changes
 #include <OpenGeometry/GL/EigenOpenGLSupport3.h> 
-
 using namespace surface_mesh;
 
 Surface_mesh mesh;
@@ -28,9 +28,8 @@ void init(){
     
     ///---------------------- OPENGL GLOBALS--------------------
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f); ///< background
-    // glEnable(GL_DEPTH_TEST); // Enable depth test
-    // glDepthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
-    // glEnable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
+    glEnable(GL_DEPTH_TEST); // Enable depth test
+    glDisable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
         
     /// Compile the shaders
     GLuint programID = load_shaders( "vshader.glsl", "fshader.glsl" );
@@ -43,7 +42,7 @@ void init(){
         typedef Eigen::Matrix4f mat4;
         
         /// Define projection matrix (FOV, aspect, near, far)
-        mat4 projection = Eigen::perspective(45.0f, 4.0f/3.0f, 0.f, 10.f);
+        mat4 projection = Eigen::perspective(45.0f, 4.0f/3.0f, 0.1f, 10.f);
         
         /// Define the view matrix (camera extrinsics)
         vec3 cam_pos(0,0,3);
@@ -80,7 +79,7 @@ void init(){
         glGenBuffers(1, &vertexbuffer); 
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(mesh.n_vertices()) * sizeof(Vec3f), vpoints.data(), GL_STATIC_DRAW); 
-    
+        
         /// Load mesh normals    
         glGenBuffers(1, &normalbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
@@ -119,6 +118,7 @@ int main(int argc, char** argv){
     assert(argc==2);
     mesh.read(argv[1]);
     mesh.update_vertex_normals();
+    // std::cout << bounding_box(mesh) << std::endl;
     // mesh.property_stats();
     std::cout << "input: '" << argv[1] << "' num vertices " << mesh.vertices_size() << std::endl;
     simple_glfw_window("mesh viewer", 640, 480, init, display);
