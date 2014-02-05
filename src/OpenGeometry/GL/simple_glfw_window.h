@@ -1,7 +1,7 @@
 #pragma once
 #include "GL/glew.h" ///< must be included before GLFW
 #include "GL/glfw.h"
-#include "./load_shaders.h"
+#include "load_shaders.h"
 
 /// Some constants used in OpenGL applications
 #define ZERO_BUFFER_OFFSET ((void*) 0)
@@ -31,15 +31,13 @@ int simple_glfw_window(const char* title, int width, int height, void (*init)(vo
     /// Outputs the OpenGL version
     int major, minor, revision;
     glfwGetGLVersion(&major, &minor,&revision);
-    std::cout << "GLFW OpenGL " << major << "." << minor << "." << revision << std::endl;
+    std::cout << "Opened GLFW OpenGL " << major << "." << minor << "." << revision << std::endl;
     
     // GLEW Initialization (must have a context)
-
-#ifdef __APPLE__
+#ifdef __APPLE__ 
     /// @note OSX needs this why... URL
     glewExperimental = true;
 #endif
-    
     if( glewInit() != GLEW_NO_ERROR )
     {
         fprintf( stderr, "Failed to initialize GLEW\n"); 
