@@ -57,7 +57,7 @@ void init(){
         // cout << view << endl;
         
         /// Define the modelview matrix
-        mat4 model = Eigen::scale(.5f,.5f,.5f) * Eigen::translate(-.5f,-.5f,.0f);
+        mat4 model = Eigen::scale(.5f,.5f,.5f) * Eigen::translate(.0f,.0f,.0f);
         // mat4 model = mat4::Identity();
         // cout << model << endl;
         
@@ -86,12 +86,12 @@ void init(){
         /// Load mesh vertices
         glGenBuffers(1, &vertexbuffer); 
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(mesh.n_vertices()) * sizeof(Vec3f), vpoints.data(), GL_STATIC_DRAW); 
+        glBufferData(GL_ARRAY_BUFFER, mesh.n_vertices() * sizeof(Vec3f), vpoints.data(), GL_STATIC_DRAW); 
         
         /// Load mesh normals    
         glGenBuffers(1, &normalbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(mesh.n_vertices()) * sizeof(Vec3f), vnormals.data(), GL_STATIC_DRAW);     
+        glBufferData(GL_ARRAY_BUFFER, mesh.n_vertices() * sizeof(Vec3f), vnormals.data(), GL_STATIC_DRAW);     
         
         /// Triangle indexes buffer
         glGenBuffers(1, &trianglebuffer);
@@ -114,9 +114,6 @@ void init(){
         glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
         glVertexAttribPointer(VNOR, 3, GL_FLOAT, NOT_NORMALIZED, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
     }
-    
-    ///---------------------- ENABLE BUFFER ----------------------------
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, trianglebuffer); //< used by glDrawElements
 }
 
 /// OpenGL render loop
