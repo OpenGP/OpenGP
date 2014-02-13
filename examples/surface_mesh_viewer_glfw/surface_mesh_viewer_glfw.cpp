@@ -137,7 +137,6 @@ void display(){
 
 /// Entry point
 int main(int argc, char** argv){
-    assert(argc==2);
     if(argc!=2){
         cout << "usage: \nsurface_mesh_viewer_glfw bunny.obj" << endl;
         return EXIT_FAILURE;
