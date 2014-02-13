@@ -20,8 +20,8 @@
 //== INCLUDES =================================================================
 
 
-#include <surface_mesh/Surface_mesh.h>
-#include <surface_mesh/IO.h>
+#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/surface_mesh/IO.h>
 
 #include <cmath>
 
@@ -29,7 +29,7 @@
 //== NAMESPACE ================================================================
 
 
-namespace surface_mesh {
+namespace opengp {
 
 
 //== IMPLEMENTATION ===========================================================
@@ -1711,5 +1711,5 @@ garbage_collection()
 
 
 //=============================================================================
-} // namespace surface_mesh
+} // namespace opengp
 //=============================================================================

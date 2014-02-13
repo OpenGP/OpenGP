@@ -94,4 +94,10 @@ inline typename Derived::Scalar norm(const Derived& v)
     return v.norm();
 }
 
+/// Basic types
+typedef Vec3 Point;                     ///< Point type
+typedef Vec3 Normal;                    ///< Normal type
+typedef Vec3 Color;                     ///< Color type
+typedef Vec3 Texture_coordinate;        ///< Texture coordinate type
+
 #endif

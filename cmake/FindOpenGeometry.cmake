@@ -1,20 +1,20 @@
-# Locate the OpenGeometry library (version 1.0)
+# Locate the OpenGP library (version 1.0)
 # This module defines the following variables:
-# OpenGeometry_INCLUDE_DIRS, where to find OpenGeometry include files.
-# OpenGeometry_FOUND, true if library path was resolved
+# OpenGP_INCLUDE_DIRS, where to find OpenGP include files.
+# OpenGP_FOUND, true if library path was resolved
 #
 # Usage example to compile an "executable" target:
 #
-# FIND_PACKAGE (OpenGeometry REQUIRED)
-# INCLUDE_DIRECTORIES (${OpenGeometry_INCLUDE_DIRS})
+# FIND_PACKAGE (OpenGP REQUIRED)
+# INCLUDE_DIRECTORIES (${OpenGP_INCLUDE_DIRS})
 # ADD_EXECUTABLE (executable ${YOUR_EXECUTABLE_SRCS})
 #
 
 # DEBUG: outputs given environment variable
-#message(STATUS OpenGeometryDIR $ENV{OpenGeometryDIR})
+#message(STATUS OpenGPDIR $ENV{OpenGPDIR})
 
-FIND_PATH( OpenGeometry_INCLUDE_DIRS OpenGeometry/Surface_mesh/Surface_mesh.h
-    $ENV{OpenGeometryDIR}
+FIND_PATH( OpenGP_INCLUDE_DIRS OpenGP/Surface_mesh/Surface_mesh.h
+    $ENV{OpenGPDIR}
     /usr/local/include
     /usr/local/X11R6/include
     /usr/X11R6/include
@@ -25,9 +25,9 @@ FIND_PATH( OpenGeometry_INCLUDE_DIRS OpenGeometry/Surface_mesh/Surface_mesh.h
     /opt/include)
 
 # @todo this might be done in a better way in the FIND_PATH above
-SET(OpenGeometry_INCLUDE_DIRS ${OpenGeometry_INCLUDE_DIRS}/OpenGeometry)
+SET(OpenGP_INCLUDE_DIRS ${OpenGP_INCLUDE_DIRS}/OpenGP)
 
-SET(OpenGeometry_FOUND "NO")
-IF(OpenGeometry_INCLUDE_DIRS)
-  SET(OpenGeometry_FOUND "YES")
-ENDIF(OpenGeometry_INCLUDE_DIRS)
+SET(OpenGP_FOUND "NO")
+IF(OpenGP_INCLUDE_DIRS)
+  SET(OpenGP_FOUND "YES")
+ENDIF(OpenGP_INCLUDE_DIRS)

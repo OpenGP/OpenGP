@@ -1,4 +1,4 @@
-project(OpenGeometry)
+project(OpenGP)
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -34,7 +34,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 endif()
 
 # Generate rules to compile the library
-#add_subdirectory(src/OpenGeometry)
+add_subdirectory(src)
 
 # Generate rules to build the documentation
 add_subdirectory(doc)

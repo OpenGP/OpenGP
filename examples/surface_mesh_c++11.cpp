@@ -1,8 +1,8 @@
 // Copyright (C) 2014 by Andrea Tagliasacchi
 // Barycenter example re-written with C++11 syntax
 
-#include <surface_mesh/Surface_mesh.h>
-using namespace surface_mesh;
+#include <OpenGP/Surface_mesh.h>
+using namespace opengp;
 int main(int /*argc*/, char** argv)
 {
     Surface_mesh mesh;

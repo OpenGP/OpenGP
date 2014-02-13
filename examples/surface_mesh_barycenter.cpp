@@ -1,15 +1,6 @@
 // Copyright (C) 2013 by Graphics & Geometry Group, Bielefeld University
-#include <surface_mesh/Surface_mesh.h>
-
-
-//=============================================================================
-
-
-using namespace surface_mesh;
-
-
-//=============================================================================
-
+#include <OpenGP/Surface_mesh.h>
+using namespace opengp;
 
 int main(int /*argc*/, char** argv)
 {
@@ -34,6 +25,3 @@ int main(int /*argc*/, char** argv)
 
     std::cout << "barycenter: " << p << std::endl;
 }
-
-
-//=============================================================================

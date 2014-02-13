@@ -24,14 +24,14 @@
 //== INCLUDES =================================================================
 
 
-#include <surface_mesh/Surface_mesh.h>
+#include <OpenGP/Surface_mesh.h>
 #include <string>
 
 
 //== NAMESPACE ================================================================
 
 
-namespace surface_mesh {
+namespace opengp {
 
 
 //=============================================================================
@@ -55,7 +55,7 @@ template <typename T> void read(FILE* in, T& t)
 }
 
 //=============================================================================
-} // namespace surface_mesh
+} // namespace opengp
 
 #ifdef HEADERONLY
     #include "IO.cpp"

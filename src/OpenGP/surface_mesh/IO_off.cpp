@@ -20,15 +20,15 @@
 //== INCLUDES =================================================================
 
 
-#include <surface_mesh/Surface_mesh.h>
-#include <surface_mesh/IO.h>
+#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/surface_mesh/IO.h>
 #include <cstdio>
 
 
 //== NAMESPACE ================================================================
 
 
-namespace surface_mesh {
+namespace opengp {
 
 
 //== IMPLEMENTATION ===========================================================
@@ -351,5 +351,5 @@ bool write_off(const Surface_mesh& mesh, const std::string& filename)
 
 
 //=============================================================================
-} // namespace surface_mesh
+} // namespace opengp
 //=============================================================================

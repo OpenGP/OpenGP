@@ -25,14 +25,12 @@
 
 
 #include "headeronly.h"
-#include <surface_mesh/types.h>
-#include <surface_mesh/properties.h>
-
+#include <OpenGP/types.h>
+#include <OpenGP/properties.h>
 
 //== NAMESPACE ================================================================
 
-
-namespace surface_mesh {
+namespace opengp {
 
 
 //== CLASS DEFINITION =========================================================
@@ -1801,9 +1799,10 @@ inline std::ostream& operator<<(std::ostream& os, Surface_mesh::Face f)
 
 
 //=============================================================================
-} // namespace surface_mesh
+} // namespace opengp
+//=============================================================================
 
-//== HEADER ONLY SUPPORT ======================================================
+// Header only support
 #ifdef HEADERONLY
     #include "Surface_mesh.cpp"
 #endif

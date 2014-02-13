@@ -1,5 +1,5 @@
+#include <OpenGP/Surface_mesh.h>
 #include <Eigen/Geometry>
-#include <surface_mesh/Surface_mesh.h>
 
 namespace Eigen{
 
@@ -13,7 +13,7 @@ inline std::ostream& operator<<(std::ostream& os, const Eigen::AlignedBox<Scalar
 } // Eigen
 
 
-namespace surface_mesh{
+namespace opengp{
 
 /// @todo should we move this
 typedef Eigen::AlignedBox<Scalar,3> Box3; 
@@ -28,4 +28,4 @@ Box3 bounding_box(const Surface_mesh& mesh)
 }
 
    
-} // surface_mesh
+} // opengp

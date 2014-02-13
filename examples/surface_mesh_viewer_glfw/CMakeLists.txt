@@ -1,11 +1,10 @@
 # @file examples/surface_mesh_viewer_glfw/CMakeLists.txt
 # This file is to be included with a CMake "add_subdirectory", do not run cmake on it directly
 
+# OpenGP can be found at ../src
+include_directories(../../src/OpenGP)
 # Use the header only version of the library
 add_definitions( -DHEADERONLY )
-
-# OpenGeometry can be found at ../src
-include_directories(../../src/OpenGeometry)
 
 #--- Load the graphics libraries
 find_package(OpenGL) #OPTIONAL
@@ -45,6 +44,29 @@ message(STATUS "Found Eigen3 at: " ${Eigen3_INCLUDE_DIRS})
 add_executable(surface_mesh_viewer_glfw surface_mesh_viewer_glfw.cpp vshader.glsl fshader.glsl)
 target_link_libraries(surface_mesh_viewer_glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
 
+#--- stringify shader macro
+macro(target_stringify_shader MYTARGET SHADER)
+    set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    set(TARGET_DIR ${CMAKE_CURRENT_BINARY_DIR})
+    # Make a unique name for target
+    set(TARGET_NAME stringify_${MYTARGET}_${SHADER})
+    add_custom_target( ${TARGET_NAME}
+        COMMAND ${CMAKE_COMMAND} 
+        # Parameters of the script
+        -DSHADERNAME=${SHADER}
+        -DINPUT_DIR=${SOURCE_DIR}
+        -DOUTPUT_DIR=${TARGET_DIR}
+        # Executes the script
+        -P ${CMAKE_SOURCE_DIR}/cmake/stringify_shader.cmake
+        # And when it does spit out this command
+        DEPENDS ${SOURCE_DIR}/${SHADER}.glsl
+        COMMENT "Converting ${SHADER}.glsl to a char* in ${SHADER}.h")
+    # make header visible to the compile time (NEEDS MACRO!!)
+    include_directories(${TARGET_DIR})
+    # MYTARGET depends on the just created stringify target
+    add_dependencies(${MYTARGET} ${TARGET_NAME})
+endmacro(target_stringify_shader)
+
 #--- Wraps file deployments
 macro(deploy_file MYTARGET FILEPATH)
     get_filename_component(FILENAME ${FILEPATH} NAME)
@@ -55,10 +77,9 @@ macro(deploy_file MYTARGET FILEPATH)
     add_dependencies(${MYTARGET} ${TARGETNAME})
 endmacro()
 
-deploy_file(surface_mesh_viewer_glfw ${CMAKE_CURRENT_SOURCE_DIR}/vshader.glsl)
-deploy_file(surface_mesh_viewer_glfw ${CMAKE_CURRENT_SOURCE_DIR}/fshader.glsl)
-#deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/triangle.obj)
-#deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/square.off)
-#deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/tet.obj)
-deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/sphere.obj)
-#deploy_file(surface_mesh_viewer_glfw ${CMAKE_SOURCE_DIR}/examples/data/bunny.obj)
+#--- Convert shaders to a header file
+target_stringify_shader(surface_mesh_viewer_glfw vshader)
+target_stringify_shader(surface_mesh_viewer_glfw fshader)
+
+#--- Deploy files to the build folder
+deploy_file(surface_mesh_viewer_glfw ${CMAKE_CURRENT_SOURCE_DIR}/bunny.obj)
