@@ -8,7 +8,7 @@
 #define ZERO_STRIDE 0
 #define NOT_NORMALIZED GL_FALSE
 
-int simple_glfw_window(const char* title, int width, int height, void (*init)(void), void(*display)(void)){  
+int simple_glfw_window(const char* title, int width, int height, void (*init)(void)){    
     // GLFW Initialization
     if( !glfwInit() ){
         fprintf( stderr, "Failed to initialize GLFW\n" );
@@ -49,7 +49,11 @@ int simple_glfw_window(const char* title, int width, int height, void (*init)(vo
     
     /// Initialize our OpenGL program
     init();
+    
+    return EXIT_SUCCESS;
+}
 
+int glfwMainLoop(void(*display)(void)){
     /// Render loop & keyboard input
     while(glfwGetKey(GLFW_KEY_ESC)!=GLFW_PRESS && glfwGetWindowParam(GLFW_OPENED)){
         display();
@@ -58,6 +62,5 @@ int simple_glfw_window(const char* title, int width, int height, void (*init)(vo
     
     /// Close OpenGL window and terminate GLFW
     glfwTerminate();
-    
-    return EXIT_SUCCESS;
+    return EXIT_SUCCESS;    
 }

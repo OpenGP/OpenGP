@@ -20,6 +20,14 @@ using namespace std;
 Surface_mesh mesh;
 std::vector<unsigned int> triangles; 
 
+/// @todo Find a better place where to put it
+GLuint programID;
+
+/// Matrix stack
+Eigen::Matrix4f projection;
+Eigen::Matrix4f model;
+Eigen::Matrix4f view;
+
 template <class Derived>
 void set_uniform_variable(GLuint programID, const char* NAME, Derived& value){
     GLuint mvp_id = glGetUniformLocation(programID, NAME);
@@ -46,7 +54,7 @@ void init(){
     // glDisable(GL_CULL_FACE); // Cull triangles which normal is not towards the camera
         
     /// Compile the shaders
-    GLuint programID = compile_shaders(vshader, fshader);
+    programID = compile_shaders(vshader, fshader);
     if(!programID) exit(EXIT_FAILURE);
     glUseProgram( programID );
     
@@ -56,28 +64,24 @@ void init(){
         typedef Eigen::Matrix4f mat4;
         
         /// Define projection matrix (FOV, aspect, near, far)
-        mat4 projection = Eigen::perspective(45.0f, 4.0f/3.0f, 0.1f, 10.f);
+        projection = Eigen::perspective(45.0f, 4.0f/3.0f, 0.1f, 10.f);
         // cout << projection << endl;
 
         /// Define the view matrix (camera extrinsics)
         vec3 cam_pos(0,0,5);
         vec3 cam_look(0,0,-1); /// Remember: GL swaps viewdir
         vec3 cam_up(0,1,0);
-        mat4 view = Eigen::lookAt(cam_pos, cam_look, cam_up);
+        view = Eigen::lookAt(cam_pos, cam_look, cam_up);
         // cout << view << endl;
         
         /// Define the modelview matrix
-        mat4 model = mat4::Identity();
-        // cout << model << endl;
+        model = mat4::Identity();
+        // cout << model << endl;  
         
-        /// Assemble the "Model View Projection" matrix
-        mat4 mvp = projection * view * model; 
-        // cout << mvp << endl;
-         
-        /// Pass the MVP to the shader
-        set_uniform_variable(programID,"MVP",mvp); ///< to get clip coordinates 
+        /// Set initial matrices
         set_uniform_variable(programID,"M",model); ///< to get world coordinates
         set_uniform_variable(programID,"MV",view*model); ///< to get camera coordinates
+        set_uniform_variable(programID,"MVP",projection*view*model); ///< to get clip coordinates         
     }
     
     ///---------------------- LIGHT -----------------------------
@@ -135,6 +139,71 @@ void display(){
     glDrawElements(GL_TRIANGLES, triangles.size(), GL_UNSIGNED_INT, ZERO_BUFFER_OFFSET);
 }
 
+
+namespace TrackballController{
+    Eigen::Matrix4f scale_;
+    Eigen::Matrix4f rotation_;
+    Eigen::Matrix4f translation_;
+    void update_matrices(){
+        model = model * translation_;
+        set_uniform_variable(programID,"M",model);
+        set_uniform_variable(programID,"MV",view*model);
+        set_uniform_variable(programID,"MVP",projection*view*model);
+    }
+    
+    void resize(int width_, int height_){
+        glViewport(0, 0, width_, height_);
+    }    
+    
+    void keyboard(int key, int action){
+        if (key == GLFW_KEY_ESC && action == GLFW_PRESS)
+            glfwCloseWindow();
+    }
+    
+    void mouse_button(int button, int action) {
+        bool pressed = ((action == GLFW_PRESS)?true:false);
+    }
+    
+    /// @see Simple::MouseMoveEvent
+    void mouse_move(int x, int y, int old_x, int old_y){
+        const float dx = x - old_x;
+        const float dy = y - old_y;
+      
+        // Pan
+        if (glfwGetMouseButton(GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS) {
+            const float scale = 0.05f;  
+            translation_ *= Eigen::translate(scale*dx, -scale*dy, 0.0f);
+            update_matrices();
+            return;
+        }
+    }
+    
+    /// 
+    void mouse_pos(int x, int y) {
+        static int old_x = x;
+        static int old_y = y;
+        mouse_move(x, y, old_x, old_y);
+        old_x = x;
+        old_y = y;
+    }
+    
+    static void mouse_wheel(int pos) {
+        
+    }
+    
+    void hook(){
+        translation_ = Eigen::Matrix4f::Identity();
+        rotation_ = Eigen::Matrix4f::Identity();
+        scale_ = Eigen::Matrix4f::Identity();
+        
+        glfwSetKeyCallback(keyboard);
+        glfwSetMouseButtonCallback(mouse_button);
+        glfwSetMousePosCallback(mouse_pos);
+        glfwSetMouseWheelCallback(mouse_wheel);
+        glfwSetWindowSizeCallback(resize);        
+    }
+}
+
 /// Entry point
 int main(int argc, char** argv){
     if(argc!=2){
@@ -148,6 +217,9 @@ int main(int argc, char** argv){
     cout << "input: '" << argv[1] << "' num vertices " << mesh.vertices_size() << endl;
     cout << "BBOX: " << bounding_box(mesh) << endl;
     // mesh.property_stats();
-    simple_glfw_window("mesh viewer", 640, 480, init, display);
+        
+    simple_glfw_window("mesh viewer", 640, 480, init);
+    TrackballController::hook();    
+    glfwMainLoop(display);
     return EXIT_SUCCESS;
 }
