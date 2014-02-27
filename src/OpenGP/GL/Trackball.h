@@ -1,67 +1,64 @@
-#ifndef OPENGP_TRACKBALL_H_
-#define OPENGP_TRACKBALL_H_
+// Copyright (C) 2014 - Minh Dang
+// Copyright (C) 2014 - Stefan Lienhard
+// @see http://image.diku.dk/research/trackballs/index.html.
+#pragma once
 
-#include <glm/glm.hpp>
+#include <Eigen/Dense>
+#include <Eigen/Geometry>
 
-// The following trackball class is heavily inspired by:
-// http://image.diku.dk/research/trackballs/index.html.
 class Trackball {
- public:
-  Trackball(){ radius_(1.0f); }
-  explicit Trackball(float radius) : radius_(radius){}
+public:
+    Trackball() {
+        radius_ = 1.0f;
+    }
+    explicit Trackball(float radius) : radius_(radius) {}
 
-  const glm::mat4& incremental_rotation() const {
-    return incremental_rotation_;
-  }
+    const Eigen::Matrix4f& incremental_rotation() const {
+        return incremental_rotation_;
+    }
 
-  void BeginDrag(float x, float y)
-  {
-      // TODO(stefalie): Is the identity loading required?
-      incremental_rotation_ = glm::mat4(1.0f);
+    void BeginDrag(float x, float y) {
+        // TODO(stefalie): Is the identity loading required?
+        incremental_rotation_ = Eigen::Matrix4f::Identity();
 
-      anchor_pos_= glm::vec3(x, y, 0.0f);
-      ProjectOntoSurface(&anchor_pos_);
+        anchor_pos_= Eigen::Vector3f(x, y, 0.0f);
+        ProjectOntoSurface(anchor_pos_);
 
-      current_pos_= anchor_pos_;
-  }
-  void Drag(float x, float y)
-  {
-      current_pos_= glm::vec3(x, y, 0.0f);
-      ProjectOntoSurface(&current_pos_);
-      ComputeIncremental();
-  }
+        current_pos_= anchor_pos_;
+    }
+    void Drag(float x, float y) {
+        current_pos_= Eigen::Vector3f(x, y, 0.0f);
+        ProjectOntoSurface(current_pos_);
+        ComputeIncremental();
+    }
 
- private:
-  void ProjectOntoSurface(glm::vec3* p) const{
-      // We could make this static, but maybe we want to add methods for changing
-      // the radius later on.
-      const float radius2 = radius_ * radius_;
+private:
+    void ProjectOntoSurface(Eigen::Vector3f& p) const {
+        // We could make this static, but maybe we want to add methods for changing
+        // the radius later on.
+        const float radius2 = radius_ * radius_;
 
-      const float length2 = p->x * p->x + p->y * p->y;
+        const float length2 = p.squaredNorm();
 
-      if (length2 <= radius2 * 0.5f) {
-        p->z = std::sqrt(radius2 - length2);
-      } else {
-        p->z = radius2 / (2.0f * std::sqrt(length2));
-      }
-      float length = std::sqrt(length2 + p->z * p->z);
-      *p /= length;
-  }
+        if (length2 <= radius2 * 0.5f) {
+            p[2] = std::sqrt(radius2 - length2);
+        } else {
+            p[2] = radius2 / (2.0f * std::sqrt(length2));
+        }
+        float length = p.norm();
+        p /= length;
+    }
 
-  void ComputeIncremental(){
-      const float angle_boost = 80.0f;
+    void ComputeIncremental() {
+        const float angle_boost = 10.0f
+        Eigen::Vector3f axis = anchor_pos_.cross(current_pos_);
+        float angle = angle_boost * atan2(axis.norm(), anchor_pos_.dot(current_pos_));
+        axis.normalize();
+        incremental_rotation_ = Eigen::Affine3f(Eigen::AngleAxisf(angle, axis)).matrix();
+    }
 
-      const glm::vec3 axis = glm::cross(anchor_pos_, current_pos_);
-      float angle = angle_boost * atan2(glm::length(axis), glm::dot(anchor_pos_,
-                                                                    current_pos_
-                                                                        
-      incremental_rotation_ = glm::rotate(angle, glm::normalize(axis));
-  }
-
-  float radius_;
-  glm::vec3 anchor_pos_;
-  glm::vec3 current_pos_;
-  glm::mat4 incremental_rotation_;
+    float radius_;
+    Eigen::Vector3f anchor_pos_;
+    Eigen::Vector3f current_pos_;
+    Eigen::Matrix4f incremental_rotation_;
 };
-
-#endif  // OPENGP_TRACKBALL_H_
