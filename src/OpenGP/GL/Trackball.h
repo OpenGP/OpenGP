@@ -1,10 +1,13 @@
-// Copyright (C) 2014 - Minh Dang
+// Copyright (C) 2014 - Andrea Tagliasacchi
 // Copyright (C) 2014 - Stefan Lienhard
+// Copyright (C) 2014 - Minh Dang
 // @see http://image.diku.dk/research/trackballs/index.html.
 #pragma once
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+
+namespace opengp{
 
 class Trackball {
 public:
@@ -50,7 +53,7 @@ private:
     }
 
     void ComputeIncremental() {
-        const float angle_boost = 10.0f
+        const float angle_boost = 10.0f;
         Eigen::Vector3f axis = anchor_pos_.cross(current_pos_);
         float angle = angle_boost * atan2(axis.norm(), anchor_pos_.dot(current_pos_));
         axis.normalize();
@@ -62,3 +65,5 @@ private:
     Eigen::Vector3f current_pos_;
     Eigen::Matrix4f incremental_rotation_;
 };
+
+} // opengp::

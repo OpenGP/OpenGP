@@ -235,7 +235,8 @@ namespace TrackballController{
         old_y = y;
     }
     
-    static void mouse_wheel(int pos) {
+    /// @todo implement mouse movement
+    static void mouse_wheel(int /*pos*/) {
         
     }
     
