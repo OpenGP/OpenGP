@@ -1,9 +1,7 @@
 #version 330 core 
-/// @todo see Pg 238 Angel for simpler version than layout
-
 /// These are per-vertex properties
-layout(location = 0) in vec3 VPOS; 
-layout(location = 1) in vec3 VNOR;
+in vec3 vposition; 
+in vec3 vnormal;
 
 /// These are fixed for the whole mesh
 uniform mat4 M;
@@ -15,12 +13,12 @@ uniform vec3 LDIR;
 out vec4 vColor;
 
 void main(){ 
-    gl_Position = MVP * vec4(VPOS, 1.0); /// Clip coordinates
+    gl_Position = MVP * vec4(vposition, 1.0); /// Clip coordinates
     
     ///--- Normal in world coordinates
     // @see https://code.google.com/p/opengl-tutorial-org/source/browse/tutorial09_vbo_indexing/StandardShading.vertexshader
     // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.
-    vec4 n = M * vec4(VNOR, 0);
+    vec4 n = M * vec4(vnormal, 0);
     
     ///--- Normalization
     n.xyz = normalize(n.xyz);

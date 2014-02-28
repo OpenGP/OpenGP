@@ -5,12 +5,14 @@
 #include "GL/glfw.h"
 #include "shader_helpers.h"
 
-namespace opengp{
+/// Convenience constants
+static const int ONE = 1;
+static const bool DONT_NORMALIZE = false;
+static const bool DONT_TRANSPOSE = false;
+static const int ZERO_STRIDE = 0;
+static const void* ZERO_BUFFER_OFFSET = 0;
 
-/// Some constants used in OpenGL applications
-#define ZERO_BUFFER_OFFSET ((void*) 0)
-#define ZERO_STRIDE 0
-#define NOT_NORMALIZED GL_FALSE
+namespace opengp{
 
 static int _width = 640;
 static int _height = 480;
