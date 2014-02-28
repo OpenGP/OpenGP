@@ -6,7 +6,7 @@
 
 #include <OpenGP/Surface_mesh.h>
 #include <OpenGP/surface_mesh/bounding_box.h>
-#include <OpenGP/GL/simple_glfw_window.h>
+#include <OpenGP/GL/glfw_helpers.h>
 #include <OpenGP/GL/EigenOpenGLSupport3.h> 
 #include <OpenGP/GL/Trackball.h>
 
@@ -262,15 +262,18 @@ int main(int argc, char** argv){
     }
     
     mesh.read(argv[1]);
+    // mesh.property_stats();
     mesh.triangulate();
     mesh.update_vertex_normals();
     cout << "input: '" << argv[1] << "' num vertices " << mesh.vertices_size() << endl;
     cout << "BBOX: " << bounding_box(mesh) << endl;
-    // mesh.property_stats();
         
-    simple_glfw_window("mesh viewer", 640, 480, init);
+    glfwInitWindowSize(640, 480);
+    glfwCreateWindow("mesh viewer");
+    glfwDisplayFunc(display);
+    init();
     TrackballController::hook();
-    glfwMainLoop(display);
+    glfwMainLoop();
 
     return EXIT_SUCCESS;
 }

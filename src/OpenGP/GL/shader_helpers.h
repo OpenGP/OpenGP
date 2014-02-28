@@ -2,6 +2,7 @@
 // Copyright (C) 2014 - Andrea Tagliasacchi
 // Copyright (C) 2014 - Sofien Bouaziz
 
+#pragma once
 #include <fstream>
 #include <iostream>
 #include <vector>
