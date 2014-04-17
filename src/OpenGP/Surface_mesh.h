@@ -922,7 +922,7 @@ public: //----------------------------------------------- add new vertex / face
     //@{
 
     /// add a new vertex with position \c p
-    HEADERONLY_INLINE Vertex add_vertex(const Point& p);
+    HEADERONLY_INLINE Vertex add_vertex(const Vec3& p);
 
     /// add a new face with vertex list \c vertices
     /// \sa add_triangle, add_quad
@@ -1548,11 +1548,11 @@ public: //--------------------------------------------- higher-level operations
      this is a standard one-to-three split.
      \sa split(Face, Vertex)
      */
-    HEADERONLY_INLINE Vertex split(Face f, const Point& p) { Vertex v=add_vertex(p); split(f,v); return v; }
+    HEADERONLY_INLINE Vertex split(Face f, const Vec3& p) { Vertex v=add_vertex(p); split(f,v); return v; }
 
     /** Split the face \c f by inserting edges between \c p and the vertices
      of \c f. For a triangle this is a standard one-to-three split.
-     \sa split(Face, const Point&)
+     \sa split(Face, const Vec3&)
      */
     HEADERONLY_INLINE void split(Face f, Vertex v);
 
@@ -1563,12 +1563,12 @@ public: //--------------------------------------------- higher-level operations
      \attention This function is only valid for triangle meshes.
      \sa split(Edge, Vertex)
      */
-    HEADERONLY_INLINE Vertex split(Edge e, const Point& p) { Vertex v=add_vertex(p); split(e,v); return v; }
+    HEADERONLY_INLINE Vertex split(Edge e, const Vec3& p) { Vertex v=add_vertex(p); split(e,v); return v; }
 
     /** Split the edge \c e by connecting vertex \c v it to the two vertices
      of the adjacent triangles that are opposite to edge \c e.
      \attention This function is only valid for triangle meshes.
-     \sa split(Edge, Point)
+     \sa split(Edge, Vec3)
      */
     HEADERONLY_INLINE void split(Edge e, Vertex v);
 
@@ -1579,7 +1579,7 @@ public: //--------------------------------------------- higher-level operations
      \sa insert_vertex(Edge, Vertex)
      \sa insert_vertex(Halfedge, Vertex)
      */
-    Halfedge insert_vertex(Edge e, const Point& p)
+    Halfedge insert_vertex(Edge e, const Vec3& p)
     {
         return insert_vertex(halfedge(e,0), add_vertex(p));
     }
@@ -1587,7 +1587,7 @@ public: //--------------------------------------------- higher-level operations
     /** Subdivide the edge \c e = (v0,v1) by splitting it into the two edge
      (v0,v) and (v,v1). Note that this function does not introduce any other
      edge or faces. It simply splits the edge. Returns halfedge that points to \c p.
-     \sa insert_vertex(Edge, Point)
+     \sa insert_vertex(Edge, Vec3)
      \sa insert_vertex(Halfedge, Vertex)
      */
     Halfedge insert_vertex(Edge e, Vertex v)
@@ -1598,7 +1598,7 @@ public: //--------------------------------------------- higher-level operations
     /** Subdivide the edge \c e = (v0,v1) by splitting it into the two edge
      (v0,v) and (v,v1). Note that this function does not introduce any other
      edge or faces. It simply splits the edge. Returns halfedge that points to \c p.
-     \sa insert_vertex(Edge, Point)
+     \sa insert_vertex(Edge, Vec3)
      \sa insert_vertex(Edge, Vertex)
      */
     HEADERONLY_INLINE Halfedge insert_vertex(Halfedge h, Vertex v);
@@ -1655,25 +1655,25 @@ public: //------------------------------------------ geometry-related functions
     //@{
 
     /// position of a vertex (read only)
-    const Point& position(Vertex v) const { return vpoint_[v]; }
+    const Vec3& position(Vertex v) const { return vpoint_[v]; }
 
     /// position of a vertex
-    Point& position(Vertex v) { return vpoint_[v]; }
+    Vec3& position(Vertex v) { return vpoint_[v]; }
 
     /// vector of vertex positions
-    std::vector<Point>& points() { return vpoint_.vector(); }
+    std::vector<Vec3>& points() { return vpoint_.vector(); }
 
     /// compute face normals by calling compute_face_normal(Face) for each face.
     HEADERONLY_INLINE void update_face_normals();
 
     /// compute normal vector of face \c f.
-    HEADERONLY_INLINE Normal compute_face_normal(Face f) const;
+    HEADERONLY_INLINE Vec3 compute_face_normal(Face f) const;
 
     /// compute vertex normals by calling compute_vertex_normal(Vertex) for each vertex.
     HEADERONLY_INLINE void update_vertex_normals();
 
     /// compute normal vector of vertex \c v.
-    HEADERONLY_INLINE Normal compute_vertex_normal(Vertex v) const;
+    HEADERONLY_INLINE Vec3 compute_vertex_normal(Vertex v) const;
 
     /// compute the length of edge \c e.
     HEADERONLY_INLINE Scalar edge_length(Edge e) const;
@@ -1754,9 +1754,9 @@ private: //------------------------------------------------------- private data
     Edge_property<bool>    edeleted_;
     Face_property<bool>    fdeleted_;
 
-    Vertex_property<Point>   vpoint_;
-    Vertex_property<Normal>  vnormal_;
-    Face_property<Normal>    fnormal_;
+    Vertex_property<Vec3>   vpoint_;
+    Vertex_property<Vec3>  vnormal_;
+    Face_property<Vec3>    fnormal_;
 
     unsigned int deleted_vertices_;
     unsigned int deleted_edges_;

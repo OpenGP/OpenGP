@@ -68,7 +68,7 @@ macro(target_stringify_shader MYTARGET SHADER)
 endmacro(target_stringify_shader)
 
 #--- Wraps file deployments
-macro(deploy_file MYTARGET FILEPATH)
+macro(target_deploy_file MYTARGET FILEPATH)
     get_filename_component(FILENAME ${FILEPATH} NAME)
     set(TARGETNAME deployfile_${FILENAME})
     add_custom_target(${TARGETNAME}
@@ -82,4 +82,4 @@ target_stringify_shader(surface_mesh_viewer_glfw vshader)
 target_stringify_shader(surface_mesh_viewer_glfw fshader)
 
 #--- Deploy files to the build folder
-deploy_file(surface_mesh_viewer_glfw ${CMAKE_CURRENT_SOURCE_DIR}/bunny.obj)
+target_deploy_file(surface_mesh_viewer_glfw ${CMAKE_CURRENT_SOURCE_DIR}/bunny.obj)

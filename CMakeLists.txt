@@ -33,14 +33,16 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb")
 endif()
 
-# Generate rules to compile the library
-add_subdirectory(src)
-
 # Generate rules to build the documentation
 add_subdirectory(doc)
+
+# Generate rules to compile the library
+if(WITH_LIBRARY)
+    add_subdirectory(src)
+endif()
 
 # Generate rules to build the examples (enable with cmake -DWITH_EXAMPLES )
 if(WITH_EXAMPLES)
     add_subdirectory(examples)
-endif(WITH_EXAMPLES)
+endif()
 

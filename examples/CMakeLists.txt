@@ -1,11 +1,13 @@
 # @file examples/CMakeLists.txt
-# This file is to be included with a CMake "add_subdirectory", do not run cmake on it directly
+# @note this file is to be included with a CMake "add_subdirectory", do not run cmake on it directly
 
-# Use the header only version of the library
+#--- examples use eigen
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+add_definitions(-DUSE_EIGEN)
+
+#--- examples know where to find the OpenGP header only source
 add_definitions( -DHEADERONLY )
-
-# @TODO: decide where to root the headers, as technically the first is technically a violation
-# The second allows include sytanx of the type #include "OpenGP/Surface_mesh/..."
 include_directories(../src)
 
 #--- Compile examples one by one

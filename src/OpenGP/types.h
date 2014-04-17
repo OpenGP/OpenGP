@@ -1,7 +1,6 @@
 // Copyright (C) 2013 Graphics & Geometry Group, Bielefeld University
 // Copyright (C) 2014 Andrea Tagliasacchi, EPFL
-#ifndef SURFACE_MESH_TYPES_H
-#define SURFACE_MESH_TYPES_H
+#pragma once
 
 //== INCLUDES =================================================================
 
@@ -15,13 +14,18 @@
 namespace opengp {
 //=============================================================================
 
-typedef float Scalar;               ///< Scalar type
+/// Scalar type
+typedef float Scalar; 
 
-#if defined(USE_EIGEN)
-    /// 3D vector type
-    typedef Eigen::Matrix<Scalar, 3, 1> Vec3; 
-    #include "surface_mesh/Vector_back_compatibility.h"
+#ifdef USE_EIGEN
+    typedef Eigen::Matrix<Scalar, 2, 1> Vec2; ///< 2D vector type
+    typedef Eigen::Matrix<Scalar, 3, 1> Vec3; ///< 3D vector type
+
+    #ifdef SURFACE_MESH_VECTOR_BACK_COMPATIBILITY
+        #include "surface_mesh/Vector_back_compatibility.h"
+    #endif 
 #else
+    typedef Vector<Scalar,2> Vec2;   /// 2D vector type    
     typedef Vector<Scalar,3> Vec3;   /// 3D vector type    
     typedef Vec3 Point;              ///< Point type
     typedef Vec3 Normal;             ///< Normal type
@@ -32,7 +36,3 @@ typedef float Scalar;               ///< Scalar type
 //=============================================================================
 } // namespace opengp
 //=============================================================================
-
-//=============================================================================
-#endif // SURFACE_MESH_TYPES_H
-//============================================================================

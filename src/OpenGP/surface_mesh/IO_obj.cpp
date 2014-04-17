@@ -38,9 +38,9 @@ bool read_obj(Surface_mesh& mesh, const std::string& filename)
     char   s[200];
     float  x, y, z;
     std::vector<Surface_mesh::Vertex>  vertices;
-    std::vector<Texture_coordinate> all_tex_coords;   //individual texture coordinates
+    std::vector<Vec3> all_tex_coords;   //individual texture coordinates
     std::vector<int> halfedge_tex_idx; //texture coordinates sorted for halfedges
-    Surface_mesh::Halfedge_property <Texture_coordinate> tex_coords = mesh.halfedge_property<Texture_coordinate>("h:texcoord");
+    Surface_mesh::Halfedge_property <Vec3> tex_coords = mesh.halfedge_property<Vec3>("h:texcoord");
     bool with_tex_coord=false;
 
     // clear mesh
@@ -67,7 +67,7 @@ bool read_obj(Surface_mesh& mesh, const std::string& filename)
         {
             if (sscanf(s, "v %f %f %f", &x, &y, &z))
             {
-                mesh.add_vertex(Point(x,y,z));
+                mesh.add_vertex(Vec3(x,y,z));
             }
         }
         // normal
@@ -86,7 +86,7 @@ bool read_obj(Surface_mesh& mesh, const std::string& filename)
           if (sscanf(s, "vt %f %f", &x, &y))
           {
             z=1;
-            all_tex_coords.push_back(Texture_coordinate(x,y,z));
+            all_tex_coords.push_back(Vec3(x,y,z));
           }
         }
 
@@ -193,8 +193,9 @@ bool read_obj(Surface_mesh& mesh, const std::string& filename)
 //-----------------------------------------------------------------------------
 
 
-bool write_obj(const Surface_mesh& mesh, const std::string& filename)
-{
+bool write_obj(const Surface_mesh& mesh, const std::string& filename){
+    typedef Vec3 Texture_coordinate;
+    
     FILE* out = fopen(filename.c_str(), "w");
     if (!out)
         return false;
@@ -203,18 +204,18 @@ bool write_obj(const Surface_mesh& mesh, const std::string& filename)
     fprintf(out, "# OBJ export from Surface_mesh\n");
 
     //vertices
-    Surface_mesh::Vertex_property<Point> points = mesh.get_vertex_property<Point>("v:point");
+    Surface_mesh::Vertex_property<Vec3> points = mesh.get_vertex_property<Vec3>("v:point");
     for (Surface_mesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
     {
-        const Point& p = points[*vit];
+        const Vec3& p = points[*vit];
         fprintf(out, "v %.10f %.10f %.10f\n", p[0], p[1], p[2]);
     }
 
     //normals
-    Surface_mesh::Vertex_property<Point> normals = mesh.get_vertex_property<Point>("v:normal");
+    Surface_mesh::Vertex_property<Vec3> normals = mesh.get_vertex_property<Vec3>("v:normal");
     for (Surface_mesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
     {
-        const Point& p = normals[*vit];
+        const Vec3& p = normals[*vit];
         fprintf(out, "vn %.10f %.10f %.10f\n", p[0], p[1], p[2]);
     }
 

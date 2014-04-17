@@ -1,5 +1,6 @@
-#if !defined(SURFACE_MESH_VECTOR_BACK_COMPATIBILITY) && defined(USE_EIGEN)
-#define SURFACE_MESH_VECTOR_BACK_COMPATIBILITY
+// Define SURFACE_MESH_VECTOR_BACK_COMPATIBILITY if you want 
+// to use the old Surface_mesh names with the new Eigen types
+#pragma once
 
 /** 1-byte signed vector */
 typedef Eigen::Matrix<signed char,1,1> Vec1c;

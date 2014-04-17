@@ -40,13 +40,14 @@ namespace opengp {
 
 
 // helper class for STL reader
-class CmpVec
-{
+class CmpVec{
+    typedef Vec3 Normal;
+    typedef Vec3 Texture_coordinate;
 public:
 
     CmpVec(float _eps=FLT_MIN) : eps_(_eps) {}
 
-    bool operator()(const Vec3f& v0, const Vec3f& v1) const
+    bool operator()(const Vec3& v0, const Vec3& v1) const
     {
         if (fabs(v0[0] - v1[0]) <= eps_)
         {
@@ -67,23 +68,23 @@ private:
 //-----------------------------------------------------------------------------
 
 
-bool read_stl(Surface_mesh& mesh, const std::string& filename)
-{
+bool read_stl(Surface_mesh& mesh, const std::string& filename){
+    typedef Vec3 Normal;
+    typedef Vec3 Texture_coordinate;
+    
     char                            line[100], *c;
     unsigned int                    i, nT;
-    Vec3f                           p;
+    Vec3                            p;
     Surface_mesh::Vertex               v;
     std::vector<Surface_mesh::Vertex>  vertices(3);
     size_t n_items(0);
 
     CmpVec comp(FLT_MIN);
-    std::map<Vec3f, Surface_mesh::Vertex, CmpVec>            vMap(comp);
-    std::map<Vec3f, Surface_mesh::Vertex, CmpVec>::iterator  vMapIt;
-
+    std::map<Vec3, Surface_mesh::Vertex, CmpVec>            vMap(comp);
+    std::map<Vec3, Surface_mesh::Vertex, CmpVec>::iterator  vMapIt;
 
     // clear mesh
     mesh.clear();
-
 
     // open file (in ASCII mode)
     FILE* in = fopen(filename.c_str(), "r");
@@ -127,7 +128,7 @@ bool read_stl(Surface_mesh& mesh, const std::string& filename)
                 if ((vMapIt=vMap.find(p)) == vMap.end())
                 {
                     // No : add vertex and remember idx/vector mapping
-                    v = mesh.add_vertex((Point)p);
+                    v = mesh.add_vertex((Vec3)p);
                     vertices[i] = v;
                     vMap[p] = v;
                 }
@@ -181,7 +182,7 @@ bool read_stl(Surface_mesh& mesh, const std::string& filename)
                     if ((vMapIt=vMap.find(p)) == vMap.end())
                     {
                         // No : add vertex and remember idx/vector mapping
-                        v = mesh.add_vertex((Point)p);
+                        v = mesh.add_vertex((Vec3)p);
                         vertices[i] = v;
                         vMap[p] = v;
                     }

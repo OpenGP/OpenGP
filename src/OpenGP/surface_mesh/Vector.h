@@ -270,7 +270,6 @@ public:
         return *this;
     }
 
-
 public:
     /** The N values of type Scalar are the only data members
      of this class. This guarantees 100% compatibility with arrays of type

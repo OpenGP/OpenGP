@@ -42,15 +42,18 @@ inline bool read_off_ascii(Surface_mesh& mesh,
                     const bool has_texcoords,
                     const bool has_colors)
 {
+    typedef Vec3 Normal;
+    typedef Vec3 Texture_coordinate;
+    typedef Vec3 Color;
+    
     char                 line[200], *lp;
     int                  nc;
     unsigned int         i, j, items, idx;
     unsigned int         nV, nF, nE;
-    Vec3f                p, n, c;
-    Vec2f                t;
+    Vec3                 p, n, c;
+    Vec2                 t;
     Surface_mesh::Vertex v;
-
-
+    
     // properties
     Surface_mesh::Vertex_property<Normal>              normals;
     Surface_mesh::Vertex_property<Texture_coordinate>  texcoords;
@@ -58,7 +61,6 @@ inline bool read_off_ascii(Surface_mesh& mesh,
     if (has_normals)   normals   = mesh.vertex_property<Normal>("v:normal");
     if (has_texcoords) texcoords = mesh.vertex_property<Texture_coordinate>("v:texcoord");
     if (has_colors)    colors    = mesh.vertex_property<Color>("v:color");
-
 
     // #Vertice, #Faces, #Edges
     items = fscanf(in, "%d %d %d\n", (int*)&nV, (int*)&nF, (int*)&nE);
@@ -76,7 +78,7 @@ inline bool read_off_ascii(Surface_mesh& mesh,
         // position
         items = sscanf(lp, "%f %f %f%n", &p[0], &p[1], &p[2], &nc);
         assert(items==3);
-        v = mesh.add_vertex((Point)p);
+        v = mesh.add_vertex((Vec3)p);
         lp += nc;
 
         // normal
@@ -152,10 +154,13 @@ inline bool read_off_binary(Surface_mesh& mesh,
                      const bool has_texcoords,
                      const bool has_colors)
 {
+    typedef Vec3 Normal;
+    typedef Vec3 Texture_coordinate;
+    
     unsigned int       i, j, idx;
     unsigned int       nV, nF, nE;
-    Vec3f              p, n, c;
-    Vec2f              t;
+    Vec3               p, n, c;
+    Vec2               t;
     Surface_mesh::Vertex  v;
 
 
@@ -183,7 +188,7 @@ inline bool read_off_binary(Surface_mesh& mesh,
     {
         // position
         read(in, p);
-        v = mesh.add_vertex((Point)p);
+        v = mesh.add_vertex((Vec3)p);
 
         // normal
         if (has_normals)
@@ -287,6 +292,9 @@ bool read_off(Surface_mesh& mesh, const std::string& filename)
 
 bool write_off(const Surface_mesh& mesh, const std::string& filename)
 {
+    typedef Vec3 Normal;
+    typedef Vec3 Texture_coordinate;  
+    
     FILE* out = fopen(filename.c_str(), "w");
     if (!out)
         return false;
@@ -309,10 +317,10 @@ bool write_off(const Surface_mesh& mesh, const std::string& filename)
 
 
     // vertices, and optionally normals and texture coordinates
-    Surface_mesh::Vertex_property<Point> points = mesh.get_vertex_property<Point>("v:point");
+    Surface_mesh::Vertex_property<Vec3> points = mesh.get_vertex_property<Vec3>("v:point");
     for (Surface_mesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
     {
-        const Point& p = points[*vit];
+        const Vec3& p = points[*vit];
         fprintf(out, "%.10f %.10f %.10f", p[0], p[1], p[2]);
 
         if (has_normals)

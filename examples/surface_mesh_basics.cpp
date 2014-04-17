@@ -1,4 +1,3 @@
-// Copyright (C) 2013 by Graphics & Geometry Group, Bielefeld University
 #include <OpenGP/Surface_mesh.h>
 using namespace opengp;
 
@@ -11,10 +10,10 @@ int main(void)
     Surface_mesh::Vertex v0,v1,v2,v3;
 
     // add 4 vertices
-    v0 = mesh.add_vertex(Point(0,0,0));
-    v1 = mesh.add_vertex(Point(1,0,0));
-    v2 = mesh.add_vertex(Point(0,1,0));
-    v3 = mesh.add_vertex(Point(0,0,1));
+    v0 = mesh.add_vertex(Vec3(0,0,0));
+    v1 = mesh.add_vertex(Vec3(1,0,0));
+    v2 = mesh.add_vertex(Vec3(0,1,0));
+    v3 = mesh.add_vertex(Vec3(0,0,1));
 
     // add 4 triangular faces
     mesh.add_triangle(v0,v1,v3);

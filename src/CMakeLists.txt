@@ -18,9 +18,9 @@ set(SOURCES ${COMMON_SOURCES} ${SURFACEMESH_SOURCES})
 set(HEADERS ${COMMON_HEADERS} ${SURFACEMESH_HEADERS})
 # Compile the library
 if(UNIX)
-	add_library(OpenGP SHARED ${SOURCES} ${HEADERS})
+    add_library(OpenGP SHARED ${SOURCES} ${HEADERS})
 elseif(WIN32)
-	add_library(OpenGP STATIC ${SOURCES} ${HEADERS})
+    add_library(OpenGP STATIC ${SOURCES} ${HEADERS})
 endif()
 
 # Set the library version

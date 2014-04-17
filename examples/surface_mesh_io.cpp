@@ -1,4 +1,3 @@
-// Copyright (C) 2013 by Graphics & Geometry Group, Bielefeld University
 #include <OpenGP/Surface_mesh.h>
 using namespace opengp;
 

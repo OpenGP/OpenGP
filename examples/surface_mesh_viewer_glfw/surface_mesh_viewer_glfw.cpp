@@ -39,8 +39,8 @@ void set_uniform_variable(GLuint programID, const char* NAME, Derived& value){
 /// OpenGL initialization
 void init(){
     ///----------------------- DATA ----------------------------
-    auto vpoints = mesh.get_vertex_property<Point>("v:point");
-    auto vnormals = mesh.get_vertex_property<Normal>("v:normal");
+    auto vpoints = mesh.get_vertex_property<Vec3>("v:point");
+    auto vnormals = mesh.get_vertex_property<Vec3>("v:normal");
     assert(vpoints);
     assert(vnormals);    
     
@@ -88,7 +88,7 @@ void init(){
     
     ///---------------------- LIGHT -----------------------------
     {
-        Vec3f light_dir(0,0,1);
+        Vec3 light_dir(0,0,1);
         set_uniform_variable(programID,"LDIR",light_dir); ///< to get camera coordinates
     }
     
@@ -105,12 +105,12 @@ void init(){
         /// Load mesh vertices
         glGenBuffers(1, &vertexbuffer); 
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glBufferData(GL_ARRAY_BUFFER, mesh.n_vertices() * sizeof(Vec3f), vpoints.data(), GL_STATIC_DRAW); 
+        glBufferData(GL_ARRAY_BUFFER, mesh.n_vertices() * sizeof(Vec3), vpoints.data(), GL_STATIC_DRAW); 
         
         /// Load mesh normals    
         glGenBuffers(1, &normalbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-        glBufferData(GL_ARRAY_BUFFER, mesh.n_vertices() * sizeof(Vec3f), vnormals.data(), GL_STATIC_DRAW);     
+        glBufferData(GL_ARRAY_BUFFER, mesh.n_vertices() * sizeof(Vec3), vnormals.data(), GL_STATIC_DRAW);     
         
         /// Triangle indexes buffer
         glGenBuffers(1, &trianglebuffer);
@@ -130,7 +130,7 @@ void init(){
         GLuint vnormal = glGetAttribLocation(programID, "vnormal");        
         glEnableVertexAttribArray(vnormal);
         glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-        glVertexAttribPointer(vnormal, 3, GL_FLOAT, GL_TRUE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
+        glVertexAttribPointer(vnormal, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
     }
 }
 
