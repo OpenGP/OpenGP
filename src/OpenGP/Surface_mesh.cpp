@@ -842,7 +842,7 @@ compute_vertex_normal(Vertex v) const
         }
         while (h != hend);
 
-        nn.normalized();
+        nn.normalize();
     }
 
     return nn;
