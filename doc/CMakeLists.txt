@@ -28,7 +28,7 @@ add_custom_target(publish_doc
 	COMMAND git init
 	COMMAND git add .
 	COMMAND git commit -m "updated doc"
-	COMMAND git remote add origin https://github.com/OpenGeometry/OpenGeometry.github.io
+	COMMAND git remote add origin https://github.com/OpenGP/OpenGP.github.io
     COMMAND git push origin master --force
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
     
