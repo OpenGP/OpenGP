@@ -1,15 +1,26 @@
 #!/usr/bin/python
-
+import numpy;
 from opengp import Surface_mesh;
-import opengp;
 
-s = Surface_mesh();
-s.read("../data/bunny.obj");
-s.property_stats();
-print "Number of vertices", s.n_vertices();
+#-------------------------------------------------------------------------------
+print "Read mesh vertices in a numpy matrix"
+mesh = Surface_mesh();
+mesh.read("../data/tet.obj");
+print "Number of vertices", mesh.n_vertices();
+mesh.property_stats();
+print"\n"
 
-# to convert a Eigen::matrix to something like [[1,2,3],[4,5,6]];
-# see this stuff: http://www.swig.org/Doc1.1/HTML/Typemaps.html
+#-------------------------------------------------------------------------------
+print "Read mesh vertices in a numpy matrix"
+matrix = mesh.get_vertices();
+print "print few vertices of matrix"
+print "v1:" , matrix[:,0]
+print "v2:" , matrix[:,1]
+print"\n"
 
-# to convert a Eigen::matrix into a numpy.matrix
-# possibly see this stuff: https://github.com/jorisv/Eigen3ToPython
+#-------------------------------------------------------------------------------
+print "Test a simple write operation"
+for vidx in xrange(matrix.shape[1]):
+    matrix[:,vidx] = vidx;
+mesh.set_vertices(matrix);
+print mesh.get_vertices();
