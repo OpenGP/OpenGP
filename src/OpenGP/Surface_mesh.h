@@ -27,6 +27,7 @@
 #include "headeronly.h"
 #include <OpenGP/types.h>
 #include <OpenGP/properties.h>
+#include <OpenGP/Global_properties.h>
 
 //== NAMESPACE ================================================================
 
@@ -37,7 +38,7 @@ namespace opengp {
 
 
 /// A halfedge data structure for polygonal meshes.
-class Surface_mesh
+class Surface_mesh : public Global_properties
 {
 
 public: //------------------------------------------------------ topology types
