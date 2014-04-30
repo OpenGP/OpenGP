@@ -1,13 +1,10 @@
-#ifndef HEADERONLY_H
-#define HEADERONLY_H
+#pragma once
 
-/// Make sure HEADERONLY is either nothing or the keyword "inline"
-#ifdef HEADERONLY
+/// Make sure HEADERONLY_INLINE is either nothing or the keyword "inline"
+#ifndef DISABLE_HEADERONLY
     #undef HEADERONLY_INLINE
     #define HEADERONLY_INLINE inline
 #else
     #undef HEADERONLY_INLINE
 	#define HEADERONLY_INLINE
-#endif
-
 #endif
