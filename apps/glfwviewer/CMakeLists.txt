@@ -2,7 +2,7 @@
 # This file is to be included with a CMake "add_subdirectory", do not run cmake on it directly
 
 # OpenGP can be found at ../src
-include_directories(../../src/OpenGP)
+include_directories(../../src)
 # Use the header only version of the library
 add_definitions( -DHEADERONLY )
 
@@ -41,8 +41,8 @@ endif(NOT ALL_FOUND)
 
 message(STATUS "Found GLFW at:   " ${GLFW_INCLUDE_DIRS})
 message(STATUS "Found Eigen3 at: " ${Eigen3_INCLUDE_DIRS})
-add_executable(surface_mesh_viewer_glfw surface_mesh_viewer_glfw.cpp vshader.glsl fshader.glsl)
-target_link_libraries(surface_mesh_viewer_glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
+add_executable(glfwviewer main.cpp vshader.glsl fshader.glsl)
+target_link_libraries(glfwviewer ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
 
 #--- stringify shader macro
 macro(target_stringify_shader MYTARGET SHADER)
@@ -78,8 +78,8 @@ macro(target_deploy_file MYTARGET FILEPATH)
 endmacro()
 
 #--- Convert shaders to a header file
-target_stringify_shader(surface_mesh_viewer_glfw vshader)
-target_stringify_shader(surface_mesh_viewer_glfw fshader)
+target_stringify_shader(glfwviewer vshader)
+target_stringify_shader(glfwviewer fshader)
 
 #--- Deploy files to the build folder
-target_deploy_file(surface_mesh_viewer_glfw ${CMAKE_CURRENT_SOURCE_DIR}/bunny.obj)
+target_deploy_file(glfwviewer ${CMAKE_CURRENT_SOURCE_DIR}/bunny.obj)

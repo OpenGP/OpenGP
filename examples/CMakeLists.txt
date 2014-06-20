@@ -22,7 +22,3 @@ add_executable(surface_mesh_io          surface_mesh_io.cpp)
 add_executable(surface_mesh_barycenter  surface_mesh_barycenter.cpp)
 add_executable(surface_mesh_c++11       surface_mesh_c++11.cpp)
 add_executable(global_properties        global_properties.cpp)
-
-#--- More complex examples
-add_subdirectory(surface_mesh_viewer_glfw)
-# add_subdirectory(qglviewer)
