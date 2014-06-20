@@ -1,4 +1,4 @@
-# @file examples/surface_mesh_viewer_glfw/CMakeLists.txt
+# @file examples/glfwviewer/CMakeLists.txt
 # This file is to be included with a CMake "add_subdirectory", do not run cmake on it directly
 
 # OpenGP can be found at ../src
