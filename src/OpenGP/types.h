@@ -2,8 +2,6 @@
 // Copyright (C) 2014 Andrea Tagliasacchi, EPFL
 #pragma once
 
-//== INCLUDES =================================================================
-
 #if defined(USE_EIGEN)
     #include <Eigen/Dense>
 #else
@@ -14,8 +12,13 @@
 namespace opengp {
 //=============================================================================
 
-/// Scalar type
-typedef float Scalar; 
+/// Customizable (yet global) scalar type
+#ifdef OPENGP_SCALAR_TYPE
+    typedef OPENGP_SCALAR_TYPE Scalar
+#else
+    typedef float Scalar;
+#endif
+ 
 
 #ifdef USE_EIGEN
     typedef Eigen::Matrix<Scalar, 2, 1> Vec2; ///< 2D vector type
