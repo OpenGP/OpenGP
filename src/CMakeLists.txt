@@ -4,6 +4,11 @@ message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 # Where are the headers found? 
 include_directories(.)
 
+#--- Eigen
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+add_definitions(-DUSE_EIGEN)
+
 #--- Make a release library build by default
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
@@ -31,13 +36,21 @@ file(GLOB SURFACEMESH_HEADERS ./OpenGP/surface_mesh/*.h)
 set(SOURCES ${COMMON_SOURCES} ${SURFACEMESH_SOURCES})
 set(HEADERS ${COMMON_HEADERS} ${SURFACEMESH_HEADERS})
 
-# Compile the library
-if(UNIX)
-    add_library(OpenGP SHARED ${SOURCES} ${HEADERS})
-elseif(WIN32)
-    add_library(OpenGP STATIC ${SOURCES} ${HEADERS})
+if(BUILD_LIBRARY)   
+    #--- If we are building the library then we are not headeronly
+    add_definitions(-DDISABLE_HEADERONLY)
+    #--- Compile the library
+    if(UNIX)
+        add_library(OpenGP SHARED ${SOURCES} ${HEADERS})
+    elseif(WIN32)
+        add_library(OpenGP STATIC ${SOURCES} ${HEADERS})
+    endif()
+    #--- Set the library version
+    set_target_properties(OpenGP PROPERTIES VERSION 1.0)
+else()                  
+    # Dummy just to have sources/headers appear in IDE
+    add_executable(dummy dummy.cpp ${SOURCES} ${HEADERS})
 endif()
 
-# Set the library version
-set_target_properties(OpenGP PROPERTIES VERSION 1.0)
+
 
