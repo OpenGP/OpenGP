@@ -1,5 +1,6 @@
 # @file examples/CMakeLists.txt
 # @note this file is to be included with a CMake "add_subdirectory", do not run cmake on it directly
+message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 
 #--- Make a release build by default
 if(NOT CMAKE_BUILD_TYPE)

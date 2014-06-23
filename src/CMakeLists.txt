@@ -1,4 +1,5 @@
-# FILE: OpenGP/CMakeLists.txt
+# FILE: src/CMakeLists.txt
+message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 
 # Where are the headers found? 
 include_directories(.)
