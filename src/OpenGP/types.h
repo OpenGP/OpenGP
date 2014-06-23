@@ -18,7 +18,10 @@ namespace opengp {
 #else
     typedef float Scalar;
 #endif
- 
+
+/// Bindings for special values
+inline Scalar nan(){ return std::numeric_limits<Scalar>::quiet_NaN(); }
+inline Scalar inf(){ return std::numeric_limits<Scalar>::max(); } 
 
 #ifdef USE_EIGEN
     typedef Eigen::Matrix<Scalar, 2, 1> Vec2; ///< 2D vector type
