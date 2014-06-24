@@ -1,3 +1,4 @@
+/// @see http://qt-project.org/wiki/How_to_use_OpenGL_Core_Profile_with_Qt
 #include <QApplication>
 #include "QGLMeshLabViewer.h"
 #include <OpenGP/Surface_mesh.h>
@@ -17,62 +18,55 @@ const GLfloat vertices[] = {
        0.0f,  1.0f, 0.0f,};
 
 class Viewer : public QGLMeshLabViewer {
-public:
-    Viewer(Surface_mesh& mesh):mesh(mesh){}
-
 protected:
     Surface_mesh& mesh;
     QGLShaderProgram program;
     QOpenGLVertexArrayObject vao;
-    
+    QGLBuffer vertexbuffer = QGLBuffer(QGLBuffer::VertexBuffer);
+
 public:
-    ///--- MUST not be called more than once!
+    Viewer(Surface_mesh& mesh):mesh(mesh){}    
+public:
     void init(){        
-        ///--- Load shaders
-        bool vok = program.addShaderFromSourceFile(QGLShader::Vertex, ":/vshader.glsl");
-        bool fok = program.addShaderFromSourceFile(QGLShader::Fragment, ":/fshader.glsl");
-        bool lok = program.link ();
-        assert(lok && vok && fok);        
-        program.bind();
+        ///--- Create an array object to store properties
+        {
+            bool success = vao.create();
+            assert(success);
+            vao.bind();
+        }
+        
+        ///--- Load/compile shaders
+        {
+            bool vok = program.addShaderFromSourceFile(QGLShader::Vertex, ":/vshader.glsl");
+            bool fok = program.addShaderFromSourceFile(QGLShader::Fragment, ":/fshader.glsl");
+            bool lok = program.link ();
+            assert(lok && vok && fok);
+            bool success = program.bind();
+            assert(success);
+        }
+        
+        ///--- Create vertex buffer/attributes "position"
+        {
+            bool success = vertexbuffer.create();
+            assert(success);
+            vertexbuffer.setUsagePattern( QGLBuffer::StaticDraw ); 
+            success = vertexbuffer.bind();
+            assert(success);
+            
+            vertexbuffer.allocate( vertices, 3 * 3 * sizeof( float ) );
+            program.setAttributeBuffer( "position", GL_FLOAT, 0, 3 );
+            program.enableAttributeArray("position");
+        }
         
         ///--- Setup camera
-        camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
-        camera()->setSceneCenter(qglviewer::Vec(0,0,0));
-        camera()->setSceneRadius(1);
-        camera()->showEntireScene();
-               
-        ///--- Create an array object to store properties
-        bool vaook = vao.create();
-        assert(vaook);
-        vao.bind();
-        
-#if 0
-        ///--- Setup vertex positions property
-        {
-            ///--- buffer
-            QGLBuffer vertex_buffer_ = QGLBuffer (QGLBuffer::VertexBuffer);
-            bool success = vertex_buffer_.create();
-            vertex_buffer_.setUsagePattern (QGLBuffer::StaticDraw);
-            assert(success);
-            vertex_buffer_.bind();            
-            ///--- attribute
-            
+        {        
+            camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
+            camera()->setSceneCenter(qglviewer::Vec(0,0,0));
+            camera()->setSceneRadius(1);
+            camera()->showEntireScene();
         }
-#else   
-        GLuint vertexbuffer; 
-        glGenBuffers(1, &vertexbuffer); 
-        /// The subsequent commands will affect the specified buffer
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer); 
-        /// Pass the vertex positions to OpenGL
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); 
-#endif
-        
-        /// @todo explain what are vertex attributes
-        /// Vertex Attribute ID for Vertex Positions
-        GLuint position = glGetAttribLocation(program.programId(), "position");
-        glEnableVertexAttribArray(position);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        glVertexAttribPointer(position, 3, GL_FLOAT, /*DONT_NORMALIZE*/0, /*ZERO_STRIDE*/0, /*ZERO_BUFFER_OFFSET*/0);        
+
+        // auto vpoints = mesh.get_vertex_property<Vec3>("v:point");      
     }
 
     void draw(){
