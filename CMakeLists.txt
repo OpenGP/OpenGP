@@ -35,9 +35,11 @@ option(BUILD_DOCS          "Generate rules to build documentation"    OFF)
 option(BUILD_LIBRARY       "Build the OpenGP dynamic library"         OFF)
 option(BUILD_EXAMPLES      "Build the OpenGP examples"                OFF)
 option(BUILD_APPLICATIONS  "Build the applications/demos"             OFF)
+option(WITH_DATA           "Deploy data to build folder"              ON)
 
 add_subdirectory(doc)
 add_subdirectory(src)
 add_subdirectory(examples)
 add_subdirectory(apps)
+add_subdirectory(data)
  
