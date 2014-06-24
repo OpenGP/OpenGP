@@ -1,4 +1,3 @@
-// Copyright (C) 2014 - LGG EPFL
 #version 330 core
 
 /// @note gl_FragColor is obsolete in core OpenGL >= 3.1

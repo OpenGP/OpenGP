@@ -1,6 +1,7 @@
 #include <QApplication>
 #include "QGLMeshLabViewer.h"
 #include <OpenGP/Surface_mesh.h>
+#include <OpenGP/surface_mesh/bounding_box.h>
 #include "OpenGP/GL/shader_helpers.h"
 
 // #include <QGLShaderProgram>
@@ -19,15 +20,22 @@ public:
 
 protected:
     Surface_mesh& mesh;
-    // QGLShaderProgram program;
+    QGLShaderProgram program;
 
 public:
-    void init(){
-        /// Compile the shaders
-        GLuint programID = opengp::load_shaders("vshader.glsl", "fshader.glsl");
-        if(!programID) exit(EXIT_FAILURE);
-        glUseProgram(programID);
+    void init(){        
+        ///--- Load shaders
+        bool vok = program.addShaderFromSourceFile(QGLShader::Vertex, ":/vshader.glsl");
+        bool fok = program.addShaderFromSourceFile(QGLShader::Fragment, ":/fshader.glsl");
+        bool lok = program.link ();
+        assert(lok && vok && fok);        
+        program.bind();
         
+//        camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
+//        camera()->setSceneCenter(qglviewer::Vec(0,0,0));
+//        camera()->setSceneRadius(1);
+//        camera()->showEntireScene();
+               
         /// @todo explain more or refer to another exercise
         GLuint VertexArrayID;
         glGenVertexArrays(1, &VertexArrayID);
@@ -43,14 +51,13 @@ public:
        
         /// @todo explain what are vertex attributes
         /// Vertex Attribute ID for Vertex Positions
-        GLuint position = glGetAttribLocation(programID, "position");
+        GLuint position = glGetAttribLocation(program.programId(), "position");
         glEnableVertexAttribArray(position);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glVertexAttribPointer(position, 3, GL_FLOAT, /*DONT_NORMALIZE*/0, /*ZERO_STRIDE*/0, /*ZERO_BUFFER_OFFSET*/0);        
     }
 
     void draw(){
-        // QGLShaderProgram program;
         // setup_modelview(program);
         
         glClear(GL_COLOR_BUFFER_BIT);
@@ -61,7 +68,8 @@ public:
 
 int main(int argc, char** argv) {
     QApplication application(argc,argv);
- 
+    if(argc!=2) return EXIT_FAILURE;
+    
     Surface_mesh mesh;
     bool ok = mesh.read(argv[1]);
     if(!ok) return EXIT_FAILURE;

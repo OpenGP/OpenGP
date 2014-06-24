@@ -33,12 +33,10 @@ add_definitions(-DQGLVIEWER)
 list(APPEND LIBRARIES ${QGLVIEWER_LIBRARIES})
 
 #--- Link application
-add_executable(qglviewer main.cpp QGLMeshLabViewer.h)
+qt5_add_resources(RESOURCES shaders.qrc)
+add_executable(qglviewer main.cpp QGLMeshLabViewer.h ${RESOURCES})
 target_link_libraries(qglviewer ${LIBRARIES})
-
-#--- Qt link steps
 qt5_use_modules(qglviewer Widgets OpenGL Xml Script)
-qt5_add_resources(RCC_SRCS shaders.qrc)
 
 #--- Deploy demo files
 configure_file(${CMAKE_SOURCE_DIR}/data/bunny.obj ${CMAKE_BINARY_DIR}/ COPYONLY)
