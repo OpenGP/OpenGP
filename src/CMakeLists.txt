@@ -1,5 +1,8 @@
-# FILE: src/CMakeLists.txt
-message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
+if(NOT BUILD_LIBRARY)
+    return()
+else()
+    message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
+endif()
 
 # Where are the headers found? 
 include_directories(.)

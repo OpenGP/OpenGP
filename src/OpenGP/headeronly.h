@@ -6,6 +6,7 @@
     #undef HEADERONLY_INLINE
     #define HEADERONLY_INLINE
 #else
+    #undef HEADERONLY
     #define HEADERONLY
     #undef HEADERONLY_INLINE
     #define HEADERONLY_INLINE inline

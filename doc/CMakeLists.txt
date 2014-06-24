@@ -1,6 +1,10 @@
-message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
+if(NOT BUILD_DOCS)
+    return()
+else()
+    message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
+endif()
 
-find_package(Doxygen)
+find_package(Doxygen REQUIRED)
 
 if(DOXYGEN_FOUND STREQUAL "NO")
   message(STATUS "Doxygen not found. Please get a copy http://www.doxygen.org")
