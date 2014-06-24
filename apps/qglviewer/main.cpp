@@ -11,12 +11,6 @@
 
 using namespace opengp;
 
-/// Vertex position of the triangle
-const GLfloat vertices[] = {
-       -1.0f, -1.0f, 0.0f,
-       1.0f, -1.0f, 0.0f,
-       0.0f,  1.0f, 0.0f,};
-
 class Viewer : public QGLMeshLabViewer {
 protected:
     Surface_mesh& mesh;
@@ -47,14 +41,16 @@ public:
         
         ///--- Create vertex buffer/attributes "position"
         {
+            auto vpoints = mesh.get_vertex_property<Vec3>("v:point");            
+            
             bool success = vertexbuffer.create();
             assert(success);
             vertexbuffer.setUsagePattern( QGLBuffer::StaticDraw ); 
             success = vertexbuffer.bind();
             assert(success);
             
-            vertexbuffer.allocate( vertices, 3 * 3 * sizeof( float ) );
-            program.setAttributeBuffer( "position", GL_FLOAT, 0, 3 );
+            vertexbuffer.allocate( vpoints.data(), sizeof(Vec3) * mesh.n_vertices() );
+            program.setAttributeBuffer("position", GL_FLOAT, 0, 3 );
             program.enableAttributeArray("position");
         }
         
@@ -65,8 +61,6 @@ public:
             camera()->setSceneRadius(1);
             camera()->showEntireScene();
         }
-
-        // auto vpoints = mesh.get_vertex_property<Vec3>("v:point");      
     }
 
     void draw(){
@@ -75,10 +69,9 @@ public:
         
         ///--- clear & draw
         glClear(GL_COLOR_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, mesh.n_vertices());
     }
 };
-
 
 int main(int argc, char** argv) {
     QApplication application(argc,argv);
