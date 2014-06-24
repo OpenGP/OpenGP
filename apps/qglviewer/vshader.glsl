@@ -1,32 +1,29 @@
+// Copyright (C) 2014 - LGG EPFL
 #version 330 core 
-/// These are per-vertex properties
-in vec3 vposition; 
-in vec3 vnormal;
 
-/// These are fixed for the whole mesh
-uniform mat4 M;
-uniform mat4 MV;
-uniform mat4 MVP; 
-uniform vec3 LDIR;
+/// Map data specified in glVertexAttribPointer(...) to shader variables
+/// - location maps to the first argument glVertexAttribPointer(position,...)
+/// - vec3 because we specified glVertexAttribPointer(..., 3, GL_FLOAT, ...)
+/// - position is the name of the variable that you can use in the shader
+in vec3 position;
 
-/// These are passed to the fragment shader
-out vec4 vColor;
+/// The following variables are implicitly defined!!!
+/// If you toggle the preprocessor directive the program will still compile/run
+/// @see http://www.opengl.org/wiki/Built-in_Variable_(GLSL)
+/// @note You could comment this out (built-in)
+out gl_PerVertex{ vec4 gl_Position; };
 
-void main(){ 
-    gl_Position = MVP * vec4(vposition, 1.0); /// Clip coordinates
+void main() {
+    /// gl_Position is a built-in variable that you *must* define
+    /// The point location must be converted in homogeneous coordinates
+    /// @note Homogenous Coordinates: 
+    ///     the vector (x,y,z,1) is a position.
+    ///     the vector (x,y,z,0) is a direction.
+    gl_Position = vec4(position, 1.0);
     
-    ///--- Normal in world coordinates
-    // @see https://code.google.com/p/opengl-tutorial-org/source/browse/tutorial09_vbo_indexing/StandardShading.vertexshader
-    // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.
-    vec4 n = M * vec4(vnormal, 0);
-    
-    ///--- Normalization
-    n.xyz = normalize(n.xyz);
-    vec3 ldir = normalize(LDIR);
-    
-    ///--- per vertex shading
-    vec3 basecolor = vec3(1,0,0);
-    float albedo = max( dot( n.xyz, ldir ), 0 );   
-    vColor = vec4(basecolor * albedo,1);
-    vColor.a = 1;
+    /// Alternative way of accessing the vector
+    // gl_Position.xyz = position;
+    // gl_Position.w = 1.0;
 }
+
+
