@@ -64,3 +64,6 @@ ELSE()
     ENDIF()
 ENDIF()
 
+
+#--- Remove QGLViewer warnings (@todo can we do this inline?)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-gnu-anonymous-struct -Wno-nested-anon-types")
