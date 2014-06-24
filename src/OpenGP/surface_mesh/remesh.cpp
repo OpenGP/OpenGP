@@ -1,10 +1,13 @@
 #include "remesh.h"
-#include "OpenGP/eigen_helpers.h"
 #include "OpenGP/Surface_mesh.h"
 
 //=============================================================================
 namespace opengp {
 //=============================================================================
+
+/// @brief dot product between two eigen vectors
+template <typename Scalar, int N>
+inline Scalar dot(const Eigen::Matrix<Scalar, N, 1>& v0, const Eigen::Matrix<Scalar, N, 1>& v1){ return v0.dot(v1); }
 
 namespace {
 typedef Vec3 Point;
