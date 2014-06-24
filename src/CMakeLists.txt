@@ -21,7 +21,7 @@ endif()
 
 #--- Add the common files to the build
 file(GLOB COMMON_SOURCES ./OpenGP/*.cpp)
-file(GLOB COMMON_HEADERS ./OpenGP/.h)
+file(GLOB COMMON_HEADERS ./OpenGP/*.h)
 
 #--- Add the surface_mesh files to the build
 file(GLOB SURFACEMESH_SOURCES ./OpenGP/surface_mesh/*.cpp)
@@ -36,7 +36,8 @@ file(GLOB SURFACEMESH_HEADERS ./OpenGP/surface_mesh/*.h)
 set(SOURCES ${COMMON_SOURCES} ${SURFACEMESH_SOURCES})
 set(HEADERS ${COMMON_HEADERS} ${SURFACEMESH_HEADERS})
 
-if(BUILD_LIBRARY)   
+if(BUILD_LIBRARY) 
+    message(STATUS "Bulding libOpenGP.dylib")
     #--- If we are building the library then we are not headeronly
     add_definitions(-DDISABLE_HEADERONLY)
     #--- Compile the library
@@ -47,9 +48,9 @@ if(BUILD_LIBRARY)
     endif()
     #--- Set the library version
     set_target_properties(OpenGP PROPERTIES VERSION 1.0)
-else()                  
-    # Dummy just to have sources/headers appear in IDE
-    add_executable(dummy dummy.cpp ${SOURCES} ${HEADERS})
+else()
+    #--- Dummy just to have sources/headers appear in IDE
+    add_custom_target(dummy SOURCES ${HEADERS} ${SOURCES})
 endif()
 
 
