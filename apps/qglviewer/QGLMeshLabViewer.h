@@ -4,6 +4,7 @@
 #include <QGLViewer/manipulatedCameraFrame.h>
 #include <QGLShaderProgram>
 #include <QGLViewer/qglviewer.h>
+#include <QMatrix4x4>
 
 class QGLMeshLabViewer : public QGLViewer {
 protected:
@@ -17,10 +18,12 @@ protected:
     };
 protected:
     QGLMeshLabViewer() : QGLViewer(OpenGL4Format()){
-        init();
+        // init();
     }
     
     void init(){
+        std::cout << __FUNCTION__ << std::endl;
+        
         /// Bindings @see QGLViewer::setDefaultMouseBindings()
         /// Extra behavior in this->mouseDoubleClickEvent()
         {
@@ -43,5 +46,24 @@ protected:
             setVisualHintsMask(1);
             update();
         }
+    }
+    
+    static void setup_modelview(qglviewer::Camera* camera, QGLShaderProgram& program_){
+        ///--- Fetch matrixes from trackball
+        Eigen::Matrix4f MVP; 
+        camera->getModelViewProjectionMatrix(MVP.data());
+        MVP.transposeInPlace();
+        Eigen::Matrix4f MV; 
+        camera->getModelViewMatrix(MV.data());
+        MV.transposeInPlace();
+        
+        // std::cout << "MVP:\n" << MVP << std::endl;
+        // std::cout << "MV:\n" << MV << std::endl;
+        
+        ///--- 
+        program_.setUniformValue (program_.uniformLocation ("MVP"), QMatrix4x4(MVP.data()));
+        program_.setUniformValue (program_.uniformLocation ("MV"), QMatrix4x4(MV.data()));
+        
+        
     }
 };
