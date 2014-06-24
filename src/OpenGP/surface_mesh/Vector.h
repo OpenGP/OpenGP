@@ -1,28 +1,9 @@
 //=============================================================================
 // Copyright (C) 2001-2005 by Computer Graphics Group, RWTH Aachen
 // Copyright (C) 2011-2013 by Graphics & Geometry Group, Bielefeld University
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public License
-// as published by the Free Software Foundation, version 2.
-//
-// This library is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+// Copyright (C) 2014 by Graphics and Geometry Laborarory, EPFL 
 //=============================================================================
-
-
-#ifndef SURFACE_MESH_VECTOR_H
-#define SURFACE_MESH_VECTOR_H
-
-
-//== INCLUDES =================================================================
-
+#pragma once
 
 #include <cassert>
 #include <cmath>
@@ -30,20 +11,15 @@
 #include <iostream>
 #include <limits>
 
-
 #ifdef WIN32
 #undef min
 #undef max
 #endif
 
-
+//=============================================================================
+namespace opengp {
 //=============================================================================
 
-
-namespace opengp {
-
-
-//== CLASS DEFINITION =========================================================
 
 
 /** A vector class for an N-dimensional vector of scalar type T.
@@ -270,6 +246,19 @@ public:
         return *this;
     }
 
+    /// compute the dot product of two vectors
+    Scalar dot(const Vector<Scalar,N>& v1)
+    {
+        const Vector<Scalar,N>& v0 = *this;
+        Scalar p = v0[0]*v1[0];
+        for (int i=1; i<N; ++i)
+            p += v0[i]*v1[i];
+        return p;
+    }
+    
+    /// returns the l2 norm of the current vector
+    inline Scalar norm(){ return this->dot(*this); }
+
 public:
     /** The N values of type Scalar are the only data members
      of this class. This guarantees 100% compatibility with arrays of type
@@ -384,7 +373,7 @@ inline Scalar norm(const Vector<Scalar,N>& v)
 
 /// compute the Euclidean norm of a vector
 template <typename Scalar, int N>
-inline Vector<Scalar,N> normalize(const Vector<Scalar,N>& v)
+inline Vector<Scalar,N> normalized(const Vector<Scalar,N>& v)
 {
     Scalar n = norm(v);
     n = (n > std::numeric_limits<Scalar>::min()) ? 1.0/n : 0.0;
@@ -564,7 +553,12 @@ public:
         return *this;
     }
 
-    Vector<Scalar,3>& normalized()
+    Vector<Scalar,3>& normalized(){
+        Vector<Scalar,3> retval = (*this);
+        return retval.normalize();
+    }    
+    
+    Vector<Scalar,3>& normalize()
     {
         Scalar n = norm(*this);
         n = (n > std::numeric_limits<Scalar>::min()) ? 1.0/n : 0.0;
@@ -785,5 +779,4 @@ typedef Vector<double,4> Vec4d;
 //=============================================================================
 } // namespace opengp
 //=============================================================================
-#endif // SURFACE_MESH_VECTOR_H
-//=============================================================================
+
