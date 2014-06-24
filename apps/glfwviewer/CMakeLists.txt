@@ -1,5 +1,6 @@
 # @file examples/glfwviewer/CMakeLists.txt
 # This file is to be included with a CMake "add_subdirectory", do not run cmake on it directly
+message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 
 # OpenGP can be found at ../src
 include_directories(../../src)
@@ -7,20 +8,23 @@ include_directories(../../src)
 add_definitions( -DHEADERONLY )
 
 #--- Load the graphics libraries
-find_package(OpenGL) #OPTIONAL
+find_package(OpenGL REQUIRED)
 include_directories(${OpenGL_INCLUDE_DIRS})
 link_directories(${OpenGL_LIBRARY_DIRS})
 add_definitions(${OpenGL_DEFINITIONS})
 
-find_package(GLFW) # OPTIONAL
+#--- Context manager
+find_package(GLFW REQUIRED)
 include_directories(${GLFW_INCLUDE_DIRS})
 add_definitions(${GLFW_DEFINITIONS})
 
-find_package(GLEW) # OPTIONAL
+#--- Multi-platform OpenGL support
+find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
 link_directories(${GLEW_LIBRARY_DIRS})
 
-find_package(Eigen3) # OPTIONAL
+#--- Math
+find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 add_definitions(-DUSE_EIGEN)
 
@@ -39,8 +43,7 @@ if(NOT ALL_FOUND)
     return()
 endif(NOT ALL_FOUND)
 
-message(STATUS "Found GLFW at:   " ${GLFW_INCLUDE_DIRS})
-message(STATUS "Found Eigen3 at: " ${Eigen3_INCLUDE_DIRS})
+#--- compile
 add_executable(glfwviewer main.cpp vshader.glsl fshader.glsl)
 target_link_libraries(glfwviewer ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
 
