@@ -19,6 +19,13 @@ find_package(Qt5OpenGL)
 find_package(Qt5Xml)
 set(CMAKE_AUTOMOC ON)
 
+#--- OpenGL
+find_package(OpenGL REQUIRED)
+include_directories(${OpenGL_INCLUDE_DIRS})
+link_directories(${OpenGL_LIBRARY_DIRS})
+add_definitions(${OpenGL_DEFINITIONS})
+list(APPEND LIBRARIES ${OPENGL_LIBRARIES})
+
 #--- QGLViewer
 find_package(QGLViewer REQUIRED)
 include_directories(${QGLVIEWER_INCLUDE_DIR})
@@ -35,3 +42,7 @@ qt5_add_resources(RCC_SRCS shaders.qrc)
 
 #--- Deploy demo files
 configure_file(${CMAKE_SOURCE_DIR}/data/bunny.obj ${CMAKE_BINARY_DIR}/ COPYONLY)
+
+#--- @todo TEMPORARY!!! UNTIL WE START USING QT RESOURCES
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vshader.glsl ${CMAKE_BINARY_DIR}/ COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/fshader.glsl ${CMAKE_BINARY_DIR}/ COPYONLY)

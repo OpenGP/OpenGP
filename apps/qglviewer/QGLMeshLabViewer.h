@@ -1,11 +1,22 @@
 #pragma once
-#include <QGLViewer/qglviewer.h>
+#include <Eigen/Dense>
 #include <QMouseEvent>
 #include <QGLViewer/manipulatedCameraFrame.h>
+#include <QGLShaderProgram>
+#include <QGLViewer/qglviewer.h>
 
 class QGLMeshLabViewer : public QGLViewer {
 protected:
-    QGLMeshLabViewer(){
+    class OpenGL4Format : public QGLFormat{
+    public:
+        OpenGL4Format(){
+            setVersion( 3, 3 );
+            setProfile( QGLFormat::CoreProfile );
+            setSampleBuffers( true );     
+        }
+    };
+protected:
+    QGLMeshLabViewer() : QGLViewer(OpenGL4Format()){
         init();
     }
     
