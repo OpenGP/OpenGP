@@ -33,6 +33,6 @@ list(APPEND LIBRARIES ${QGLVIEWER_LIBRARIES})
 
 #--- Link application
 qt5_add_resources(RESOURCES shaders.qrc)
-add_executable(qglviewer main.cpp QGLMeshLabViewer.h ${RESOURCES})
+add_executable(qglviewer main.cpp ${RESOURCES})
 target_link_libraries(qglviewer ${LIBRARIES})
 qt5_use_modules(qglviewer Widgets OpenGL Xml Script)
