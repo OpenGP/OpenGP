@@ -245,10 +245,16 @@ bool read_off(Surface_mesh& mesh, const std::string& filename)
     if (!in) return false;
 
 
+    // Ignore comments (#) until I find header
+    char* c = NULL;
+    while(!feof(in)){
+        c = fgets(line, 200, in);
+        assert(c != NULL);
+        // printf("%c\n",c[0]);
+        if(c[0]!='#') break;
+    }
+    
     // read header: [ST][C][N][4][n]OFF BINARY
-    char *c = fgets(line, 200, in);
-    assert(c != NULL);
-    c = line;
     if (c[0] == 'S' && c[1] == 'T') { has_texcoords = true; c += 2; }
     if (c[0] == 'C') { has_colors  = true; ++c; }
     if (c[0] == 'N') { has_normals = true; ++c; }
@@ -258,9 +264,9 @@ bool read_off(Surface_mesh& mesh, const std::string& filename)
     if (strncmp(c+4, "BINARY", 6) == 0) is_binary = true;
 
 
-    // homogeneous coords, and vertex dimension != 3 are not supported
     if (has_hcoords || has_dim)
     {
+        std::cerr << "homogeneous coords, and vertex dimension != 3 are not supported" << std::endl;
         fclose(in);
         return false;
     }
