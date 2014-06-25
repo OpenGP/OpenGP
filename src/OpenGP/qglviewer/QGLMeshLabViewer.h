@@ -8,10 +8,9 @@
 #include <QVector3D>
 
 
+/// @brief Specialization of QGLViewer for OpenGL4 with actions that have been modified to make
+/// its default behavior match the one of MeshLab (i.e. double click to center scene)
 class QGLMeshLabViewer : public QGLViewer {
-protected: 
-    inline QVector3D toQt(const qglviewer::Vec& v){ return QVector3D(v.x, v.y, v.z); }
-
 protected:
     class OpenGL4Format : public QGLFormat{
     public:
@@ -64,7 +63,7 @@ protected:
         // std::cout << "MVP:\n" << MVP << std::endl;
         // std::cout << "MV:\n" << MV << std::endl;
         
-        ///--- 
+        ///--- Set shader variables
         program_.setUniformValue (program_.uniformLocation ("MVP"), QMatrix4x4(MVP.data()));
         program_.setUniformValue (program_.uniformLocation ("MV"), QMatrix4x4(MV.data()));   
     }

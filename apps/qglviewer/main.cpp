@@ -1,21 +1,16 @@
 /// @see http://qt-project.org/wiki/How_to_use_OpenGL_Core_Profile_with_Qt
+
 #include <QApplication>
-#include "QGLMeshLabViewer.h"
 #include <OpenGP/Surface_mesh.h>
 #include <OpenGP/surface_mesh/bounding_box.h>
 
+#include <OpenGP/qglviewer/QGLMeshLabViewer.h>
 #include <QGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
 #include <QGLBuffer>
 
 using namespace opengp;
 using namespace std;
-
-inline bool isDepthTestEnabled(){
-    GLboolean val = 0;
-    glGetBooleanv(GL_DEPTH_TEST,&val);
-    return val;        
-}
 
 class Viewer : public QGLMeshLabViewer {
 protected:
@@ -111,14 +106,12 @@ public:
     }
 
     void draw(){
+#define FORCE_REENABLE_DEPTH
 #ifdef FORCE_REENABLE_DEPTH
         glEnable(GL_DEPTH_TEST);
 #endif
-        
-        cout << __LINE__ << ": " << isDepthTestEnabled() << endl;        
         vao.bind();
         program.bind();
-        cout << __LINE__ << ": " << isDepthTestEnabled() << endl;        
         {
             ///--- Update modelview
             setup_modelview(camera(), program);
@@ -127,10 +120,8 @@ public:
             glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
             glDrawElements(GL_TRIANGLES, triangles.size(), GL_UNSIGNED_INT, 0);
         }
-        cout << __LINE__ << ": " << isDepthTestEnabled() << endl;        
         vao.release();
         program.release();
-        cout << __LINE__ << ": " << isDepthTestEnabled() << endl << endl;        
     }
 };
 
