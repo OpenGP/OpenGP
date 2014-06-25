@@ -1,13 +1,18 @@
 /// @see http://qt-project.org/wiki/How_to_use_OpenGL_Core_Profile_with_Qt
 
+///--- Qt
 #include <QApplication>
-#include <OpenGP/Surface_mesh.h>
-#include <OpenGP/surface_mesh/bounding_box.h>
-
-#include <OpenGP/qglviewer/QGLMeshLabViewer.h>
 #include <QGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
 #include <QGLBuffer>
+
+///--- Surface_mesh
+#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/surface_mesh/bounding_box.h>
+
+///--- QGLViewer 
+#include <OpenGP/qglviewer/QGLMeshLabViewer.h>
+#include <OpenGP/qglviewer/helpers.h>
 
 using namespace opengp;
 using namespace std;
@@ -94,9 +99,10 @@ public:
         
         ///--- Setup camera
         {        
+            Box3 bbox = opengp::bounding_box(mesh);
             camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
-            camera()->setSceneCenter(qglviewer::Vec(0,0,0));
-            camera()->setSceneRadius(1);
+            camera()->setSceneCenter(qglviewer::tr(bbox.center()));
+            camera()->setSceneRadius(bbox.diagonal().norm()/2.0);
             camera()->showEntireScene();
         }
         
