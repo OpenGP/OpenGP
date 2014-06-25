@@ -5,8 +5,13 @@
 #include <QGLShaderProgram>
 #include <QGLViewer/qglviewer.h>
 #include <QMatrix4x4>
+#include <QVector3D>
+
 
 class QGLMeshLabViewer : public QGLViewer {
+protected: 
+    inline QVector3D toQt(const qglviewer::Vec& v){ return QVector3D(v.x, v.y, v.z); }
+
 protected:
     class OpenGL4Format : public QGLFormat{
     public:
@@ -16,14 +21,9 @@ protected:
             setSampleBuffers( true );     
         }
     };
+    
 protected:
     QGLMeshLabViewer() : QGLViewer(OpenGL4Format()){
-        // init();
-    }
-    
-    void init(){
-        std::cout << __FUNCTION__ << std::endl;
-        
         /// Bindings @see QGLViewer::setDefaultMouseBindings()
         /// Extra behavior in this->mouseDoubleClickEvent()
         {
@@ -33,13 +33,17 @@ protected:
             setMouseBinding(Qt::NoModifier, Qt::MiddleButton, NO_CLICK_ACTION, true); /// ZOOM_TO_FIT
         }
     }
-
+    
     void mouseDoubleClickEvent(QMouseEvent* e){
+        //std::cout << __FUNCTION__ << std::endl;
+        
         /// MeshLAB like double click action
         {
             /// Modified version of "RAP_FROM_PIXEL"
-            if(!camera()->setPivotPointFromPixel(e->pos()))
+            if(!camera()->setPivotPointFromPixel(e->pos())){
+                std::cout << "failed" << std::endl;
                 return; // do nothing
+            }
             camera()->setSceneCenter( camera()->pivotPoint() );
             /// Stolen from "centerScene"
             camera()->frame()->projectOnLine(sceneCenter(), camera()->viewDirection());
@@ -62,8 +66,6 @@ protected:
         
         ///--- 
         program_.setUniformValue (program_.uniformLocation ("MVP"), QMatrix4x4(MVP.data()));
-        program_.setUniformValue (program_.uniformLocation ("MV"), QMatrix4x4(MV.data()));
-        
-        
+        program_.setUniformValue (program_.uniformLocation ("MV"), QMatrix4x4(MV.data()));   
     }
 };

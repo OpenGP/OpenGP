@@ -1,7 +1,12 @@
 #version 330 core
+in vec3 fpoint; 
+in vec3 fnormal;
+out vec3 fcolor;
 
-/// @note gl_FragColor is obsolete in core OpenGL >= 3.1
-out vec3 color;
-void main() {
-    color = vec3(1.0, 0.0, 0.0);
+/// Shade red front facing, solid blue back
+void main(){
+    if(fnormal.z>0)
+        fcolor = fnormal.z * vec3(1.0,0.0,0.0);
+    else
+        fcolor = vec3(0,0,1);
 }
