@@ -1,8 +1,9 @@
 # @todo description
 message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 
-# OpenGP can be found at ../src
-include_directories(../../src)
+#--- OpenGP (headeronly)
+find_package(OpenGP REQUIRED)
+include_directories(${OpenGP_INCLUDE_DIR})
 
 #--- Eigen
 find_package(Eigen3 REQUIRED)
@@ -19,6 +20,3 @@ endif()
 #--- Remesh executable
 add_executable(isoremesh main.cpp)
 target_link_libraries(isoremesh ${LIBS})
-
-#--- Simple test dataset
-configure_file("${CMAKE_SOURCE_DIR}/examples/data/bunny.obj" ${CMAKE_BINARY_DIR}/ COPYONLY)
