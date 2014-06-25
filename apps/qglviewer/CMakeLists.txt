@@ -1,6 +1,10 @@
-#--- Tell where to find Qt
+#--- Qt5 Needs the CMAKE_PREFIX_PATH
+# @see http://qt-project.org/doc/qt-5/cmake-manual.html
 if(APPLE)
-    set(CMAKE_PREFIX_PATH "/Developer/Qt/5.2.1/clang_64")
+    set(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH}) 
+    if(NOT CMAKE_PREFIX_PATH) 
+        message(FATAL_ERROR "CMAKE_PREFIX_PATH empty!! e.g. /Developer/Qt/5.2.1/clang_64")
+    endif()
 endif()
 
 #--- Eigen
@@ -13,9 +17,10 @@ find_package(OpenGP REQUIRED)
 include_directories(${OpenGP_INCLUDE_DIR})
 
 #--- Qt
+find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
-find_package(Qt5OpenGL) 
-find_package(Qt5Xml)
+find_package(Qt5OpenGL REQUIRED) 
+find_package(Qt5Xml REQUIRED)
 set(CMAKE_AUTOMOC ON)
 
 #--- OpenGL
