@@ -11,7 +11,6 @@ add_definitions(-DUSE_EIGEN)
 #--- OpenGP (headeronly)
 find_package(OpenGP REQUIRED)
 include_directories(${OpenGP_INCLUDE_DIR})
-message(STATUS OpenGP_INCLUDE_DIR ${OpenGP_INCLUDE_DIR})
 
 #--- Qt
 find_package(Qt5Widgets REQUIRED)
@@ -37,10 +36,3 @@ qt5_add_resources(RESOURCES shaders.qrc)
 add_executable(qglviewer main.cpp QGLMeshLabViewer.h ${RESOURCES})
 target_link_libraries(qglviewer ${LIBRARIES})
 qt5_use_modules(qglviewer Widgets OpenGL Xml Script)
-
-#--- Deploy demo files
-configure_file(${CMAKE_SOURCE_DIR}/data/bunny.obj ${CMAKE_BINARY_DIR}/ COPYONLY)
-
-#--- @todo TEMPORARY!!! UNTIL WE START USING QT RESOURCES
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vshader.glsl ${CMAKE_BINARY_DIR}/ COPYONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/fshader.glsl ${CMAKE_BINARY_DIR}/ COPYONLY)
