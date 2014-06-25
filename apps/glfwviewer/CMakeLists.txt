@@ -2,10 +2,9 @@
 # This file is to be included with a CMake "add_subdirectory", do not run cmake on it directly
 message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 
-# OpenGP can be found at ../src
-include_directories(../../src)
-# Use the header only version of the library
-add_definitions( -DHEADERONLY )
+#--- OpenGP (headeronly)
+find_package(OpenGP REQUIRED)
+include_directories(${OpenGP_INCLUDE_DIR})
 
 #--- Load the graphics libraries
 find_package(OpenGL REQUIRED)

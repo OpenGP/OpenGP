@@ -4,14 +4,14 @@ else()
     message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 endif()
 
-#--- examples use eigen
+#--- OpenGP (headeronly)
+find_package(OpenGP REQUIRED)
+include_directories(${OpenGP_INCLUDE_DIR})
+
+#--- Eigen
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 add_definitions(-DUSE_EIGEN)
-
-#--- examples know where to find the OpenGP header only source
-add_definitions( -DHEADERONLY )
-include_directories(../src)
 
 #--- Compile examples one by one
 add_executable(surface_mesh_basics      surface_mesh_basics.cpp)
