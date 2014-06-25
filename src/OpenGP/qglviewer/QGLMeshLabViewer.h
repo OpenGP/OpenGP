@@ -8,21 +8,24 @@
 #include <QVector3D>
 
 
-/// @brief Specialization of QGLViewer for OpenGL4 with actions that have been modified to make
-/// its default behavior match the one of MeshLab (i.e. double click to center scene)
+/// @brief Specialization of QGLViewer for OpenGL4 with actions that have been modified to make its default behavior match the one of MeshLab (i.e. double click to center scene, no spinning)
 class QGLMeshLabViewer : public QGLViewer {
 protected:
+    /// Format class to enable OpenGL4 core profile 
     class OpenGL4Format : public QGLFormat{
     public:
         OpenGL4Format(){
-            setVersion( 3, 3 );
-            setProfile( QGLFormat::CoreProfile );
-            setSampleBuffers( true );     
+            setVersion(3,3);
+            setProfile(QGLFormat::CoreProfile);
+            setSampleBuffers(true);     
         }
     };
     
 protected:
     QGLMeshLabViewer() : QGLViewer(OpenGL4Format()){
+        /// Disable QGLViewer's default "spin"
+        camera()->frame()->setSpinningSensitivity(100); 
+        
         /// Bindings @see QGLViewer::setDefaultMouseBindings()
         /// Extra behavior in this->mouseDoubleClickEvent()
         {
