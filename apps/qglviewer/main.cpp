@@ -137,7 +137,10 @@ int main(int argc, char** argv) {
     
     Surface_mesh mesh;
     bool ok = mesh.read(argv[1]);
-    if(!ok) return EXIT_FAILURE;
+    if(!ok){
+        cout << "could not open file: " << argv[1] << endl;
+        return EXIT_FAILURE;
+    }
     
     ///--- Preprocess
     mesh.triangulate();
