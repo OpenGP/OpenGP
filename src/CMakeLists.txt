@@ -1,8 +1,4 @@
-if(NOT BUILD_LIBRARY)
-    return()
-else()
-    message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
-endif()
+message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 
 # Where are the headers found? 
 include_directories(.)
