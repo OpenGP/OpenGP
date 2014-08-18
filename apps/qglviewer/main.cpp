@@ -133,7 +133,10 @@ public:
 
 int main(int argc, char** argv) {
     QApplication application(argc,argv);
-    if(argc!=2) return EXIT_FAILURE;
+    if(argc!=2){
+        cout << "One argument necessary, given: " << (argc-1) << endl;
+        return EXIT_FAILURE;
+    }
     
     Surface_mesh mesh;
     bool ok = mesh.read(argv[1]);
