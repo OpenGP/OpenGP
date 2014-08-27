@@ -10,3 +10,6 @@
 /examples/_python/generated.cpp
 /examples/_python/opengp.py
 /examples/_python/opengp.pyc
+
+/apps/baker-build/
+/apps/qglviewer-build/
