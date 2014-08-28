@@ -3,7 +3,7 @@
 if(APPLE)
     set(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH}) 
     if(NOT CMAKE_PREFIX_PATH) 
-        message(FATAL_ERROR "CMAKE_PREFIX_PATH empty!! e.g. /Developer/Qt/5.2.1/clang_64")
+        message(WARNING "CMAKE_PREFIX_PATH empty!! e.g. /Developer/Qt/5.2.1/clang_64")
     endif()
 endif()
 
