@@ -299,7 +299,9 @@ bool read_off(Surface_mesh& mesh, const std::string& filename)
 bool write_off(const Surface_mesh& mesh, const std::string& filename)
 {
     typedef Vec3 Normal;
+    typedef Vec3 Color;
     typedef Vec3 Texture_coordinate;  
+    typedef Vec3 Point;
     
     FILE* out = fopen(filename.c_str(), "w");
     if (!out)
@@ -308,8 +310,12 @@ bool write_off(const Surface_mesh& mesh, const std::string& filename)
 
     bool  has_normals   = false;
     bool  has_texcoords = false;
+
     Surface_mesh::Vertex_property<Normal> normals = mesh.get_vertex_property<Normal>("v:normal");
-    Surface_mesh::Vertex_property<Texture_coordinate>  texcoords = mesh.get_vertex_property<Texture_coordinate>("v:texcoord");
+    Surface_mesh::Vertex_property<Texture_coordinate> texcoords = mesh.get_vertex_property<Texture_coordinate>("v:texcoord");
+    Surface_mesh::Vertex_property<Color> vcolor = mesh.get_vertex_property<Color>("v:color");
+    Surface_mesh::Face_property<Color> fcolor = mesh.get_face_property<Color>("f:color");
+
     if (normals)   has_normals = true;
     if (texcoords) has_texcoords = true;
 
@@ -319,16 +325,23 @@ bool write_off(const Surface_mesh& mesh, const std::string& filename)
         fprintf(out, "ST");
     if(has_normals)
         fprintf(out, "N");
+    if(vcolor)
+        fprintf(out, "C");
     fprintf(out, "OFF\n%d %d 0\n", mesh.n_vertices(), mesh.n_faces());
-
 
     // vertices, and optionally normals and texture coordinates
     Surface_mesh::Vertex_property<Vec3> points = mesh.get_vertex_property<Vec3>("v:point");
     for (Surface_mesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
     {
-        const Vec3& p = points[*vit];
-        fprintf(out, "%.10f %.10f %.10f", p[0], p[1], p[2]);
-
+        const Point& p = points[*vit];
+        if( !vcolor ){
+            fprintf(out, "%.10f %.10f %.10f", p[0], p[1], p[2]);
+        } else {
+            const Color& c = vcolor[*vit] * 255;
+            int r = c[0], g = c[1], b=c[2];
+            fprintf(out, "%.10f %.10f %.10f %d %d %d %d", p[0], p[1], p[2], r, g, b, 255);            
+        }
+            
         if (has_normals)
         {
             const Normal& n = normals[*vit];
@@ -356,6 +369,14 @@ bool write_off(const Surface_mesh& mesh, const std::string& filename)
             fprintf(out, " %d", (*fvit).idx());
         }
         while (++fvit != fvend);
+
+        if (fcolor)
+        {
+             const Color& c = fcolor[*fit] * 255;
+             int r = c[0], g = c[1], b=c[2];
+             fprintf(out, " %d %d %d", r, g, b);
+        }
+
         fprintf(out, "\n");
     }
 
