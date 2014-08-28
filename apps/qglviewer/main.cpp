@@ -148,6 +148,9 @@ int main(int argc, char** argv) {
     ///--- Preprocess
     mesh.triangulate();
     mesh.update_vertex_normals();
+
+    ///--- Shutdown on close GUI
+    QObject::connect(&application, &QApplication::lastWindowClosed, &application, &QApplication::quit);
     
     Viewer viewer(mesh);
     viewer.setWindowTitle("OpenGP/apps/qglviewer");
