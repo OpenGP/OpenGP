@@ -1,6 +1,9 @@
 #include <fstream> ///< write file
 #include <iomanip> ///< precision
 #include <OpenGP/Surface_mesh.h>
+#include <OpenGP/surface_mesh/bounding_box.h>
+
+#include "sort.h"
 
 using namespace std;
 using namespace opengp;
@@ -22,6 +25,11 @@ int main(int argc, char** argv){
         cout << "Input mesh has 0 vertices" << endl;
         return EXIT_FAILURE;
     }
+    
+#define SORT_MESH_VERTICES
+#ifdef SORT_MESH_VERTICES
+    mesh = sort(mesh, 1/*Y dimension*/);
+#endif
     
     /// File open for writing
     /// Any contents that existed in the file before it is open are discarded.
@@ -82,9 +90,7 @@ int main(int argc, char** argv){
                     
         file << "};" << endl;        
     file << "} // icopill::" << endl;
-    
 
-    
     file.close();
     return EXIT_SUCCESS;
 }

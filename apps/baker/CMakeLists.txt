@@ -18,5 +18,5 @@ if(CGAL_FOUND)
 endif()
 
 #--- Remesh executable
-add_executable(baker main.cpp)
+add_executable(baker baker.cpp)
 target_link_libraries(baker ${LIBS})
