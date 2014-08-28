@@ -213,10 +213,13 @@ bool write_obj(const Surface_mesh& mesh, const std::string& filename){
 
     //normals
     Surface_mesh::Vertex_property<Vec3> normals = mesh.get_vertex_property<Vec3>("v:normal");
-    for (Surface_mesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
+    if(normals)
     {
-        const Vec3& p = normals[*vit];
-        fprintf(out, "vn %.10f %.10f %.10f\n", p[0], p[1], p[2]);
+        for (Surface_mesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
+        {
+            const Vec3& p = normals[*vit];
+            fprintf(out, "vn %.10f %.10f %.10f\n", p[0], p[1], p[2]);
+        }
     }
 
     //optionally texture coordinates
