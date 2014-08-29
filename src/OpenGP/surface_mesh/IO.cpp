@@ -22,7 +22,8 @@
 #include <OpenGP/Surface_mesh.h>
 #include <OpenGP/surface_mesh/IO.h>
 #include <clocale>
-
+#include <algorithm>
+#include <string>
 
 //== NAMESPACE ================================================================
 
@@ -32,6 +33,12 @@ namespace opengp {
 
 //== IMPLEMENTATION ===========================================================
 
+namespace{
+inline char easytolower(char in){
+    static std::locale locale;
+    return std::tolower<char>(in, locale);
+} 
+} // ::anonymous
 
 bool read_mesh(Surface_mesh& mesh, const std::string& filename)
 {
@@ -44,7 +51,7 @@ bool read_mesh(Surface_mesh& mesh, const std::string& filename)
     std::string::size_type dot(filename.rfind("."));
     if (dot == std::string::npos) return false;
     std::string ext = filename.substr(dot+1, filename.length()-dot-1);
-    std::transform(ext.begin(), ext.end(), ext.begin(), tolower);
+    std::transform(ext.begin(), ext.end(), ext.begin(), easytolower);
 
     // extension determines reader
     if (ext == "off")
@@ -74,7 +81,7 @@ bool write_mesh(const Surface_mesh& mesh, const std::string& filename)
     std::string::size_type dot(filename.rfind("."));
     if (dot == std::string::npos) return false;
     std::string ext = filename.substr(dot+1, filename.length()-dot-1);
-    std::transform(ext.begin(), ext.end(), ext.begin(), tolower);
+    std::transform(ext.begin(), ext.end(), ext.begin(), easytolower);
 
 
     // extension determines reader
