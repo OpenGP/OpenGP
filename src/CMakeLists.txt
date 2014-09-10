@@ -6,7 +6,6 @@ include_directories(.)
 #--- Eigen
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
-add_definitions(-DUSE_EIGEN)
 
 #--- Make a release library build by default
 if(NOT CMAKE_BUILD_TYPE)

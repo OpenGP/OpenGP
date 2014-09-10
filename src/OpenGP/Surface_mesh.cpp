@@ -718,11 +718,7 @@ compute_face_normal(Face f) const
 
     if (next_halfedge(h) == hend) // face is a triangle
     {
-#if !defined(USE_EIGEN) || defined(TODO_SURFACEMESH_DOT_CROSS) 
-        return cross(p2-=p1, p0-=p1).normalized();
-#else
         return ((p2-=p1).cross(p0-=p1)).normalized();
-#endif
     }
 
     else // face is a general polygon
@@ -732,11 +728,7 @@ compute_face_normal(Face f) const
         hend = h;
         do
         {
-#if !defined(USE_EIGEN) || defined(TODO_SURFACEMESH_DOT_CROSS) 
-            n += cross(p2-p1, p0-p1);
-#else
             n += (p2-p1).cross(p0-p1);
-#endif
             h  = next_halfedge(h);
             p0 = p1;
             p1 = p2;

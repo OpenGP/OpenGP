@@ -8,7 +8,6 @@ include_directories(${OpenGP_INCLUDE_DIR})
 #--- Eigen
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
-add_definitions(-DUSE_EIGEN)
 
 #--- CGAL (OPTIONAL)
 find_package(CGAL)

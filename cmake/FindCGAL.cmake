@@ -94,10 +94,8 @@ ELSE(CGAL_INCLUDE_DIR )
 ENDIF(CGAL_INCLUDE_DIR )
 
 #use eigen if available
-find_package(EIGEN3)
-if ( EIGEN3_FOUND )
-  add_definitions(-DCGAL_EIGEN3_ENABLED)
-endif()
+find_package(EIGEN3 REQUIRED)
+add_definitions(-DCGAL_EIGEN3_ENABLED)
 
 # Report the results.
 IF(NOT CGAL_FOUND)
