@@ -33,10 +33,15 @@ endif()
 #--- "make install" (always install source as well for headeronly support)
 install(FILES ${HEADERS} DESTINATION include/OpenGP)
 install(FILES ${SOURCES} DESTINATION include/OpenGP)
-
 if(BUILD_LIBRARY)
     install(TARGETS OpenGP DESTINATION lib/)
 endif()
 
 #--- "make uninstall" (not fully supported by cmake)
 # http://www.cmake.org/Wiki/CMake_FAQ#Can_I_do_.22make_uninstall.22_with_CMake.3F
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+               IMMEDIATE @ONLY)
+add_custom_target(uninstall COMMAND 
+                  ${CMAKE_COMMAND} -P 
+                  ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
