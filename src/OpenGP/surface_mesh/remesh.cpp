@@ -437,7 +437,7 @@ void IsotropicRemesher::tangentialRelaxation() {
     for (v_it = mesh->vertices_begin(); v_it != v_end; ++v_it) {
 
         Vector3 tmp(0,0,0);
-        uint N = 0;
+        unsigned int N = 0;
 
         for( Surface_mesh::Halfedge hvit: mesh->halfedges(*v_it) ) {
             tmp += points[ mesh->to_vertex(hvit) ];
@@ -504,7 +504,7 @@ Vector3 IsotropicRemesher::findNearestPoint(Surface_mesh& original_mesh, const V
 void IsotropicRemesher::projectToSurface() {
     *myout << __FUNCTION__ << std::endl;
     
-#ifdef USE_CGAL
+#ifdef WITH_CGAL
     for(Surface_mesh::Vertex v: mesh->vertices())
         points[v] = searcher.closest_point(points[v]);
 #else

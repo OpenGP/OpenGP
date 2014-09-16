@@ -6,7 +6,7 @@
 #include <OpenGP/NullStream.h>
 #include <OpenGP/Surface_mesh.h>
 
-#ifdef USE_CGAL
+#ifdef WITH_CGAL
     #include <OpenGP/surface_mesh/eigen.h>
     #include <OpenGP/CGAL/AABBSearcher.h>
 #endif
@@ -49,7 +49,7 @@ public:
         if(reproject_to_surface)
             copy = *mesh; ///< deep copy
         
-#ifdef USE_CGAL
+#ifdef WITH_CGAL
         VerticesMatrixMap vertices = vertices_matrix(*mesh);
         FacesMatrix faces = faces_matrix(*mesh);
         std::cout << vertices.cols() << " " << vertices.rows() << std::endl;
@@ -90,7 +90,7 @@ public:
     bool reproject_to_surface = false;     
 /// @}
     
-#ifdef USE_CGAL
+#ifdef WITH_CGAL
 private:
     AABBSearcher<VerticesMatrixMap, FacesMatrix> searcher;
 #endif
