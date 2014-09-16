@@ -20,14 +20,24 @@ To install the header-only version of the library you can just copy&paste the Op
 The latest release is available from the GitHub at https://github.com/OpenGP. You can checkout a snapshot of the sources, compile them with <a href="http://www.cmake.org/">CMake</a>, and install them as follows:
 
 	$ ~/Developer: git clone https://github.com/OpenGP/OpenGP.git
-	$ ~/Developer: cd OpenGP && mkdir build && cd build
-	$ ~/Developer/OpenGP/build: cmake ..
+	$ ~/Developer: cd OpenGP
+	$ ~/Developer/OpenGP: mkdir build
+    $ ~/Developer/OpenGP: cd build
+	$ ~/Developer/OpenGP/build: cmake -DBUILD_LIBRARY=True .. 
 	$ ~/Developer/OpenGP/build: make
 	$ ~/Developer/OpenGP/build: sudo make install
+
+To uninstall OpenGP, simply type: 
+
+	$ ~/Developer/OpenGP/build: sudo make uninstall
 
 The documentation for this library is available at <a href="http://opengp.github.io/">http://opengp.github.io/</a>, but you can also generate a local copy by executing the following command and opening the file "build/index.html":
 
 	$ ~/Developer/OpenGP/build: make doxygen
+
+To publish the documentation on <a href="http://opengp.github.io/">http://opengp.github.io/</a> (if you have push rights):
+
+	$ ~/Developer/OpenGP/build: make publish_doc
 
 ## Configuring the library
 
