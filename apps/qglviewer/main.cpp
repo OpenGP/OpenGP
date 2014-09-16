@@ -31,7 +31,8 @@ public:
     Viewer(Surface_mesh& mesh):mesh(mesh){}
     
 public:
-    void init(){     
+    /// @overload QGLWidget
+    void initializeGL(){     
         ///--- Setup opengl flags
         glEnable(GL_DEPTH_TEST);
         
@@ -111,11 +112,8 @@ public:
         program.release();
     }
 
-    void draw(){
-#define FORCE_REENABLE_DEPTH
-#ifdef FORCE_REENABLE_DEPTH
-        glEnable(GL_DEPTH_TEST);
-#endif
+    /// @overload QGLWidget
+    void paintGL(){
         vao.bind();
         program.bind();
         {
