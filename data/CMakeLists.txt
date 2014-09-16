@@ -1,10 +1,6 @@
-if(NOT WITH_DATA)
-    return()
-else()
-    message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
-endif()
+message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 
-#--- Deploy demo files
+#--- Files in the current (data) folder
 file(GLOB_RECURSE DATAFILES "${CMAKE_CURRENT_SOURCE_DIR}/*")
 foreach(datafile ${DATAFILES})
     # message(STATUS ${datafile})

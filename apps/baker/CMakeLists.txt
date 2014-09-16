@@ -1,21 +1,10 @@
-# @todo description
-message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
+project(baker)
 
-#--- OpenGP (headeronly)
-find_package(OpenGP REQUIRED)
-include_directories(${OpenGP_INCLUDE_DIR})
+# set(CMAKE_MODULE_PATH ../../cmake)
+include(ConfigureCompiler)
+include(ConfigureEigen)
+include(ConfigureOpenGP)
+include(ConfigureCGAL)
 
-#--- Eigen
-find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
-
-#--- CGAL (OPTIONAL)
-find_package(CGAL)
-if(CGAL_FOUND)
-    add_definitions(-DUSE_CGAL)
-    list(APPEND LIBS ${CGAL_LIBRARIES})
-endif()
-
-#--- Remesh executable
 add_executable(baker baker.cpp)
-target_link_libraries(baker ${LIBS})
+target_link_libraries(baker ${LIBRARIES})

@@ -1,41 +1,14 @@
-#--- Qt5 Needs the CMAKE_PREFIX_PATH
-# @see http://qt-project.org/doc/qt-5/cmake-manual.html
-if(APPLE)
-    set(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH}) 
-    if(NOT CMAKE_PREFIX_PATH) 
-        message(WARNING "CMAKE_PREFIX_PATH empty!! e.g. /Developer/Qt/5.2.1/clang_64")
-    endif()
-endif()
+cmake_minimum_required(VERSION 2.8)
+project(qglviewer)
 
-#--- Eigen
-find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
-
-#--- OpenGP (headeronly)
-find_package(OpenGP REQUIRED)
-include_directories(${OpenGP_INCLUDE_DIR})
-
-#--- Qt
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5OpenGL REQUIRED) 
-find_package(Qt5Xml REQUIRED)
-set(CMAKE_AUTOMOC ON)
-
-#--- OpenGL
-find_package(OpenGL REQUIRED)
-include_directories(${OpenGL_INCLUDE_DIRS})
-link_directories(${OpenGL_LIBRARY_DIRS})
-add_definitions(${OpenGL_DEFINITIONS})
-list(APPEND LIBRARIES ${OPENGL_LIBRARIES})
-
-#--- QGLViewer (optional)
-find_package(QGLViewer)
-if(QGLVIEWER_FOUND)
-    include_directories(${QGLVIEWER_INCLUDE_DIR})
-    list(APPEND LIBRARIES ${QGLVIEWER_LIBRARIES})
-    add_definitions(-DWITH_QGLVIEWER)
-endif()
+#--- OpenGP shared modules
+# set(CMAKE_MODULE_PATH ../../cmake)
+include(ConfigureCompiler)
+include(ConfigureQt5)
+include(ConfigureEigen)
+include(ConfigureOpenGP)
+include(ConfigureOpenGL)
+include(ConfigureQGLViewer)
 
 #--- Link application
 qt5_add_resources(RESOURCES shaders.qrc)

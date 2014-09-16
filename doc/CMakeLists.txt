@@ -1,8 +1,4 @@
-if(NOT BUILD_DOCS)
-    return()
-else()
-    message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
-endif()
+message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 
 find_package(Doxygen REQUIRED)
 
