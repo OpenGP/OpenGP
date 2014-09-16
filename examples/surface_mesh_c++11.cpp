@@ -2,10 +2,15 @@
 
 #include <OpenGP/Surface_mesh.h>
 using namespace opengp;
-int main(int /*argc*/, char** argv)
+using namespace std;
+int main(int argc, char** argv)
 {
     Surface_mesh mesh;
-    mesh.read(argv[1]);
+    if(!(argc==2 && mesh.read(argv[1]))){ 
+        cout << "!!! file doesn't exist or no file provided" << endl;
+        exit(0);
+    }
+    
     auto points = mesh.get_vertex_property<Vec3>("v:point");
     Vec3 p(0,0,0);
     for(auto vit: mesh.vertices())
