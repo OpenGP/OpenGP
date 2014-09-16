@@ -1,4 +1,4 @@
-# Locate the OpenGP library (version 1.0)
+# Locate the OpenGP library
 # This module defines the following variables:
 # OpenGP_INCLUDE_DIRS, where to find OpenGP include files.
 # OpenGP_FOUND true if library path was resolved

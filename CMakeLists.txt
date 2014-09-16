@@ -16,9 +16,6 @@ add_subdirectory(data)     # deploys data to the build folder
 add_subdirectory(doc)      # builds the documentation
  
 #--- full-blown applications
-# They should be compiled on their own, but you can enable them here if you want
-# make sure you uncomment the CMAKE_MODULE_PATH line though!
-# 
 #add_subdirectory(apps/qglviewer)
 #add_subdirectory(apps/baker)
 #add_subdirectory(apps/isoremesh)

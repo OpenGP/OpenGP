@@ -2,7 +2,7 @@ message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
 
 include(ConfigureCompiler)
 include(ConfigureEigen)
-include(ConfigureOpenGP)
+include_directories(../src)
 
 add_executable(surface_mesh_basics      surface_mesh_basics.cpp)
 add_executable(surface_mesh_iterators   surface_mesh_iterators.cpp)
