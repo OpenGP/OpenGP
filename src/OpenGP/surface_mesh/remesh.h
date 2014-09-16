@@ -1,5 +1,3 @@
-/// Copyright (C) 2014 - Andrea Tagliasacchi
-/// Copyright (C) 2014 - Ibraheem Alhashim
 #pragma once
 #include <OpenGP/headeronly.h>
 #include <OpenGP/types.h>

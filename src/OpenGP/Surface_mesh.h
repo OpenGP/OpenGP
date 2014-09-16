@@ -1,9 +1,4 @@
-//=============================================================================
-// Copyright (C) 2001-2005 by Computer Graphics Group, RWTH Aachen
-// Copyright (C) 2011-2013 by Graphics & Geometry Group, Bielefeld University
-//=============================================================================
 #pragma once
-
 #include <OpenGP/headeronly.h>
 #include <OpenGP/types.h>
 #include <OpenGP/properties.h>

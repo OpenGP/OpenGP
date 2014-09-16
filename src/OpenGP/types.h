@@ -1,6 +1,3 @@
-// Copyright (C) 2013 Graphics & Geometry Group, Bielefeld University
-// Copyright (C) 2014 Graphics & Geometry Group, EPFL
-// Authors: A. Tagliasacchi, S. Bouaziz
 #pragma once
 #include <Eigen/Dense>
 

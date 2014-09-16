@@ -1,6 +1,4 @@
 /// Simple mesh viewer based on GLFW
-/// Copyright (C) 2014 - Andrea Tagliasacchi
-/// Copyright (C) 2014 - Minh Dang
 /// @see https://code.google.com/p/opengl-tutorial-org/source/browse/tutorial08_basic_shading/tutorial08.cpp
 /// @see http://www.glfw.org
 

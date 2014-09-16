@@ -1,5 +1,3 @@
-// Copyright (C) 2014 - Andrea Tagliasacchi
-
 #pragma once
 #include "GL/glew.h" ///< must be included before GLFW
 #include "GL/glfw.h"

@@ -1,8 +1,3 @@
-//=============================================================================
-// Copyright (C) 2001-2005 by Computer Graphics Group, RWTH Aachen
-// Copyright (C) 2011-2013 by Graphics & Geometry Group, Bielefeld University
-// Copyright (C) 2014 by Graphics and Geometry Laborarory, EPFL 
-//=============================================================================
 #pragma once
 
 #include <cassert>

@@ -1,6 +1,3 @@
-// Copyright (C) 2014 - Andrea Tagliasacchi
-// Copyright (C) 2014 - Stefan Lienhard
-// Copyright (C) 2014 - Minh Dang
 // @see http://image.diku.dk/research/trackballs/index.html.
 #pragma once
 
