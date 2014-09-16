@@ -9,10 +9,15 @@
 #include <QOpenGLVertexArrayObject>
 #include <QGLBuffer>
 
+///--- Support for OpenGL (also #define GL_GLEXT_PROTOTYPES=1)
+#if __unix__
+    #include <GL/gl.h>
+    #include <GL/glext.h>
+#endif
+
 ///--- Surface_mesh
 #include <OpenGP/Surface_mesh.h>
 #include <OpenGP/surface_mesh/bounding_box.h>
-
 
 #ifdef WITH_QGLVIEWER
     #include <OpenGP/qglviewer/QGLMeshLabViewer.h>
@@ -47,6 +52,9 @@ public:
  
         ///--- Background
         glClearColor(1.0, 1.0, 1.0, 1.0);
+        
+        ///--- Viewport (simple, for unresizeable window)
+        glViewport(0, 0, this->width(), this->height());
         
         ///--- Setup opengl flags
         glEnable(GL_DEPTH_TEST);

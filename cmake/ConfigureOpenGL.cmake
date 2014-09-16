@@ -7,3 +7,8 @@ list(APPEND LIBRARIES ${OPENGL_LIBRARIES})
 if(NOT OPENGL_FOUND)
     message(WARNING "OpenGL not found")
 endif(NOT OPENGL_FOUND)
+
+#--- Allows 
+if(UNIX AND NOT APPLE)
+    add_definitions(-DGL_GLEXT_PROTOTYPES=1)
+endif()

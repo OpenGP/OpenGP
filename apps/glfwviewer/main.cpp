@@ -30,11 +30,15 @@ Eigen::Matrix4f projection;
 Eigen::Matrix4f model;
 Eigen::Matrix4f view;
 
-template <class Derived>
-void set_uniform_variable(GLuint programID, const char* NAME, Derived& value){
-    GLuint mvp_id = glGetUniformLocation(programID, NAME);
-    Eigen::glUniform(mvp_id, value);  
+void set_uniform_vector(GLuint programID, const char* NAME, const Eigen::Vector3f& vector){
+    GLuint matrix_id = glGetUniformLocation(programID, NAME);   
+    glUniform4fv(matrix_id, 3, vector.data());
 }
+void set_uniform_matrix(GLuint programID, const char* NAME, const Eigen::Matrix4f& matrix){
+    GLuint matrix_id = glGetUniformLocation(programID, NAME);   
+    glUniformMatrix4fv(matrix_id, 1, GL_FALSE, matrix.data());
+}
+
 
 /// OpenGL initialization
 void init(){
@@ -81,15 +85,15 @@ void init(){
         // cout << model << endl;  
         
         /// Set initial matrices
-        set_uniform_variable(programID,"M",model); ///< to get world coordinates
-        set_uniform_variable(programID,"MV",view*model); ///< to get camera coordinates
-        set_uniform_variable(programID,"MVP",projection*view*model); ///< to get clip coordinates         
+        set_uniform_matrix(programID,"M",model); ///< to get world coordinates
+        set_uniform_matrix(programID,"MV",view*model); ///< to get camera coordinates
+        set_uniform_matrix(programID,"MVP",projection*view*model); ///< to get clip coordinates         
     }
     
     ///---------------------- LIGHT -----------------------------
     {
         Vec3 light_dir(0,0,1);
-        set_uniform_variable(programID,"LDIR",light_dir); ///< to get camera coordinates
+        set_uniform_vector(programID,"LDIR",light_dir); ///< to get camera coordinates
     }
     
     ///---------------------- VARRAY ----------------------------    
@@ -136,9 +140,9 @@ void init(){
 
 /// 
 void update_matrices(Eigen::Matrix4f model){
-    set_uniform_variable(programID,"M",model);
-    set_uniform_variable(programID,"MV",view*model);
-    set_uniform_variable(programID,"MVP",projection*view*model);
+    set_uniform_matrix(programID,"M",model);
+    set_uniform_matrix(programID,"MV",view*model);
+    set_uniform_matrix(programID,"MVP",projection*view*model);
 }
 
 /// OpenGL render loop
