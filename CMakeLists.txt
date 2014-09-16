@@ -16,7 +16,9 @@ add_subdirectory(data)     # deploys data to the build folder
 add_subdirectory(doc)      # builds the documentation
  
 #--- full-blown applications
-#add_subdirectory(apps/qglviewer)
-#add_subdirectory(apps/baker)
-#add_subdirectory(apps/isoremesh)
-#add_subdirectory(apps/glfwviewer)
+if(WITH_APPLICATIONS)
+    add_subdirectory(apps/qglviewer)
+    add_subdirectory(apps/baker)
+    add_subdirectory(apps/isoremesh)
+    add_subdirectory(apps/glfwviewer)
+endif()

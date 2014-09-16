@@ -8,7 +8,7 @@ include(ConfigureOpenGP)
 file(GLOB_RECURSE SOURCES "${OpenGP_INCLUDE_DIR}/OpenGP/*.cpp")
 file(GLOB_RECURSE HEADERS "${OpenGP_INCLUDE_DIR}/OpenGP/*.h")
 
-if(NOT BUILD_LIBRARY) 
+if(NOT WITH_LIBRARY) 
     #--- Dummy target just to have sources/headers appear in IDE
     add_custom_target(opengplib SOURCES ${HEADERS} ${SOURCES})
 else()
@@ -33,7 +33,7 @@ endif()
 #--- "make install" (always install source as well for headeronly support)
 install(FILES ${HEADERS} DESTINATION include/OpenGP)
 install(FILES ${SOURCES} DESTINATION include/OpenGP)
-if(BUILD_LIBRARY)
+if(WITH_LIBRARY)
     install(TARGETS OpenGP DESTINATION lib/)
 endif()
 

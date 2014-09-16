@@ -16,14 +16,14 @@ To install the header-only version of the library you can just copy&paste the Op
 
     brew install https://raw.githubusercontent.com/OpenGP/OpenGP/master/opengp.rb
 
-# Installing OpenGP - Compiled Library 
+# Installing OpenGP - Compiled Portions 
 The latest release is available from the GitHub at https://github.com/OpenGP. You can checkout a snapshot of the sources, compile them with <a href="http://www.cmake.org/">CMake</a>, and install them as follows:
 
 	$ ~/Developer: git clone https://github.com/OpenGP/OpenGP.git
 	$ ~/Developer: cd OpenGP
 	$ ~/Developer/OpenGP: mkdir build
     $ ~/Developer/OpenGP: cd build
-	$ ~/Developer/OpenGP/build: cmake -DBUILD_LIBRARY=True .. 
+	$ ~/Developer/OpenGP/build: cmake .. 
 	$ ~/Developer/OpenGP/build: make
 	$ ~/Developer/OpenGP/build: sudo make install
 
@@ -31,9 +31,18 @@ To uninstall OpenGP, simply type:
 
 	$ ~/Developer/OpenGP/build: sudo make uninstall
 
-The documentation for this library is available at <a href="http://opengp.github.io/">http://opengp.github.io/</a>, but you can also generate a local copy by executing the following command and opening the file "build/index.html":
+To compile the dynamic library, build the examples or build the applications (more involved examples), provide the appropriate flags:
+
+	$ ~/Developer/OpenGP/build: cmake -DWITH_LIBRARY=True .. 
+    $ ~/Developer/OpenGP/build: cmake -DWITH_EXAMPLES=True ..
+    $ ~/Developer/OpenGP/build: cmake -DWITH_APPLICATIONS=True ..
+
+# Documentation 
+
+The documentation for this library is available at <a href="http://opengp.github.io/">http://opengp.github.io/</a>, but you can also generate a local copy by executing the following command and opening the file "doc/index.html":
 
 	$ ~/Developer/OpenGP/build: make doxygen
+    $ ~/Developer/OpenGP/build: open doc/index.html
 
 To publish the documentation on <a href="http://opengp.github.io/">http://opengp.github.io/</a> (if you have push rights):
 
@@ -43,7 +52,7 @@ To publish the documentation on <a href="http://opengp.github.io/">http://opengp
 
 The configuration procedure can be fine-tuned by specifying flags using the -D option of cmake, for example:
 
-	$ ~/Developer/OpenGP/build: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/usr/bin/g++
+	$ ~/Developer/OpenGP/build: cmake -DCMAKE_BUILD_TYPE=Release ..
 
 The command above would configure CMake to use release mode as its build type and /usr/bin/g++ as its C++ compiler. To build the examples, configure CMake with:
 
