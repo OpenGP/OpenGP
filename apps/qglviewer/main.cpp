@@ -1,5 +1,8 @@
 /// @see http://qt-project.org/wiki/How_to_use_OpenGL_Core_Profile_with_Qt
 
+///--- Uncomment to force-disable QGLViewer
+// #undef WITH_QGLVIEWER
+
 ///--- Qt
 #include <QApplication>
 #include <QGLShaderProgram>
@@ -10,14 +13,21 @@
 #include <OpenGP/Surface_mesh.h>
 #include <OpenGP/surface_mesh/bounding_box.h>
 
-///--- QGLViewer 
-#include <OpenGP/qglviewer/QGLMeshLabViewer.h>
-#include <OpenGP/qglviewer/helpers.h>
+
+#ifdef WITH_QGLVIEWER
+    #include <OpenGP/qglviewer/QGLMeshLabViewer.h>
+    #include <OpenGP/qglviewer/helpers.h>
+    typedef QGLMeshLabViewer QGLWidgetSuperClass;
+#else
+    #include <OpenGP/GL/QGLWidget32.h>
+    #include <OpenGP/GL/EigenOpenGLSupport3.h>
+    typedef opengp::QGLWidget32 QGLWidgetSuperClass;
+#endif
 
 using namespace opengp;
 using namespace std;
 
-class Viewer : public QGLMeshLabViewer {
+class Viewer : public QGLWidgetSuperClass {
 protected:
     Surface_mesh& mesh;
     QGLShaderProgram program;
@@ -33,6 +43,11 @@ public:
 public:
     /// @overload QGLWidget
     void initializeGL(){     
+        printf("OpenGL %d.%d\n",this->format().majorVersion(),this->format().minorVersion());
+ 
+        ///--- Background
+        glClearColor(1.0, 1.0, 1.0, 1.0);
+        
         ///--- Setup opengl flags
         glEnable(GL_DEPTH_TEST);
         
@@ -98,6 +113,7 @@ public:
             indexbuffer.allocate(&triangles[0], triangles.size()*sizeof(unsigned int));
         }
         
+#ifdef WITH_QGLVIEWER
         ///--- Setup camera
         {        
             Box3 bbox = opengp::bounding_box(mesh);
@@ -106,6 +122,7 @@ public:
             camera()->setSceneRadius(bbox.diagonal().norm()/2.0);
             camera()->showEntireScene();
         }
+#endif
         
         ///--- Unbind to avoid pollution
         vao.release();
@@ -117,8 +134,23 @@ public:
         vao.bind();
         program.bind();
         {
-            ///--- Update modelview
+            
+        ///--- Update modelview
+#ifdef WITH_QGLVIEWER
+            /// use the trackball to specify the matrices
             setup_modelview(camera(), program);
+#else
+            ///--- simple unit cube orthographic view
+            static Eigen::Matrix4f M = Eigen::Matrix4f::Identity();
+            static Eigen::Matrix4f P = Eigen::ortho(-1.0f, +1.0f, -1.0f, +1.0f, -1.0f, +1.0f);
+            static Eigen::Matrix4f V = Eigen::Matrix4f::Identity();
+            static Eigen::Matrix4f MV = V*M;
+            static Eigen::Matrix4f MVP = P*MV;
+            GLint MVP_id = glGetUniformLocation(program.programId(), "MVP");
+            glUniformMatrix4fv(MVP_id, 1, GL_FALSE, MVP.data());
+            GLint MV_id = glGetUniformLocation(program.programId(), "MV");
+            glUniformMatrix4fv(MV_id, 1, GL_FALSE, MV.data());
+#endif      
                         
             ///--- clear & draw
             glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
