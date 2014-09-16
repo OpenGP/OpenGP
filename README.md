@@ -11,7 +11,12 @@ OpenGP uses <a href="http://www.cmake.org">CMake</a> as its build system. Versio
   <tr><td> Windows </td> <td> Visual Studio 2008 </td> </tr>
 </table>
 
-# Installing OpenGP
+# Installing OpenGP - Header Only
+To install the header-only version of the library you can just copy&paste the OpenGP folder in the "src" subdirectory in your favorite include folder. In MaxOSX you can also just install it using <a href="http://brew.sh/">homebrew</a> as:
+
+    brew install https://raw.githubusercontent.com/OpenGP/OpenGP/master/opengp.rb
+
+# Installing OpenGP - Compiled Library 
 The latest release is available from the GitHub at https://github.com/OpenGP. You can checkout a snapshot of the sources, compile them with <a href="http://www.cmake.org/">CMake</a>, and install them as follows:
 
 	$ ~/Developer: git clone https://github.com/OpenGP/OpenGP.git
