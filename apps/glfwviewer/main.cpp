@@ -30,13 +30,19 @@ Eigen::Matrix4f view;
 
 void set_uniform_vector(GLuint programID, const char* NAME, const Eigen::Vector3f& vector){
     GLuint matrix_id = glGetUniformLocation(programID, NAME);   
-    glUniform4fv(matrix_id, 3, vector.data());
+    glUniform3fv(matrix_id, 1, vector.data());
 }
 void set_uniform_matrix(GLuint programID, const char* NAME, const Eigen::Matrix4f& matrix){
     GLuint matrix_id = glGetUniformLocation(programID, NAME);   
     glUniformMatrix4fv(matrix_id, 1, GL_FALSE, matrix.data());
 }
 
+
+void update_projection_matrix() {
+    /// Define projection matrix (FOV, aspect, near, far)
+    projection = Eigen::perspective(45.0f, static_cast<float>(_width)/static_cast<float>(_height), 0.1f, 10.f);
+    // cout << projection << endl;
+}
 
 /// OpenGL initialization
 void init(){
@@ -66,10 +72,8 @@ void init(){
     {
         typedef Eigen::Vector3f vec3;
         typedef Eigen::Matrix4f mat4;
-        
-        /// Define projection matrix (FOV, aspect, near, far)
-        projection = Eigen::perspective(45.0f, 4.0f/3.0f, 0.1f, 10.f);
-        // cout << projection << endl;
+
+        update_projection_matrix();
 
         /// Define the view matrix (camera extrinsics)
         vec3 cam_pos(0,0,5);
@@ -162,11 +166,13 @@ int main(int argc, char** argv){
     mesh.update_vertex_normals();
     cout << "input: '" << argv[1] << "' num vertices " << mesh.vertices_size() << endl;
     cout << "BBOX: " << bounding_box(mesh) << endl;
-        
-    glfwInitWindowSize(640, 480);
-    glfwCreateWindow("GLFW Surface Mesh Viewer");
+
+    glfwInitWindowSize(_width, _height);
+    if (glfwMakeWindow("GLFW Surface Mesh Viewer") == EXIT_FAILURE)
+        return EXIT_FAILURE;
+
     glfwDisplayFunc(display);
-    glfwTrackball(update_matrices);
+    glfwTrackball(update_matrices, update_projection_matrix);
     init();
     glfwMainLoop();
 

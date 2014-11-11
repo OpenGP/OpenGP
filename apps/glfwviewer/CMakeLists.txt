@@ -5,12 +5,12 @@ include(ConfigureCompiler)
 include(ConfigureEigen)
 include(ConfigureOpenGP)
 include(ConfigureOpenGL)
-include(ConfigureGLFW)
+include(ConfigureGLFW3)
 include(ConfigureGLEW)
 
 #--- compile
 add_executable(glfwviewer main.cpp vshader.glsl fshader.glsl)
-target_link_libraries(glfwviewer ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
+target_link_libraries(glfwviewer ${GLFW3_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
 
 #--- convert shaders into header files
 include(target_stringify_shader)
