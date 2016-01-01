@@ -1,6 +1,6 @@
 #pragma once
 #include <OpenGP/GL/glfw_helpers.h>
-#include <OpenGP/GL/Scene.h>
+#include <OpenGP/GL/SceneGraph.h>
 
 //=============================================================================
 namespace opengp {
@@ -10,7 +10,7 @@ namespace opengp {
 
 class GlfwWindow{
 public:
-    Scene scene;    
+    SceneGraph scene;    
     int width = 640;
     int height = 480;
     

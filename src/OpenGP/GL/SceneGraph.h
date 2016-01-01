@@ -1,43 +1,29 @@
 #pragma once
 
 #include <vector>
-#include <Eigen/Core>
 #include <OpenGP/types.h>
 #include <OpenGP/MLogger.h>
 
 #include <OpenGP/GL/Eigen.h> 
-#include <OpenGP/GL/glfw_helpers.h>
 #include <OpenGP/GL/VertexArrayObject.h>
 #include <OpenGP/GL/Shader.h>
 #include <OpenGP/GL/Buffer.h>
+#include <OpenGP/GL/SceneObject.h>
 
 //=============================================================================
 namespace opengp {
 //=============================================================================
 
-/// TODO rename into scenegraph
-class Scene{
-public:
-    class Object{
-    public:
-        ShaderProgram program;
-        /// Model Transformation Matrix
-        Mat4x4 model = Mat4x4::Identity();
-
-        virtual ~Object(){}
-        virtual void init() = 0;
-        virtual void display() = 0;
-    };
-    
+class SceneGraph{
 public:
     Mat4x4 _projection;
     Mat4x4 _view;  
     Vec3 _light_dir = Vec3(0,0,1);
     
     ///--- Set of objects that needs to be rendered
-    std::vector<Object*> objects;
+    std::vector<SceneObject*> objects;
 
-    Scene(){
+    SceneGraph(){
         /// Define projection matrix (FOV, aspect, near, far)
         _projection = opengp::perspective(45.0f, 4.0f/3.0f, 0.1f, 10.f);
         // cout << projection << endl;
@@ -50,14 +36,14 @@ public:
         // cout << view << endl;
     }
 
-    void add(Object& object){
+    void add(SceneObject& object){
         object.init();
         objects.push_back(&object);
     }
     
     void display(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        for(Object* obj: objects) {
+        for(SceneObject* obj: objects) {
             // ///--- Update Light Specs
             // obj->program.setUniformValue("LDIR", _light_dir);
             // check_error_gl();

@@ -2,14 +2,14 @@
 #include <vector>
 #include <OpenGP/MLogger.h>
 #include <OpenGP/Surface_mesh.h>
-#include <OpenGP/GL/Scene.h>
+#include <OpenGP/GL/SceneGraph.h>
 #include <OpenGP/GL/gl.h>
 
 //=============================================================================
 namespace opengp {
 //=============================================================================
 
-class SurfaceMeshRenderShaded : public Scene::Object{
+class SurfaceMeshRenderShaded : public SceneObject{
 private:
     Surface_mesh& mesh;
     VertexArrayObject vao;    

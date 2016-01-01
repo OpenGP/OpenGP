@@ -6,13 +6,13 @@
 #include <OpenGP/MLogger.h>
 
 #include <OpenGP/GL/Buffer.h>
-#include <OpenGP/GL/Scene.h>
+#include <OpenGP/GL/SceneGraph.h>
 
 //=============================================================================
 namespace opengp {
 //=============================================================================
 
-class SurfaceMeshRenderFlat : public Scene::Object{
+class SurfaceMeshRenderFlat : public SceneObject{
 private:
     Surface_mesh& mesh;
     VertexArrayObject vao;    
