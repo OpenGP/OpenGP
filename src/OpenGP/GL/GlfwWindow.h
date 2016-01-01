@@ -6,6 +6,8 @@
 namespace opengp {
 //=============================================================================
 
+// TODO: don't use the single-context glfw_helpers now that we use GLFW3!
+
 class GlfwWindow{
 public:
     Scene scene;    
@@ -17,7 +19,9 @@ public:
         this->width = width;
         this->height = height;
         glfwInitWindowSize(width, height);
-        glfwCreateWindow(title.c_str());
+        glfwInitWindowSize(_width, _height);
+        if(glfwMakeWindow(title.c_str()) == EXIT_FAILURE)
+            exit(EXIT_FAILURE);
         
         ///---------------------- OPENGL GLOBALS--------------------
         {
@@ -34,9 +38,10 @@ public:
 
 public:
     int run(){
-        while(glfwGetKey(GLFW_KEY_ESC)!=GLFW_PRESS && glfwGetWindowParam(GLFW_OPENED)){
+        while(glfwGetKey(window, GLFW_KEY_ESCAPE)!=GLFW_PRESS && !glfwWindowShouldClose(window)){
             scene.display();
-            glfwSwapBuffers();
+            glfwSwapBuffers(window);
+            glfwPollEvents();
         }
         
         /// Closes OpenGL window and terminates GLFW

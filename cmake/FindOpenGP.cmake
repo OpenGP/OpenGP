@@ -34,9 +34,9 @@ endif()
 
 #--- Message
 if(OpenGP_FOUND)
-    if(NOT CMAKE_FIND_QUIETLY)
-        message(STATUS "Found OpenGP: ${OpenGP_INCLUDE_DIR}")
-    endif()
+#    if(NOT CMAKE_FIND_QUIETLY)
+#        message(STATUS "Found OpenGP: ${OpenGP_INCLUDE_DIR}")
+#    endif()
 else()
     if(OpenGP_FIND_REQUIRED)
         message(FATAL_ERROR "Could not find OpenGP")

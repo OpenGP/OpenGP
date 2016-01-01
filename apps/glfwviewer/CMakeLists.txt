@@ -6,7 +6,7 @@ include(ConfigureCompiler)
 include(ConfigureEigen)
 include(ConfigureOpenGP)
 include(ConfigureOpenGL)
-include(ConfigureGLFW)
+include(ConfigureGLFW3)
 include(ConfigureGLEW)
 
 file(GLOB_RECURSE SOURCES "*.cpp")
