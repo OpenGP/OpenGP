@@ -1,5 +1,5 @@
 #pragma once
-#include <OpenGP/GL/glfw_helpers.h> //< TODO 
+#include <OpenGP/GL/gl.h>
 
 //=============================================================================
 namespace opengp {
