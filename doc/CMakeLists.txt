@@ -1,5 +1,3 @@
-message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
-
 find_package(Doxygen REQUIRED)
 
 if(DOXYGEN_FOUND STREQUAL "NO")
