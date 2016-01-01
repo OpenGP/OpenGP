@@ -1,12 +1,6 @@
-message(STATUS "==> ${CMAKE_CURRENT_LIST_DIR}")
-
-include(ConfigureCompiler)
-include(ConfigureEigen)
-include(ConfigureOpenGP)
-
 #--- Find all headers/sources
-file(GLOB_RECURSE SOURCES "${OpenGP_INCLUDE_DIR}/OpenGP/*.cpp")
-file(GLOB_RECURSE HEADERS "${OpenGP_INCLUDE_DIR}/OpenGP/*.h")
+file(GLOB_RECURSE SOURCES "OpenGP/*.cpp")
+file(GLOB_RECURSE HEADERS "OpenGP/*.h")
 
 if(NOT WITH_LIBRARY) 
     #--- Dummy target just to have sources/headers appear in IDE
