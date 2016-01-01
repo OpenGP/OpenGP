@@ -30,13 +30,9 @@ public:
     };
     
 public:
-    /// TODO: remove
-    typedef Eigen::Vector3f vec3;
-    typedef Eigen::Matrix4f mat4;
-    
-    Eigen::Matrix4f _projection;
-    Eigen::Matrix4f _view;  
-    vec3 _light_dir = vec3(0,0,1);
+    Mat4x4 _projection;
+    Mat4x4 _view;  
+    Vec3 _light_dir = Vec3(0,0,1);
     
     ///--- Set of objects that needs to be rendered
     std::vector<Object*> objects;
@@ -47,9 +43,9 @@ public:
         // cout << projection << endl;
 
         /// Define the view matrix (camera extrinsics)
-        vec3 cam_pos(0,0,2);
-        vec3 cam_look(0,0,-1); /// Remember: GL swaps viewdir
-        vec3 cam_up(0,1,0);
+        Vec3 cam_pos(0,0,2);
+        Vec3 cam_look(0,0,-1); /// Remember: GL swaps viewdir
+        Vec3 cam_up(0,1,0);
         _view = opengp::lookAt(cam_pos, cam_look, cam_up);
         // cout << view << endl;
     }
