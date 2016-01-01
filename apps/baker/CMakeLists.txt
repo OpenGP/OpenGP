@@ -1,6 +1,6 @@
-project(baker)
+get_filename_component(PROJNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
+project(${PROJNAME})
 
-# set(CMAKE_MODULE_PATH ../../cmake)
 include(ConfigureCompiler)
 include(ConfigureEigen)
 include(ConfigureOpenGP)

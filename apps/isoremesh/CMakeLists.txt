@@ -1,6 +1,8 @@
+get_filename_component(PROJNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
+project(${PROJNAME})
+
 project(isoremesh)
 
-# set(CMAKE_MODULE_PATH ../../cmake)
 include(ConfigureCompiler)
 include(ConfigureEigen)
 include(ConfigureOpenGP)
