@@ -1,24 +1,23 @@
 project(OpenGP)
 cmake_minimum_required(VERSION 2.8)
 
-#--- where should I look for cmake configuration files?
+#--- where should I look for cmake config files?
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+ 
+#--- import libraries
+include(cmake/ConfigureCompiler.cmake)
+include(cmake/ConfigureEigen.cmake)
+include(cmake/ConfigureOpenGP.cmake)
 
-#--- everything will be built in the project build folder
-set(PROJECT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
- 
-#--- basic components
+#--- basic components (only depend from Eigen & OpenGP)
 add_subdirectory(examples) # builds the examples
-add_subdirectory(library)  # builds dynamic library
-add_subdirectory(data)     # deploys data to the build folder
-add_subdirectory(doc)      # builds the documentation
- 
+add_subdirectory(data)     # deploys data to build folder
+#add_subdirectory(doc)      # builds the documentation
+#add_subdirectory(src)      # builds the dynamic library
+
 #--- full-blown applications
-if(WITH_APPLICATIONS)
-    add_subdirectory(apps/qglviewer)
-    add_subdirectory(apps/baker)
-    add_subdirectory(apps/isoremesh)
-    add_subdirectory(apps/glfwviewer)
-endif()
+#add_subdirectory(apps/viewer)
+#add_subdirectory(apps/qglviewer) #BROKEN/OBSOLETE
+#add_subdirectory(apps/baker)
+#add_subdirectory(apps/isoremesh)
+#add_subdirectory(apps/glfwviewer)
