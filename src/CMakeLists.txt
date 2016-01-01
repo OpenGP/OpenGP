@@ -2,27 +2,21 @@
 file(GLOB_RECURSE SOURCES "OpenGP/*.cpp")
 file(GLOB_RECURSE HEADERS "OpenGP/*.h")
 
-if(NOT WITH_LIBRARY) 
-    #--- Dummy target just to have sources/headers appear in IDE
-    add_custom_target(opengplib SOURCES ${HEADERS} ${SOURCES})
-else()
-    message(STATUS "Building libOpenGP.dylib")
-    
-    #--- If we are building the library then we are not headeronly
-    add_definitions(-DDISABLE_HEADERONLY)
+#--- If we are building the library then we are not headeronly
+message(STATUS "Building libOpenGP.dylib")
+add_definitions(-DDISABLE_HEADERONLY)
 
-    #--- Compile the library
-    if(UNIX)
-        add_library(OpenGP SHARED ${SOURCES} ${HEADERS})
-    elseif(WIN32)
-        add_library(OpenGP STATIC ${SOURCES} ${HEADERS})
-    endif()
-
-    #--- It's a C++ library
-    set_target_properties(OpenGP PROPERTIES LINKER_LANGUAGE CXX)
-    #--- Set the library version
-    set_target_properties(OpenGP PROPERTIES VERSION 1.0)
+#--- Compile the library
+if(UNIX)
+    add_library(OpenGP SHARED ${SOURCES} ${HEADERS})
+elseif(WIN32)
+    add_library(OpenGP STATIC ${SOURCES} ${HEADERS})
 endif()
+
+#--- It's a C++ library
+set_target_properties(OpenGP PROPERTIES LINKER_LANGUAGE CXX)
+#--- Set the library version
+set_target_properties(OpenGP PROPERTIES VERSION 1.0)
 
 #--- "make install" (always install source as well for headeronly support)
 install(FILES ${HEADERS} DESTINATION include/OpenGP)
