@@ -539,7 +539,7 @@ void IsotropicRemesher::phase_analyze(){
     ///--- Identify feature edges
     for(Surface_mesh::Edge e: mesh->edges()) {
         Scalar dihedral = calc_dihedral_angle(*mesh, mesh->halfedge(e,0));
-        if(abs(dihedral)>TH)
+        if(std::abs(dihedral)>TH)
             efeature[e] = true;
     }
     
