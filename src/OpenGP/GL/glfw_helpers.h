@@ -1,14 +1,7 @@
 #pragma once
-#include "GL/glew.h" ///< must be included before GLFW
-#include "GL/glfw.h"
-#include "shader_helpers.h"
-
-/// Convenience constants
-static const int ONE = 1;
-static const bool DONT_NORMALIZE = false;
-static const bool DONT_TRANSPOSE = false;
-static const int ZERO_STRIDE = 0;
-static const void* ZERO_BUFFER_OFFSET = 0;
+#include <OpenGP/GL/gl.h>
+#include <OpenGP/GL/glfw.h>
+#include <OpenGP/GL/shader_helpers.h>
 
 namespace opengp{
 
@@ -31,6 +24,7 @@ int glfwCreateWindow(const char* title){
     /// Hint GLFW that we would like an OpenGL 3 context (at least)
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
+    glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4); ///< anti-aliasing
     glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
     /// Attempt to open the window: fails if required version unavailable
@@ -52,6 +46,9 @@ int glfwCreateWindow(const char* title){
         fprintf( stderr, "Failed to initialize GLEW\n"); 
         return EXIT_FAILURE;
     }
+
+    /// Wipe Startup Errors (Are they caused by GLEW?)
+    while (glGetError() != GL_NO_ERROR) {}
     
     /// Set window title
     glfwSetWindowTitle(title);
