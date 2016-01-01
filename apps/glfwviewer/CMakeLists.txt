@@ -1,4 +1,6 @@
-project(glfwviewer)
+# Simple mesh viewer based on GLFW
+get_filename_component(PROJNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
+project(${PROJNAME})
 
 # set(CMAKE_MODULE_PATH ../../cmake)
 include(ConfigureCompiler)
@@ -9,10 +11,13 @@ include(ConfigureGLFW)
 include(ConfigureGLEW)
 
 #--- compile
-add_executable(glfwviewer main.cpp vshader.glsl fshader.glsl)
-target_link_libraries(glfwviewer ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
+file(GLOB_RECURSE HEADERS "*.h")
+file(GLOB_RECURSE SOURCES "*.cpp")
+file(GLOB_RECURSE SHADERS "*.glsl")
+add_executable(${PROJNAME} ${HEADERS} ${SOURCES} ${SHADERS})
+target_link_libraries(${PROJNAME} ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
 
-#--- convert shaders into header files
-include(target_stringify_shader)
-target_stringify_shader(glfwviewer vshader)
-target_stringify_shader(glfwviewer fshader)
+#--- shaders & data need to be copied to run folder
+file(COPY vshader.glsl DESTINATION ${PROJECT_BINARY_DIR})
+file(COPY fshader.glsl DESTINATION ${PROJECT_BINARY_DIR})
+file(COPY bunny.obj    DESTINATION ${PROJECT_BINARY_DIR})
