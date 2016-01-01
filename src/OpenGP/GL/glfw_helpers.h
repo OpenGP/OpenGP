@@ -45,12 +45,13 @@ int glfwMakeWindow(const char* title){
     /// Hint GLFW that we would like an OpenGL 3 context (at least)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-#ifdef __APPLE__ // TODO is it ok to use it on Windows and Linux?
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-
+#ifdef __APPLE__ 
+    // TODO test if we can use this on Windows and Linux (makes all calls below 3.2 obsolete)
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+    
     /// Attempt to open the window: fails if required version unavailable
     /// @note Intel GPUs do not support OpenGL 3.0
     if( !(window = glfwCreateWindow(_width, _height, title, nullptr, nullptr)) ) {
