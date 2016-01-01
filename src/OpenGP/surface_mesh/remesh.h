@@ -13,7 +13,10 @@
 namespace opengp{
 //=============================================================================
 
-/// @{ @todo centralize these definitions elsewhere
+
+
+class IsotropicRemesher{
+    /// @{ @todo centralize these definitions elsewhere
     const std::string VPOINT = "v:point";           ///< vertex coordinates
     const std::string VNORMAL = "v:normal";         ///< vertex normals
     const std::string VCOLOR = "v:color";           ///< vertex color
@@ -23,26 +26,18 @@ namespace opengp{
     const std::string FAREA = "f:area";             ///< face area
     const std::string ELENGTH = "e:length";         ///< edge length
     const std::string FSELECTED = "f:selected";     ///< is face selected?    
-/// @}
-
-/// @{ @todo get rid of these defines!
-typedef Vec3 Vector3;
-typedef Surface_mesh::Vertex_property<Vector3>  Vector3VertexProperty; 
-typedef Surface_mesh::Edge_property<bool>       BoolEdgeProperty; 
-typedef Surface_mesh::Face_property<Vector3>    Vector3FaceProperty;
-/// @}
-
-class IsotropicRemesher{
+    /// @}
+    
 private:
-    Vector3VertexProperty points;
-    BoolEdgeProperty efeature;
+    Surface_mesh::Vertex_property<Vec3> points;
+    Surface_mesh::Edge_property<bool> efeature;
     Surface_mesh* mesh = NULL;
     Surface_mesh copy;
 public:
     IsotropicRemesher(Surface_mesh& _mesh){
         this->mesh = &_mesh;
         efeature = mesh->edge_property<bool>("e:feature", false);
-        points = mesh->vertex_property<Vector3>(VPOINT);
+        points = mesh->vertex_property<Vec3>(VPOINT);
          
         if(reproject_to_surface)
             copy = *mesh; ///< deep copy
@@ -103,7 +98,7 @@ private:
     int targetValence(const Surface_mesh::Vertex &_vh);
     bool isBoundary(const Surface_mesh::Vertex &_vh);
     bool isFeature(const Surface_mesh::Vertex &_vh);
-    Vector3 findNearestPoint(Surface_mesh& orginal_mesh, const Vector3& _point, Surface_mesh::Face& _fh, Scalar & _dbest);
+    Vec3 findNearestPoint(Surface_mesh& orginal_mesh, const Vec3& _point, Surface_mesh::Face& _fh, Scalar & _dbest);
 /// @} utilities
 };
 

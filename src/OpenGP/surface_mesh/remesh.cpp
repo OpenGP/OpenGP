@@ -42,13 +42,13 @@ static Scalar calc_dihedral_angle(Surface_mesh & mesh, Surface_mesh::Halfedge _h
         return 0;
     }
 
-    Vector3FaceProperty normal = mesh.face_property<Vector3>( FNORMAL );
-    Vector3VertexProperty points = mesh.vertex_property<Vector3>( VPOINT );
+    auto normal = mesh.face_property<Vec3>("f:normal");
+    auto points = mesh.vertex_property<Vec3>("v:point");
 
-    const Vector3& n0 = normal[mesh.face(_heh)];
-    const Vector3& n1 = normal[mesh.face(mesh.opposite_halfedge(_heh))];
+    const Vec3& n0 = normal[mesh.face(_heh)];
+    const Vec3& n1 = normal[mesh.face(mesh.opposite_halfedge(_heh))];
 
-    Vector3 he = points[mesh.to_vertex(_heh)] - points[mesh.from_vertex(_heh)];
+    Vec3 he = points[mesh.to_vertex(_heh)] - points[mesh.from_vertex(_heh)];
 
     Scalar da_cos = dot(n0, n1);
 
@@ -57,10 +57,10 @@ static Scalar calc_dihedral_angle(Surface_mesh & mesh, Surface_mesh::Halfedge _h
     return angle(da_cos, da_sin_sign);
 }
 
-static Scalar distPointTriangleSquared( const Vector3& _p,const Vector3& _v0,const Vector3& _v1,const Vector3& _v2,Vector3& _nearestPoint ) {
-    Vector3 v0v1 = _v1 - _v0;
-    Vector3 v0v2 = _v2 - _v0;
-    Vector3 n = v0v1.cross(v0v2); // not normalized !
+static Scalar distPointTriangleSquared( const Vec3& _p,const Vec3& _v0,const Vec3& _v1,const Vec3& _v2,Vec3& _nearestPoint ) {
+    Vec3 v0v1 = _v1 - _v0;
+    Vec3 v0v2 = _v2 - _v0;
+    Vec3 n = v0v1.cross(v0v2); // not normalized !
     double d = n.squaredNorm();
 
 
@@ -74,14 +74,14 @@ static Scalar distPointTriangleSquared( const Vector3& _p,const Vector3& _v0,con
 
     // these are not needed for every point, should still perform
     // better with many points against one triangle
-    Vector3 v1v2 = _v2 - _v1;
+    Vec3 v1v2 = _v2 - _v1;
     double inv_v0v2_2 = 1.0 / v0v2.squaredNorm();
     double inv_v0v1_2 = 1.0 / v0v1.squaredNorm();
     double inv_v1v2_2 = 1.0 / v1v2.squaredNorm();
 
 
-    Vector3 v0p = _p - _v0;
-    Vector3 t = v0p.cross(n);
+    Vec3 v0p = _p - _v0;
+    Vec3 t = v0p.cross(n);
     double  s01, s02, s12;
     double a = dot(t, v0v2) * -invD;
     double b = dot(t, v0v1) * invD;
@@ -100,7 +100,7 @@ static Scalar distPointTriangleSquared( const Vector3& _p,const Vector3& _v0,con
                 v0p = _v0 + v0v1 * s01;
             }
         } else if (s02 > 1.0) {
-            s12 = dot( v1v2, Vector3(_p - _v1 )) * inv_v1v2_2;
+            s12 = dot( v1v2, Vec3(_p - _v1 )) * inv_v1v2_2;
             if (s12 >= 1.0) {
                 v0p = _v2;
             } else if (s12 <= 0.0) {
@@ -124,7 +124,7 @@ static Scalar distPointTriangleSquared( const Vector3& _p,const Vector3& _v0,con
                 v0p = _v0 + v0v2 * s02;
             }
         } else if (s01 > 1.0) {
-            s12 = dot( v1v2, Vector3(_p - _v1 )) * inv_v1v2_2;
+            s12 = dot( v1v2, Vec3(_p - _v1 )) * inv_v1v2_2;
             if (s12 >= 1.0) {
                 v0p = _v2;
             } else if (s12 <= 0.0) {
@@ -137,7 +137,7 @@ static Scalar distPointTriangleSquared( const Vector3& _p,const Vector3& _v0,con
         }
     } else if (a+b > 1.0) {
         // Calculate the distance to an edge or a corner vertex
-        s12 = dot( v1v2, Vector3(_p - _v1 )) * inv_v1v2_2;
+        s12 = dot( v1v2, Vec3(_p - _v1 )) * inv_v1v2_2;
         if (s12 >= 1.0) {
             s02 = dot( v0v2, v0p ) * inv_v0v2_2;
             if (s02 <= 0.0) {
@@ -170,7 +170,7 @@ static Scalar distPointTriangleSquared( const Vector3& _p,const Vector3& _v0,con
     return (_nearestPoint - _p).squaredNorm();
 }
 
-inline Scalar ClosestPointTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c, Vector3 & closest) {
+inline Scalar ClosestPointTriangle(Vec3 p, Vec3 a, Vec3 b, Vec3 c, Vec3 & closest) {
     // Check if P in vertex region outside A
     Vec3 ab = b - a;
     Vec3 ac = c - a;
@@ -237,7 +237,7 @@ inline static bool TestSphereTriangle(Point sphereCenter, Scalar sphereRadius, P
 }
 
 inline static bool TestSphereTriangle(Point sphereCenter, Scalar sphereRadius, Point a, Point b, Point c) {
-    Vector3 p(0,0,0);
+    Vec3 p(0,0,0);
     return TestSphereTriangle(sphereCenter, sphereRadius, a, b, c);
 }
 
@@ -258,12 +258,12 @@ void IsotropicRemesher::splitLongEdges(Scalar maxEdgeLength ) {
         const Surface_mesh::Vertex & v0 = mesh->from_vertex(hh);
         const Surface_mesh::Vertex & v1 = mesh->to_vertex(hh);
 
-        Vector3 vec = points[v1] - points[v0];
+        Vec3 vec = points[v1] - points[v0];
 
         // edge too long?
         if ( vec.squaredNorm() > maxEdgeLengthSqr ) {
 
-            const Vector3 midPoint = points[v0] + ( 0.5 * vec );
+            const Vec3 midPoint = points[v0] + ( 0.5 * vec );
 
             // split at midpoint
             Surface_mesh::Vertex vh = mesh->add_vertex( midPoint );
@@ -294,7 +294,7 @@ void IsotropicRemesher::collapseShortEdges(const Scalar _minEdgeLength, const Sc
     const Scalar _maxEdgeLengthSqr = _maxEdgeLength * _maxEdgeLength;
 
     //add checked property
-    BoolEdgeProperty checked = mesh->edge_property< bool >("e:checked", false);
+    auto checked = mesh->edge_property< bool >("e:checked", false);
 
     Surface_mesh::Edge_iterator e_it;
 
@@ -315,7 +315,7 @@ void IsotropicRemesher::collapseShortEdges(const Scalar _minEdgeLength, const Sc
             const Surface_mesh::Vertex & v0 = mesh->from_vertex(hh);
             const Surface_mesh::Vertex & v1 = mesh->to_vertex(hh);
 
-            const Vector3 vec = points[v1] - points[v0];
+            const Vec3 vec = points[v1] - points[v0];
 
             const Scalar edgeLength = vec.squaredNorm();
 
@@ -327,7 +327,7 @@ void IsotropicRemesher::collapseShortEdges(const Scalar _minEdgeLength, const Sc
             if ( (edgeLength < _minEdgeLengthSqr) && (edgeLength > std::numeric_limits<Scalar>::epsilon()) ) {
 
                 //check if the collapse is ok
-                const Vector3 & B = points[v1];
+                const Vec3 & B = points[v1];
 
                 bool collapse_ok = true;
 
@@ -427,8 +427,8 @@ void IsotropicRemesher::tangentialRelaxation() {
     mesh->update_face_normals();
     mesh->update_vertex_normals();
 
-    Vector3VertexProperty q = mesh->vertex_property<Vector3>("v:q");
-    Vector3VertexProperty normal = mesh->vertex_property<Vector3>(VNORMAL);
+    auto q = mesh->vertex_property<Vec3>("v:q");
+    auto normal = mesh->vertex_property<Vec3>(VNORMAL);
 
     Surface_mesh::Vertex_iterator v_it;
     Surface_mesh::Vertex_iterator v_end = mesh->vertices_end();
@@ -436,7 +436,7 @@ void IsotropicRemesher::tangentialRelaxation() {
     //first compute barycenters
     for (v_it = mesh->vertices_begin(); v_it != v_end; ++v_it) {
 
-        Vector3 tmp(0,0,0);
+        Vec3 tmp(0,0,0);
         unsigned int N = 0;
 
         for( Surface_mesh::Halfedge hvit: mesh->halfedges(*v_it) ) {
@@ -454,7 +454,7 @@ void IsotropicRemesher::tangentialRelaxation() {
     for (v_it = mesh->vertices_begin(); v_it != v_end; ++v_it) {
         if ( !isBoundary(*v_it) && !isFeature(*v_it) ) {
             if(reproject_on_tanget)
-                points[*v_it] = q[*v_it] + (dot(normal[*v_it], Vector3(points[*v_it] - q[*v_it]) ) * normal[*v_it]);
+                points[*v_it] = q[*v_it] + (dot(normal[*v_it], Vec3(points[*v_it] - q[*v_it]) ) * normal[*v_it]);
             else
                 points[*v_it] = q[*v_it];
         }
@@ -463,10 +463,10 @@ void IsotropicRemesher::tangentialRelaxation() {
     mesh->remove_vertex_property(q);
 }
 
-Vector3 IsotropicRemesher::findNearestPoint(Surface_mesh& original_mesh, const Vector3& _point, Surface_mesh::Face& _fh, Scalar& /*=*/ _dbest) {
-    Vector3VertexProperty orig_points = original_mesh.vertex_property<Vector3>( VPOINT );
+Vec3 IsotropicRemesher::findNearestPoint(Surface_mesh& original_mesh, const Vec3& _point, Surface_mesh::Face& _fh, Scalar& /*=*/ _dbest) {
+    auto orig_points = original_mesh.vertex_property<Vec3>( VPOINT );
 
-    Vector3 p_best(nan(), nan(), nan());
+    Vec3 p_best(nan(), nan(), nan());
     Scalar d_best = inf();
     Surface_mesh::Face fh_best;
 
@@ -475,11 +475,11 @@ Vector3 IsotropicRemesher::findNearestPoint(Surface_mesh& original_mesh, const V
         Surface_mesh::Vertex_around_face_circulator cfv_it = original_mesh.vertices(f);
 
         // Assume triangular
-        const Vector3& pt0 = orig_points[     *cfv_it];
-        const Vector3& pt1 = orig_points[ *(++cfv_it)];
-        const Vector3& pt2 = orig_points[ *(++cfv_it)];
+        const Vec3& pt0 = orig_points[     *cfv_it];
+        const Vec3& pt1 = orig_points[ *(++cfv_it)];
+        const Vec3& pt2 = orig_points[ *(++cfv_it)];
 
-        Vector3 ptn = _point;
+        Vec3 ptn = _point;
 
         //Surface_mesh::Scalar d = distPointTriangleSquared( _point, pt0, pt1, pt2, ptn );
         Scalar d = ClosestPointTriangle( _point, pt0, pt1, pt2, ptn );
@@ -514,12 +514,12 @@ void IsotropicRemesher::projectToSurface() {
         if (isBoundary(*v_it)) continue;
         if ( isFeature(*v_it)) continue;
 
-        Vector3 p = points[*v_it];
+        Vec3 p = points[*v_it];
 
         Surface_mesh::Face fhNear;
         Scalar distance;
 
-        Vector3 pNear = findNearestPoint(copy, p, fhNear, distance);
+        Vec3 pNear = findNearestPoint(copy, p, fhNear, distance);
 
         points[*v_it] = pNear;
     }
@@ -549,7 +549,7 @@ void IsotropicRemesher::phase_analyze(){
             const Surface_mesh::Halfedge & hh = mesh->halfedge( e, 0 );
             const Surface_mesh::Vertex & v0 = mesh->from_vertex(hh);
             const Surface_mesh::Vertex & v1 = mesh->to_vertex(hh);
-            const Vector3 vec = points[v1] - points[v0];
+            const Vec3 vec = points[v1] - points[v0];
 
             if (vec.norm() <= longest_edge_length)
                 efeature[e] = true;
