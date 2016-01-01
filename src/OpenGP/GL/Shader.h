@@ -19,9 +19,13 @@ namespace{
 
 /// @note Inspired by QOpenGLShaderProgram
 class ShaderProgram{
+/// @{
 private:
     GLuint pid = 0; ///< 0: invalid
-     
+public:
+    bool verbose = false; ///< prints messages
+/// @}
+
 public:
     ShaderProgram(){ pid = glCreateProgram(); }
     GLuint programId() const { return pid; }
@@ -53,7 +57,7 @@ public:
     
 public:
     bool add_vshader_from_source(const char* code){
-        mDebug() << "Compiling Vertex shader";
+        if(verbose) mDebug() << "Compiling Vertex shader";
         
         /// Create the Vertex Shader
         GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -79,7 +83,7 @@ public:
     }
     
     bool add_fshader_from_source(const char* code){ 
-        mDebug() << "Compiling Fragment shader";
+        if(verbose) mDebug() << "Compiling Fragment shader";
 
         /// Create the Fragment Shader
         GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
@@ -105,7 +109,7 @@ public:
     }
     
     bool link(){
-        mDebug() << "Linking shader program";
+       if(verbose) mDebug() << "Linking shader program";
         glLinkProgram(pid);
     
         /// Check the program
