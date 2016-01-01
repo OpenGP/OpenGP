@@ -33,7 +33,7 @@ public:
     }
 
 public:
-    void run(){
+    int run(){
         while(glfwGetKey(GLFW_KEY_ESC)!=GLFW_PRESS && glfwGetWindowParam(GLFW_OPENED)){
             scene.display();
             glfwSwapBuffers();
@@ -41,6 +41,7 @@ public:
         
         /// Closes OpenGL window and terminates GLFW
         glfwTerminate();
+        return EXIT_SUCCESS;
     }
 };
 
