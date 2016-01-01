@@ -1,10 +1,9 @@
 #pragma once
 #include <vector>
+#include <OpenGP/MLogger.h>
 #include <OpenGP/Surface_mesh.h>
 #include <OpenGP/GL/Scene.h>
-#include <OpenGP/GL/glfw_helpers.h> /// TODO
-#include <OpenGP/GL/check_error_gl.h>
-#include <OpenGP/MLogger.h>
+#include <OpenGP/GL/gl.h>
 
 //=============================================================================
 namespace opengp {

@@ -1,9 +1,8 @@
 #pragma once
 #include <Eigen/Core>
-#include <OpenGP/GL/glfw_helpers.h> ///< TODO: change opengl_helper.h
+#include <OpenGP/GL/gl.h>
 #include <OpenGP/MLogger.h>
 #include <OpenGP/GL/Buffer.h>
-#include <OpenGP/GL/check_error_gl.h>
 
 //=============================================================================
 namespace opengp {
@@ -45,12 +44,10 @@ public:
     
     void set_attribute(const char* name, ArrayBuffer<Eigen::Vector3f>& buffer){
         bind(); ///< todo: check bound
-            check_error_gl();        
             GLint location = glGetAttribLocation(pid, name); ///< property to modify
             glEnableVertexAttribArray(location); ///< cached in VAO
             buffer.bind(); ///< memory the description below refers to
             glVertexAttribPointer(location, /*vec3*/ 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);   
-            check_error_gl();        
         release();
     }
     
