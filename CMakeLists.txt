@@ -12,12 +12,11 @@ include(cmake/ConfigureOpenGP.cmake)
 #--- basic components (only depend from Eigen & OpenGP)
 add_subdirectory(examples) # builds the examples
 add_subdirectory(data)     # deploys data to build folder
-#add_subdirectory(doc)      # builds the documentation
-#add_subdirectory(src)      # builds the dynamic library
+add_subdirectory(doc)      # builds the documentation
+add_subdirectory(src)      # builds the dynamic library
 
-#--- full-blown applications
-#add_subdirectory(apps/viewer)
-#add_subdirectory(apps/qglviewer) #BROKEN/OBSOLETE
-#add_subdirectory(apps/baker)
-#add_subdirectory(apps/isoremesh)
-#add_subdirectory(apps/glfwviewer)
+#--- full-blown applications (can be compiled independently)
+add_subdirectory(apps/glfwviewer)
+add_subdirectory(apps/baker)
+add_subdirectory(apps/isoremesh)
+#add_subdirectory(apps/qglviewer) # UNSTABLE
