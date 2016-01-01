@@ -1,26 +1,16 @@
 #pragma once
-
+#include <OpenGP/types.h>
 #include <Eigen/Geometry>
-#if defined(__APPLE_CC__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#include <GL/glext.h>
-#endif
 
 //== NAMESPACE ================================================================
-namespace Eigen {
+namespace opengp {
 //=============================================================================
 
 /// @brief Returns a perspective transformation matrix like the one from gluPerspective
 /// @see http://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml
 /// @see glm::perspective
-template<typename Scalar>
-Eigen::Matrix<Scalar,4,4> perspective(Scalar fovy,
-                                      Scalar aspect,
-                                      Scalar zNear,
-                                      Scalar zFar) {
-    Transform<Scalar,3,Projective> tr;
+Mat4x4 perspective(Scalar fovy, Scalar aspect, Scalar zNear, Scalar zFar) {
+    Eigen::Transform<Scalar,3,Eigen::Projective> tr;
     tr.matrix().setZero();
     assert(aspect > 0);
     assert(zFar > zNear);
@@ -37,12 +27,10 @@ Eigen::Matrix<Scalar,4,4> perspective(Scalar fovy,
 
 /// @see glm::ortho
 template<typename Scalar>
-Eigen::Matrix<Scalar,4,4> ortho( Scalar const& left,
-                                 Scalar const& right,
-                                 Scalar const& bottom,
-                                 Scalar const& top,
-                                 Scalar const& zNear,
-                                 Scalar const& zFar ) {
+Mat4x4 ortho( Scalar const& left, Scalar const& right, 
+              Scalar const& bottom, Scalar const& top,
+              Scalar const& zNear, Scalar const& zFar ) 
+{
     Eigen::Matrix<Scalar,4,4> mat = Eigen::Matrix<Scalar,4,4>::Identity();
     mat(0,0) = Scalar(2) / (right - left);
     mat(1,1) = Scalar(2) / (top - bottom);
@@ -53,9 +41,8 @@ Eigen::Matrix<Scalar,4,4> ortho( Scalar const& left,
     return mat;
 }
 
-template<typename Scalar>
-Eigen::Matrix<Scalar,4,4> scale(Scalar x, Scalar y, Scalar z) {
-    Transform<Scalar,3,Affine> tr;
+Mat4x4 scale(Scalar x, Scalar y, Scalar z) {
+    Eigen::Transform<Scalar,3,Eigen::Affine> tr;
     tr.matrix().setZero();
     tr(0,0) = x;
     tr(1,1) = y;
@@ -64,14 +51,11 @@ Eigen::Matrix<Scalar,4,4> scale(Scalar x, Scalar y, Scalar z) {
     return tr.matrix();
 }
 
-template<typename Scalar>
-Eigen::Matrix<Scalar,4,4> translate(Scalar x, Scalar y, Scalar z) {
-    Transform<Scalar,3,Affine> tr;
-    tr.matrix().setIdentity();
-    tr(0,3) = x;
-    tr(1,3) = y;
-    tr(2,3) = z;
-    return tr.matrix();
+Mat4x4 translate(Scalar tx, Scalar ty, Scalar tz){
+    typedef Eigen::Transform<Scalar,3,Eigen::Affine> Transform;
+    Transform M = Transform::Identity();
+    M = Eigen::Translation<Scalar,3>(tx,ty,tz);
+    return M.matrix();
 }
 
 /// @brief Returns a view transformation matrix like the one from glu's lookAt
@@ -103,5 +87,5 @@ Eigen::Matrix<typename Derived::Scalar,4,4> lookAt(Derived const& eye, Derived c
 }
 
 //=============================================================================
-} // namespace Eigen
+} // namespace opengp
 //=============================================================================
