@@ -1,6 +1,7 @@
 #pragma once
 #include <OpenGP/GL/glfw.h>
 #include <OpenGP/GL/SceneGraph.h>
+#include <OpenGP/GL/GlfwFpsCounter.h>
 
 //=============================================================================
 namespace opengp {
@@ -16,8 +17,10 @@ private:
     GLFWwindow *window = nullptr;
     int _width = 640;
     int _height = 480;
+    
 public:
-    SceneGraph scene;    
+    SceneGraph scene;
+    GlfwFpsCounter fps_counter;
 /// @}  
    
 public:
@@ -80,12 +83,12 @@ public:
         }
     }
 
-public:
     int run(){
         while(glfwGetKey(window, GLFW_KEY_ESCAPE)!=GLFW_PRESS && !glfwWindowShouldClose(window)){
             scene.display();
             glfwSwapBuffers(window);
             glfwPollEvents();
+            fps_counter.tick();
         }
         
         /// Closes OpenGL window and terminates GLFW
