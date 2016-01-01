@@ -67,9 +67,10 @@ IF(CGAL_INCLUDE_DIR )
                 DOC "Directory containing the CGAL library"
                ) 
     list ( APPEND CGAL_LIBRARIES CGAL CGAL_Core mpfr gmp boost_thread-mt boost_system )
-    set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -frounding-math")
-    set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -frounding-math")
-
+    if(NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -frounding-math")
+        set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -frounding-math")
+    endif()
   ELSE( WIN32 )
     find_path(CGAL_LIBRARY_DIR
               NAMES "libCGAL.so"
