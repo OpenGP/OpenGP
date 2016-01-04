@@ -1,5 +1,5 @@
 #pragma once
-#include <Eigen/Core>
+#include <OpenGP/types.h>
 #include <OpenGP/GL/gl.h>
 #include <OpenGP/MLogger.h>
 #include <OpenGP/GL/Buffer.h>
@@ -32,10 +32,17 @@ public:
     void bind(){ glUseProgram(pid); }
     void release(){ glUseProgram(0); }
     
+    void set_uniform(const char* name, const Scalar& scalar){
+        bind();
+            GLint loc = glGetUniformLocation(pid, name);
+            glUniform1f(loc, scalar);
+        release();
+    }
+    
     void set_uniform(const char* name, const Eigen::Vector3f& vector){
         bind(); ///< todo: check bound
             GLint loc = glGetUniformLocation(pid, name);
-            glUniform4fv(loc, 3, vector.data());    
+            glUniform4fv(loc, 3, vector.data());
         release();
     }
     

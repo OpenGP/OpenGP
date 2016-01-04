@@ -41,13 +41,15 @@ public:
         objects.push_back(&object);
     }
     
-    void display(){
+    void display(float time=0){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         for(SceneObject* obj: objects) {
-            // ///--- Update Light Specs
+            ///--- TODO: Upload Light Specs
             // obj->program.setUniformValue("LDIR", _light_dir);
-            // check_error_gl();
-                    
+              
+            ///--- Upload time information
+            obj->program.set_uniform("time", time);
+            
             ///--- Update Matrix Stack
             obj->program.set_uniform("M",   Mat4x4(obj->model));
             obj->program.set_uniform("MV",  Mat4x4(_view*obj->model));
