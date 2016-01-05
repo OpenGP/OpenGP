@@ -34,7 +34,7 @@ using namespace std;
 
 class Viewer : public QGLWidgetSuperClass {
 protected:
-    Surface_mesh& mesh;
+    SurfaceMesh& mesh;
     QGLShaderProgram program;
     QOpenGLVertexArrayObject vao;
     QGLBuffer vertexbuffer = QGLBuffer(QGLBuffer::VertexBuffer);
@@ -43,7 +43,7 @@ protected:
     std::vector<unsigned int> triangles;
     
 public:
-    Viewer(Surface_mesh& mesh):mesh(mesh){}
+    Viewer(SurfaceMesh& mesh):mesh(mesh){}
     
 public:
     /// @overload QGLWidget
@@ -176,7 +176,7 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
     
-    Surface_mesh mesh;
+    SurfaceMesh mesh;
     bool ok = mesh.read(argv[1]);
     if(!ok){
         cout << "could not open file: " << argv[1] << endl;
