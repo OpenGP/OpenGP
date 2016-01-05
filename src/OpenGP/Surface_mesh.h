@@ -5,7 +5,7 @@
 #include <OpenGP/Global_properties.h>
 
 //== NAMESPACE ================================================================
-namespace opengp {
+namespace OpenGP {
 //=============================================================================
 
 
@@ -1773,7 +1773,7 @@ inline std::ostream& operator<<(std::ostream& os, Surface_mesh::Face f)
 
 
 //=============================================================================
-} // namespace opengp
+} // namespace OpenGP
 //=============================================================================
 
 // Header only support

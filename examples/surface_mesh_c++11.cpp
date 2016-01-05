@@ -1,7 +1,7 @@
 /// Barycenter example re-written with C++11 syntax
 
 #include <OpenGP/Surface_mesh.h>
-using namespace opengp;
+using namespace OpenGP;
 using namespace std;
 int main(int argc, char** argv)
 {

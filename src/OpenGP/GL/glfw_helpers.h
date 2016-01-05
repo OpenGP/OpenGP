@@ -16,7 +16,7 @@ static const bool DONT_TRANSPOSE = false;
 static const int ZERO_STRIDE = 0;
 static const void* ZERO_BUFFER_OFFSET = 0;
 
-namespace opengp{
+namespace OpenGP{
 
 static int _width = 640;
 static int _height = 480;
@@ -109,4 +109,4 @@ void glfwMainLoop(){
     glfwTerminate();
 }
 
-} // opengp::
+} // OpenGP::

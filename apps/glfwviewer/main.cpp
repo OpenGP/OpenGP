@@ -4,7 +4,7 @@
 #include <OpenGP/Surface_mesh.h>
 #include <OpenGP/surface_mesh/GL/SurfaceMeshRenderFlat.h>
 #include <OpenGP/surface_mesh/GL/SurfaceMeshRenderShaded.h>
-using namespace opengp;
+using namespace OpenGP;
 
 int main(int argc, char** argv){   
     if(argc!=2) mFatal("usage: glfwviewer bunny.obj");
@@ -19,11 +19,11 @@ int main(int argc, char** argv){
     GlfwWindow window("Viewer",640,480);
 
     SurfaceMeshRenderShaded shaded(mesh);
-    shaded.model = opengp::translate(-.5,0,0);
+    shaded.model = OpenGP::translate(-.5,0,0);
     window.scene.add(shaded);
     
     SurfaceMeshRenderFlat flat(mesh);
-    flat.model = opengp::translate(+.5,0,0);
+    flat.model = OpenGP::translate(+.5,0,0);
     window.scene.add(flat);
     
     return window.run();

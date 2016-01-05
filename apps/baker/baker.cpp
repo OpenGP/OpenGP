@@ -6,7 +6,7 @@
 #include "sort.h"
 
 using namespace std;
-using namespace opengp;
+using namespace OpenGP;
 
 /// Takes a mesh and generates a source file representing that mesh
 /// Produces: vertices, normals, render indexes

@@ -3,7 +3,7 @@
 #include <OpenGP/surface_mesh/bounding_box.h>
 
 using namespace std;
-using namespace opengp;
+using namespace OpenGP;
 
 int main(int argc, char** argv){
     if(argc!=3){

@@ -3,7 +3,7 @@
 #include <Eigen/Geometry>
 
 //== NAMESPACE ================================================================
-namespace opengp {
+namespace OpenGP {
 //=============================================================================
 
 /// @brief Returns a perspective transformation matrix like the one from gluPerspective
@@ -87,5 +87,5 @@ Eigen::Matrix<typename Derived::Scalar,4,4> lookAt(Derived const& eye, Derived c
 }
 
 //=============================================================================
-} // namespace opengp
+} // namespace OpenGP
 //=============================================================================

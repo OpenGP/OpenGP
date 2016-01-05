@@ -5,7 +5,7 @@
 #include <OpenGP/GL/GlfwFpsCounter.h>
 
 //=============================================================================
-namespace opengp {
+namespace OpenGP {
 //=============================================================================
 
 void glfw_error_callback(int error, const char* description){

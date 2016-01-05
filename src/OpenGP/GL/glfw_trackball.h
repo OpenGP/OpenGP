@@ -4,7 +4,7 @@
 
 #define GLFW_MOD_NONE 0
 
-namespace opengp{
+namespace OpenGP{
 
 /// @todo DOCUMENT
 void glfwTrackball(void (*update_matrices)(Eigen::Matrix4f), void (*update_projection_matrix)());
@@ -137,4 +137,4 @@ void glfwTrackball(void (*update_matrices)(Eigen::Matrix4f), void (*update_proje
     hook_trackball_callbacks(update_matrices, update_projection_matrix);
 }
 
-} // opengp::
+} // OpenGP::

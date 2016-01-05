@@ -9,7 +9,7 @@
 //== NAMESPACE ================================================================
 
 
-namespace opengp {
+namespace OpenGP {
 
 
 //== IMPLEMENTATION ===========================================================
@@ -24,7 +24,7 @@ inline bool read_off_ascii(Surface_mesh& mesh,
                     const bool has_colors)
 {
     typedef Vec3 Normal;
-    typedef Vec3 Texture_coordinate;
+    typedef Vec3 TextureCoordinate;
     typedef Vec3 Color;
     
     char                 line[200], *lp;
@@ -37,10 +37,10 @@ inline bool read_off_ascii(Surface_mesh& mesh,
     
     // properties
     Surface_mesh::Vertex_property<Normal>              normals;
-    Surface_mesh::Vertex_property<Texture_coordinate>  texcoords;
+    Surface_mesh::Vertex_property<TextureCoordinate>  texcoords;
     Surface_mesh::Vertex_property<Color>               colors;
     if (has_normals)   normals   = mesh.vertex_property<Normal>("v:normal");
-    if (has_texcoords) texcoords = mesh.vertex_property<Texture_coordinate>("v:texcoord");
+    if (has_texcoords) texcoords = mesh.vertex_property<TextureCoordinate>("v:texcoord");
     if (has_colors)    colors    = mesh.vertex_property<Color>("v:color");
 
     // #Vertice, #Faces, #Edges
@@ -136,7 +136,7 @@ inline bool read_off_binary(Surface_mesh& mesh,
                      const bool has_colors)
 {
     typedef Vec3 Normal;
-    typedef Vec3 Texture_coordinate;
+    typedef Vec3 TextureCoordinate;
     
     unsigned int       i, j, idx;
     unsigned int       nV, nF, nE;
@@ -151,9 +151,9 @@ inline bool read_off_binary(Surface_mesh& mesh,
 
     // properties
     Surface_mesh::Vertex_property<Normal>              normals;
-    Surface_mesh::Vertex_property<Texture_coordinate>  texcoords;
+    Surface_mesh::Vertex_property<TextureCoordinate>  texcoords;
     if (has_normals)   normals   = mesh.vertex_property<Normal>("v:normal");
-    if (has_texcoords) texcoords = mesh.vertex_property<Texture_coordinate>("v:texcoord");
+    if (has_texcoords) texcoords = mesh.vertex_property<TextureCoordinate>("v:texcoord");
 
 
     // #Vertice, #Faces, #Edges
@@ -281,7 +281,7 @@ bool write_off(const Surface_mesh& mesh, const std::string& filename)
 {
     typedef Vec3 Normal;
     typedef Vec3 Color;
-    typedef Vec3 Texture_coordinate;  
+    typedef Vec3 TextureCoordinate;  
     typedef Vec3 Point;
     
     FILE* out = fopen(filename.c_str(), "w");
@@ -293,7 +293,7 @@ bool write_off(const Surface_mesh& mesh, const std::string& filename)
     bool  has_texcoords = false;
 
     Surface_mesh::Vertex_property<Normal> normals = mesh.get_vertex_property<Normal>("v:normal");
-    Surface_mesh::Vertex_property<Texture_coordinate> texcoords = mesh.get_vertex_property<Texture_coordinate>("v:texcoord");
+    Surface_mesh::Vertex_property<TextureCoordinate> texcoords = mesh.get_vertex_property<TextureCoordinate>("v:texcoord");
     Surface_mesh::Vertex_property<Color> vcolor = mesh.get_vertex_property<Color>("v:color");
     Surface_mesh::Face_property<Color> fcolor = mesh.get_face_property<Color>("f:color");
 
@@ -331,7 +331,7 @@ bool write_off(const Surface_mesh& mesh, const std::string& filename)
 
         if (has_texcoords)
         {
-            const Texture_coordinate& t = texcoords[*vit];
+            const TextureCoordinate& t = texcoords[*vit];
             fprintf(out, "% .10f %.10f", t[0], t[1]);
         }
 
@@ -367,5 +367,5 @@ bool write_off(const Surface_mesh& mesh, const std::string& filename)
 
 
 //=============================================================================
-} // namespace opengp
+} // namespace OpenGP
 //=============================================================================

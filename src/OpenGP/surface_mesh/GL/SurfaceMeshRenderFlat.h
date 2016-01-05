@@ -9,7 +9,7 @@
 #include <OpenGP/GL/SceneGraph.h>
 
 //=============================================================================
-namespace opengp {
+namespace OpenGP {
 //=============================================================================
 
 class SurfaceMeshRenderFlat : public SceneObject{

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-namespace opengp{
+namespace OpenGP{
 
 /// Compiles the vertex, geometry and fragment shaders stored in the given strings
 GLuint compile_shaders(const char * vshader, const char * fshader, const char * gshader = NULL) {
@@ -158,4 +158,4 @@ GLuint load_shaders(const char * vertex_file_path, const char * fragment_file_pa
     return compile_shaders(VertexSourcePointer, FragmentSourcePointer, GeometrySourcePointer);
 }
 
-} //< opengp::
+} //< OpenGP::

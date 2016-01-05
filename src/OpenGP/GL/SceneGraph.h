@@ -11,7 +11,7 @@
 #include <OpenGP/GL/SceneObject.h>
 
 //=============================================================================
-namespace opengp {
+namespace OpenGP {
 //=============================================================================
 
 class SceneGraph{
@@ -25,14 +25,14 @@ public:
 
     SceneGraph(){
         /// Define projection matrix (FOV, aspect, near, far)
-        _projection = opengp::perspective(45.0f, 4.0f/3.0f, 0.1f, 10.f);
+        _projection = OpenGP::perspective(45.0f, 4.0f/3.0f, 0.1f, 10.f);
         // cout << projection << endl;
 
         /// Define the view matrix (camera extrinsics)
         Vec3 cam_pos(0,0,2);
         Vec3 cam_look(0,0,-1); /// Remember: GL swaps viewdir
         Vec3 cam_up(0,1,0);
-        _view = opengp::lookAt(cam_pos, cam_look, cam_up);
+        _view = OpenGP::lookAt(cam_pos, cam_look, cam_up);
         // cout << view << endl;
     }
 

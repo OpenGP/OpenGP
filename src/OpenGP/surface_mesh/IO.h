@@ -12,7 +12,7 @@
 //== NAMESPACE ================================================================
 
 
-namespace opengp {
+namespace OpenGP {
 
 
 //=============================================================================
@@ -36,7 +36,7 @@ template <typename T> void read(FILE* in, T& t)
 }
 
 //=============================================================================
-} // namespace opengp
+} // namespace OpenGP
 
 #ifdef HEADERONLY
     #include "IO.cpp"

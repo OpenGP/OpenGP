@@ -8,7 +8,7 @@
 //== NAMESPACES ===============================================================
 
 
-namespace opengp {
+namespace OpenGP {
 
 
 //== IMPLEMENTATION ===========================================================
@@ -175,7 +175,7 @@ bool read_obj(Surface_mesh& mesh, const std::string& filename)
 
 
 bool write_obj(const Surface_mesh& mesh, const std::string& filename){
-    typedef Vec3 Texture_coordinate;
+    typedef Vec3 TextureCoordinate;
     
     FILE* out = fopen(filename.c_str(), "w");
     if (!out)
@@ -221,10 +221,10 @@ bool write_obj(const Surface_mesh& mesh, const std::string& filename){
     //if so then add
     if(with_tex_coord)
     {
-        Surface_mesh::Halfedge_property<Texture_coordinate> tex_coord = mesh.get_halfedge_property<Texture_coordinate>("h:texcoord");
+        Surface_mesh::Halfedge_property<TextureCoordinate> tex_coord = mesh.get_halfedge_property<TextureCoordinate>("h:texcoord");
         for (Surface_mesh::Halfedge_iterator hit=mesh.halfedges_begin(); hit!=mesh.halfedges_end(); ++hit)
         {
-            const Texture_coordinate& pt = tex_coord[*hit];
+            const TextureCoordinate& pt = tex_coord[*hit];
             fprintf(out, "vt %.10f %.10f %.10f\n", pt[0], pt[1], pt[2]);
         }
     }
@@ -259,5 +259,5 @@ bool write_obj(const Surface_mesh& mesh, const std::string& filename){
 
 
 //=============================================================================
-} // namespace opengp
+} // namespace OpenGP
 //=============================================================================

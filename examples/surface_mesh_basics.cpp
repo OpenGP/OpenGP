@@ -1,5 +1,5 @@
 #include <OpenGP/Surface_mesh.h>
-using namespace opengp;
+using namespace OpenGP;
 
 int main(void)
 {

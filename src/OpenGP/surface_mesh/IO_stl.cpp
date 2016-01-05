@@ -11,7 +11,7 @@
 //== NAMESPACES ===============================================================
 
 
-namespace opengp {
+namespace OpenGP {
 
 
 //== IMPLEMENTATION ===========================================================
@@ -23,7 +23,7 @@ namespace opengp {
 // helper class for STL reader
 class CmpVec{
     typedef Vec3 Normal;
-    typedef Vec3 Texture_coordinate;
+    typedef Vec3 TextureCoordinate;
 public:
 
     CmpVec(float _eps=FLT_MIN) : eps_(_eps) {}
@@ -51,7 +51,7 @@ private:
 
 bool read_stl(Surface_mesh& mesh, const std::string& filename){
     typedef Vec3 Normal;
-    typedef Vec3 Texture_coordinate;
+    typedef Vec3 TextureCoordinate;
     
     char                            line[100], *c;
     unsigned int                    i, nT;
@@ -190,5 +190,5 @@ bool read_stl(Surface_mesh& mesh, const std::string& filename){
 
 
 //=============================================================================
-} // namespace opengp
+} // namespace OpenGP
 //=============================================================================

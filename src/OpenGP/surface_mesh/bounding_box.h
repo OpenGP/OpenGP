@@ -18,7 +18,7 @@ inline std::ostream& operator<<(std::ostream& os, const Eigen::AlignedBox<Scalar
 
 
 //=============================================================================
-namespace opengp{
+namespace OpenGP{
 //=============================================================================
 
 /// @todo should we move this
@@ -34,5 +34,5 @@ inline Box3 bounding_box(const Surface_mesh& mesh)
 }
    
 //=============================================================================
-} // namespace opengp
+} // namespace OpenGP
 //=============================================================================

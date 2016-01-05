@@ -3,7 +3,7 @@
 #include <OpenGP/Surface_mesh.h>
 
 //=============================================================================
-namespace opengp{
+namespace OpenGP{
 //=============================================================================
 
 typedef Eigen::Matrix<Scalar, 3, Eigen::Dynamic> VerticesMatrix;
@@ -35,5 +35,5 @@ VerticesMatrixMap vertices_matrix(Surface_mesh& mesh){
 /// VerticesMatrix vertices_matrix(const Surface_mesh& mesh){}
 
 //=============================================================================
-} // opengp::
+} // OpenGP::
 //=============================================================================

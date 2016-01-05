@@ -4,7 +4,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 
-namespace opengp{
+namespace OpenGP{
 
 class Trackball {
 public:
@@ -63,4 +63,4 @@ private:
     Eigen::Matrix4f incremental_rotation_;
 };
 
-} // opengp::
+} // OpenGP::

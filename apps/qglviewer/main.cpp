@@ -26,10 +26,10 @@
 #else
     #include <OpenGP/GL/QGLWidget32.h>
     #include <OpenGP/GL/EigenOpenGLSupport3.h>
-    typedef opengp::QGLWidget32 QGLWidgetSuperClass;
+    typedef OpenGP::QGLWidget32 QGLWidgetSuperClass;
 #endif
 
-using namespace opengp;
+using namespace OpenGP;
 using namespace std;
 
 class Viewer : public QGLWidgetSuperClass {
@@ -124,7 +124,7 @@ public:
 #ifdef WITH_QGLVIEWER
         ///--- Setup camera
         {        
-            Box3 bbox = opengp::bounding_box(mesh);
+            Box3 bbox = OpenGP::bounding_box(mesh);
             camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
             camera()->setSceneCenter(qglviewer::tr(bbox.center()));
             camera()->setSceneRadius(bbox.diagonal().norm()/2.0);
