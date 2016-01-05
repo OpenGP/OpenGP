@@ -1,7 +1,7 @@
 //== INCLUDES =================================================================
 
-#include <OpenGP/Surface_mesh.h>
-#include <OpenGP/surface_mesh/IO.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
+#include <OpenGP/SurfaceMesh/IO.h>
 #include <cstdio>
 
 
@@ -14,14 +14,14 @@ namespace OpenGP {
 //== IMPLEMENTATION ===========================================================
 
 
-bool read_obj(Surface_mesh& mesh, const std::string& filename)
+bool read_obj(SurfaceMesh& mesh, const std::string& filename)
 {
     char   s[200];
     float  x, y, z;
-    std::vector<Surface_mesh::Vertex>  vertices;
+    std::vector<SurfaceMesh::Vertex>  vertices;
     std::vector<Vec3> all_tex_coords;   //individual texture coordinates
     std::vector<int> halfedge_tex_idx; //texture coordinates sorted for halfedges
-    Surface_mesh::Halfedge_property <Vec3> tex_coords = mesh.halfedge_property<Vec3>("h:texcoord");
+    SurfaceMesh::Halfedge_property <Vec3> tex_coords = mesh.halfedge_property<Vec3>("h:texcoord");
     bool with_tex_coord=false;
 
     // clear mesh
@@ -119,7 +119,7 @@ bool read_obj(Surface_mesh& mesh, const std::string& filename)
               {
                 case 0: // vertex
                 {
-                  vertices.push_back( Surface_mesh::Vertex(atoi(p0) - 1) );
+                  vertices.push_back( SurfaceMesh::Vertex(atoi(p0) - 1) );
                   break;
                 }
                 case 1: // texture coord
@@ -144,14 +144,14 @@ bool read_obj(Surface_mesh& mesh, const std::string& filename)
             }
           }
 
-          Surface_mesh::Face f=mesh.add_face(vertices);
+          SurfaceMesh::Face f=mesh.add_face(vertices);
 
 
           // add texture coordinates
           if(with_tex_coord)
           {
-              Surface_mesh::Halfedge_around_face_circulator h_fit = mesh.halfedges(f);
-              Surface_mesh::Halfedge_around_face_circulator h_end = h_fit;
+              SurfaceMesh::Halfedge_around_face_circulator h_fit = mesh.halfedges(f);
+              SurfaceMesh::Halfedge_around_face_circulator h_end = h_fit;
               unsigned v_idx =0;
               do
               {
@@ -174,7 +174,7 @@ bool read_obj(Surface_mesh& mesh, const std::string& filename)
 //-----------------------------------------------------------------------------
 
 
-bool write_obj(const Surface_mesh& mesh, const std::string& filename){
+bool write_obj(const SurfaceMesh& mesh, const std::string& filename){
     typedef Vec3 TextureCoordinate;
     
     FILE* out = fopen(filename.c_str(), "w");
@@ -182,21 +182,21 @@ bool write_obj(const Surface_mesh& mesh, const std::string& filename){
         return false;
 
     // comment
-    fprintf(out, "# OBJ export from Surface_mesh\n");
+    fprintf(out, "# OBJ export from SurfaceMesh\n");
 
     //vertices
-    Surface_mesh::Vertex_property<Vec3> points = mesh.get_vertex_property<Vec3>("v:point");
-    for (Surface_mesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
+    SurfaceMesh::Vertex_property<Vec3> points = mesh.get_vertex_property<Vec3>("v:point");
+    for (SurfaceMesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
     {
         const Vec3& p = points[*vit];
         fprintf(out, "v %.10f %.10f %.10f\n", p[0], p[1], p[2]);
     }
 
     //normals
-    Surface_mesh::Vertex_property<Vec3> normals = mesh.get_vertex_property<Vec3>("v:normal");
+    SurfaceMesh::Vertex_property<Vec3> normals = mesh.get_vertex_property<Vec3>("v:normal");
     if(normals)
     {
-        for (Surface_mesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
+        for (SurfaceMesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
         {
             const Vec3& p = normals[*vit];
             fprintf(out, "vn %.10f %.10f %.10f\n", p[0], p[1], p[2]);
@@ -221,8 +221,8 @@ bool write_obj(const Surface_mesh& mesh, const std::string& filename){
     //if so then add
     if(with_tex_coord)
     {
-        Surface_mesh::Halfedge_property<TextureCoordinate> tex_coord = mesh.get_halfedge_property<TextureCoordinate>("h:texcoord");
-        for (Surface_mesh::Halfedge_iterator hit=mesh.halfedges_begin(); hit!=mesh.halfedges_end(); ++hit)
+        SurfaceMesh::Halfedge_property<TextureCoordinate> tex_coord = mesh.get_halfedge_property<TextureCoordinate>("h:texcoord");
+        for (SurfaceMesh::Halfedge_iterator hit=mesh.halfedges_begin(); hit!=mesh.halfedges_end(); ++hit)
         {
             const TextureCoordinate& pt = tex_coord[*hit];
             fprintf(out, "vt %.10f %.10f %.10f\n", pt[0], pt[1], pt[2]);
@@ -230,11 +230,11 @@ bool write_obj(const Surface_mesh& mesh, const std::string& filename){
     }
 
     //faces
-    for (Surface_mesh::Face_iterator fit=mesh.faces_begin(); fit!=mesh.faces_end(); ++fit)
+    for (SurfaceMesh::Face_iterator fit=mesh.faces_begin(); fit!=mesh.faces_end(); ++fit)
     {
         fprintf(out, "f");
-        Surface_mesh::Vertex_around_face_circulator fvit=mesh.vertices(*fit), fvend=fvit;
-        Surface_mesh::Halfedge_around_face_circulator fhit=mesh.halfedges(*fit);
+        SurfaceMesh::Vertex_around_face_circulator fvit=mesh.vertices(*fit), fvend=fvit;
+        SurfaceMesh::Halfedge_around_face_circulator fhit=mesh.halfedges(*fit);
         do
         {
             if(with_tex_coord)

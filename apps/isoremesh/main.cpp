@@ -1,6 +1,6 @@
-#include <OpenGP/Surface_mesh.h>
-#include <OpenGP/surface_mesh/remesh.h>
-#include <OpenGP/surface_mesh/bounding_box.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
+#include <OpenGP/SurfaceMesh/remesh.h>
+#include <OpenGP/SurfaceMesh/bounding_box.h>
 
 using namespace std;
 using namespace OpenGP;
@@ -14,7 +14,7 @@ int main(int argc, char** argv){
     std::string output(argv[2]);
     
     ///--- Load mesh
-    Surface_mesh mesh;
+    SurfaceMesh mesh;
     mesh.read(input);
     if(mesh.n_vertices()==0){
         cout << "Input mesh has 0 vertices" << endl;

@@ -6,5 +6,9 @@ include(ConfigureEigen)
 include(ConfigureOpenGP)
 include(ConfigureCGAL)
 
-add_executable(baker baker.cpp)
+file(GLOB_RECURSE SOURCES "*.cpp")
+file(GLOB_RECURSE HEADERS "*.h")
+file(GLOB_RECURSE SHADERS "*.glsl")
+add_executable(${PROJNAME} ${SOURCES} ${HEADERS} ${SHADERS})
+
 target_link_libraries(baker ${LIBRARIES})

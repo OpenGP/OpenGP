@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 #include <OpenGP/GL/glfw_helpers.h>
 #include <OpenGP/GL/check_error_gl.h>
 #include <OpenGP/MLogger.h>
@@ -14,7 +14,7 @@ namespace OpenGP {
 
 class SurfaceMeshRenderFlat : public SceneObject{
 private:
-    Surface_mesh& mesh;
+    SurfaceMesh& mesh;
     VertexArrayObject vao;    
     ArrayBuffer<Vec3> vertexbuffer;
     ArrayBuffer<Vec3> normalbuffer;
@@ -67,7 +67,7 @@ private:
     )GLSL";
     
 public:
-    SurfaceMeshRenderFlat(Surface_mesh& mesh) : mesh(mesh){}
+    SurfaceMeshRenderFlat(SurfaceMesh& mesh) : mesh(mesh){}
     
     void init(){        
         // compile_shaders(vshader, fshader);
@@ -130,5 +130,5 @@ public:
 };
     
 //=============================================================================
-} // namespace GL
+} // namespace OpenGP
 //=============================================================================

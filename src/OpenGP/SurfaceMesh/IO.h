@@ -5,7 +5,7 @@
 //== INCLUDES =================================================================
 
 
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 #include <string>
 
 
@@ -18,14 +18,14 @@ namespace OpenGP {
 //=============================================================================
 
 
-HEADERONLY_INLINE bool read_mesh(Surface_mesh& mesh, const std::string& filename);
-HEADERONLY_INLINE bool read_off(Surface_mesh& mesh, const std::string& filename);
-HEADERONLY_INLINE bool read_obj(Surface_mesh& mesh, const std::string& filename);
-HEADERONLY_INLINE bool read_stl(Surface_mesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool read_mesh(SurfaceMesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool read_off(SurfaceMesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool read_obj(SurfaceMesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool read_stl(SurfaceMesh& mesh, const std::string& filename);
 
-HEADERONLY_INLINE bool write_mesh(const Surface_mesh& mesh, const std::string& filename);
-HEADERONLY_INLINE bool write_off(const Surface_mesh& mesh, const std::string& filename);
-HEADERONLY_INLINE bool write_obj(const Surface_mesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool write_mesh(const SurfaceMesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool write_off(const SurfaceMesh& mesh, const std::string& filename);
+HEADERONLY_INLINE bool write_obj(const SurfaceMesh& mesh, const std::string& filename);
 
 /// Private helper function
 template <typename T> void read(FILE* in, T& t)

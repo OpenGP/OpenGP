@@ -167,7 +167,7 @@ public:
     typedef typename Property_array<T>::const_reference const_reference;
 
     friend class Property_container;
-    friend class Surface_mesh;
+    friend class SurfaceMesh;
 
 
 public:

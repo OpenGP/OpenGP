@@ -5,7 +5,7 @@
 %{
     /// Needed for numpy support
     #define SWIG_FILE_WITH_INIT
-    #include "Surface_mesh.h"
+    #include "SurfaceMesh.h"
 %}
 
 /// numpy typemap support
@@ -22,5 +22,5 @@
 %apply (float** ARGOUTVIEWM_ARRAY2, int *DIM1, int *DIM2) {(float** matrix, int* rows, int* cols)}
 
 /// And a second include needed here
-%include "Surface_mesh.h"
+%include "SurfaceMesh.h"
 

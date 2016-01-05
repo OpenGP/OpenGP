@@ -1,4 +1,4 @@
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 #include <Eigen/Geometry>
 
 //=============================================================================
@@ -23,7 +23,7 @@ namespace OpenGP{
 
 /// @todo should we move this
 typedef Eigen::AlignedBox<Scalar,3> Box3; 
-inline Box3 bounding_box(const Surface_mesh& mesh)
+inline Box3 bounding_box(const SurfaceMesh& mesh)
 {
     auto vpoints = mesh.get_vertex_property<Vec3>("v:point");
     Box3 bbox;

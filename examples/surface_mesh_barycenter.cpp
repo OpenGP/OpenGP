@@ -1,16 +1,16 @@
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 using namespace OpenGP;
 
 int main(int /*argc*/, char** argv)
 {
-    Surface_mesh mesh;
+    SurfaceMesh mesh;
 
     mesh.read(argv[1]);
 
     // get (pre-defined) property storing vertex positions
-    Surface_mesh::Vertex_property<Vec3> points = mesh.get_vertex_property<Vec3>("v:point");
+    SurfaceMesh::Vertex_property<Vec3> points = mesh.get_vertex_property<Vec3>("v:point");
 
-    Surface_mesh::Vertex_iterator vit, vend = mesh.vertices_end();
+    SurfaceMesh::Vertex_iterator vit, vend = mesh.vertices_end();
 
     Vec3 p(0,0,0);
 

@@ -1,9 +1,9 @@
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 using namespace OpenGP;
 
 int main(int /*argc*/, char** argv)
 {
-    Surface_mesh mesh;
+    SurfaceMesh mesh;
 
     mesh.read(argv[1]);
 
@@ -11,8 +11,8 @@ int main(int /*argc*/, char** argv)
     unsigned int vertex_valence;
 
     // instantiate iterator and circulators
-    Surface_mesh::Vertex_iterator vit;
-    Surface_mesh::Vertex_around_vertex_circulator vc, vc_end;
+    SurfaceMesh::Vertex_iterator vit;
+    SurfaceMesh::Vertex_around_vertex_circulator vc, vc_end;
 
     // loop over all vertices
     for (vit = mesh.vertices_begin(); vit != mesh.vertices_end(); ++vit)

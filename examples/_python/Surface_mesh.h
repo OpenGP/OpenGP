@@ -1,4 +1,4 @@
-#include "OpenGP/Surface_mesh.h"
+#include "OpenGP/SurfaceMesh/SurfaceMesh.h"
 
 /// Same name as C++ element (but no namespace)
 class Surface_mesh{

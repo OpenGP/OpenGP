@@ -2,10 +2,10 @@
 #include <OpenGP/headeronly.h>
 #include <OpenGP/types.h>
 #include <OpenGP/NullStream.h>
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 
 #ifdef WITH_CGAL
-    #include <OpenGP/surface_mesh/eigen.h>
+    #include <OpenGP/SurfaceMesh/eigen.h>
     #include <OpenGP/CGAL/AABBSearcher.h>
 #endif
 
@@ -29,12 +29,12 @@ class IsotropicRemesher{
     /// @}
     
 private:
-    Surface_mesh::Vertex_property<Vec3> points;
-    Surface_mesh::Edge_property<bool> efeature;
-    Surface_mesh* mesh = NULL;
-    Surface_mesh copy;
+    SurfaceMesh::Vertex_property<Vec3> points;
+    SurfaceMesh::Edge_property<bool> efeature;
+    SurfaceMesh* mesh = NULL;
+    SurfaceMesh copy;
 public:
-    IsotropicRemesher(Surface_mesh& _mesh){
+    IsotropicRemesher(SurfaceMesh& _mesh){
         this->mesh = &_mesh;
         efeature = mesh->edge_property<bool>("e:feature", false);
         points = mesh->vertex_property<Vec3>(VPOINT);
@@ -95,10 +95,10 @@ private:
     void equalizeValences();
     void tangentialRelaxation();
     void projectToSurface();
-    int targetValence(const Surface_mesh::Vertex &_vh);
-    bool isBoundary(const Surface_mesh::Vertex &_vh);
-    bool isFeature(const Surface_mesh::Vertex &_vh);
-    Vec3 findNearestPoint(Surface_mesh& orginal_mesh, const Vec3& _point, Surface_mesh::Face& _fh, Scalar & _dbest);
+    int targetValence(const SurfaceMesh::Vertex &_vh);
+    bool isBoundary(const SurfaceMesh::Vertex &_vh);
+    bool isFeature(const SurfaceMesh::Vertex &_vh);
+    Vec3 findNearestPoint(SurfaceMesh& orginal_mesh, const Vec3& _point, SurfaceMesh::Face& _fh, Scalar & _dbest);
 /// @} utilities
 };
 

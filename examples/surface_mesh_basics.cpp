@@ -1,13 +1,13 @@
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 using namespace OpenGP;
 
 int main(void)
 {
-    // instantiate a Surface_mesh object
-    Surface_mesh mesh;
+    // instantiate a SurfaceMesh object
+    SurfaceMesh mesh;
 
     // instantiate 4 vertex handles
-    Surface_mesh::Vertex v0,v1,v2,v3;
+    SurfaceMesh::Vertex v0,v1,v2,v3;
 
     // add 4 vertices
     v0 = mesh.add_vertex(Vec3(0,0,0));

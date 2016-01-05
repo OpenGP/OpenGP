@@ -16,8 +16,8 @@
 #endif
 
 ///--- Surface_mesh
-#include <OpenGP/Surface_mesh.h>
-#include <OpenGP/surface_mesh/bounding_box.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
+#include <OpenGP/SurfaceMesh/bounding_box.h>
 
 #ifdef WITH_QGLVIEWER
     #include <OpenGP/qglviewer/QGLMeshLabViewer.h>

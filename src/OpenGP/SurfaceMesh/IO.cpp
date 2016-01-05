@@ -1,18 +1,12 @@
-//== INCLUDES =================================================================
-
-#include <OpenGP/Surface_mesh.h>
-#include <OpenGP/surface_mesh/IO.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
+#include <OpenGP/SurfaceMesh/IO.h>
 #include <clocale>
 #include <algorithm>
 #include <string>
 
 //== NAMESPACE ================================================================
-
-
 namespace OpenGP {
-
-
-//== IMPLEMENTATION ===========================================================
+//=============================================================================
 
 namespace{
 inline char easytolower(char in){
@@ -21,7 +15,7 @@ inline char easytolower(char in){
 } 
 } // ::anonymous
 
-bool read_mesh(Surface_mesh& mesh, const std::string& filename)
+bool read_mesh(SurfaceMesh& mesh, const std::string& filename)
 {
     std::setlocale(LC_NUMERIC, "C");
 
@@ -56,7 +50,7 @@ bool read_mesh(Surface_mesh& mesh, const std::string& filename)
 //-----------------------------------------------------------------------------
 
 
-bool write_mesh(const Surface_mesh& mesh, const std::string& filename)
+bool write_mesh(const SurfaceMesh& mesh, const std::string& filename)
 {
     // extract file extension
     std::string::size_type dot(filename.rfind("."));
@@ -78,7 +72,6 @@ bool write_mesh(const Surface_mesh& mesh, const std::string& filename)
     // we didn't find a writer module
     return false;
 }
-
 
 //=============================================================================
 } // namespace OpenGP

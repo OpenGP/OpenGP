@@ -12,7 +12,7 @@
 # DEBUG: outputs given environment variable
 # message(STATUS OpenGPDIR $ENV{OpenGP_DIR})
 
-find_path(OpenGP_INCLUDE_DIR OpenGP/Surface_mesh.h
+find_path(OpenGP_INCLUDE_DIR OpenGP/SurfaceMesh/SurfaceMesh.h
     # Check build tree
     ./src
     ../src

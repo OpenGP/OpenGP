@@ -1,7 +1,7 @@
 #include <fstream> ///< write file
 #include <iomanip> ///< precision
-#include <OpenGP/Surface_mesh.h>
-#include <OpenGP/surface_mesh/bounding_box.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
+#include <OpenGP/SurfaceMesh/bounding_box.h>
 
 #include "sort.h"
 
@@ -19,7 +19,7 @@ int main(int argc, char** argv){
     std::string output(argv[2]);
     
     ///--- Load mesh
-    Surface_mesh mesh;
+    SurfaceMesh mesh;
     mesh.read(input);
     if(mesh.n_vertices()==0){
         cout << "Input mesh has 0 vertices" << endl;

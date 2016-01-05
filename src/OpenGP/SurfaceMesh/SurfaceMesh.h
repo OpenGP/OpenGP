@@ -1,17 +1,15 @@
 #pragma once
 #include <OpenGP/headeronly.h>
 #include <OpenGP/types.h>
-#include <OpenGP/properties.h>
-#include <OpenGP/Global_properties.h>
+#include <OpenGP/SurfaceMesh/internal/Global_properties.h>
+#include <OpenGP/SurfaceMesh/internal/properties.h>
 
-//== NAMESPACE ================================================================
+//=============================================================================
 namespace OpenGP {
 //=============================================================================
 
-
-//== CLASS DEFINITION =========================================================
 /// A halfedge data structure for polygonal meshes.
-class Surface_mesh : public Global_properties
+class SurfaceMesh : public Global_properties
 {
 
 public: //------------------------------------------------------ topology types
@@ -55,7 +53,7 @@ public: //------------------------------------------------------ topology types
         friend class Halfedge_iterator;
         friend class Edge_iterator;
         friend class Face_iterator;
-        friend class Surface_mesh;
+        friend class SurfaceMesh;
         int idx_;
     };
 
@@ -246,7 +244,7 @@ public: //------------------------------------------------------ iterator types
     public:
 
         /// Default constructor
-        Vertex_iterator(Vertex v=Vertex(), const Surface_mesh* m=NULL) : hnd_(v), mesh_(m)
+        Vertex_iterator(Vertex v=Vertex(), const SurfaceMesh* m=NULL) : hnd_(v), mesh_(m)
         {
             if (mesh_ && mesh_->garbage()) while (mesh_->is_valid(hnd_) && mesh_->is_deleted(hnd_)) ++hnd_.idx_;
         }
@@ -286,7 +284,7 @@ public: //------------------------------------------------------ iterator types
 
     private:
         Vertex  hnd_;
-        const Surface_mesh* mesh_;
+        const SurfaceMesh* mesh_;
     };
 
 
@@ -298,7 +296,7 @@ public: //------------------------------------------------------ iterator types
     public:
 
         /// Default constructor
-        Halfedge_iterator(Halfedge h=Halfedge(), const Surface_mesh* m=NULL) : hnd_(h), mesh_(m)
+        Halfedge_iterator(Halfedge h=Halfedge(), const SurfaceMesh* m=NULL) : hnd_(h), mesh_(m)
         {
             if (mesh_ && mesh_->garbage()) while (mesh_->is_valid(hnd_) && mesh_->is_deleted(hnd_)) ++hnd_.idx_;
         }
@@ -338,7 +336,7 @@ public: //------------------------------------------------------ iterator types
 
     private:
         Halfedge  hnd_;
-        const Surface_mesh* mesh_;
+        const SurfaceMesh* mesh_;
     };
 
 
@@ -350,7 +348,7 @@ public: //------------------------------------------------------ iterator types
     public:
 
         /// Default constructor
-        Edge_iterator(Edge e=Edge(), const Surface_mesh* m=NULL) : hnd_(e), mesh_(m)
+        Edge_iterator(Edge e=Edge(), const SurfaceMesh* m=NULL) : hnd_(e), mesh_(m)
         {
             if (mesh_ && mesh_->garbage()) while (mesh_->is_valid(hnd_) && mesh_->is_deleted(hnd_)) ++hnd_.idx_;
         }
@@ -390,7 +388,7 @@ public: //------------------------------------------------------ iterator types
 
     private:
         Edge  hnd_;
-        const Surface_mesh* mesh_;
+        const SurfaceMesh* mesh_;
     };
 
 
@@ -402,7 +400,7 @@ public: //------------------------------------------------------ iterator types
     public:
 
         /// Default constructor
-        Face_iterator(Face f=Face(), const Surface_mesh* m=NULL) : hnd_(f), mesh_(m)
+        Face_iterator(Face f=Face(), const SurfaceMesh* m=NULL) : hnd_(f), mesh_(m)
         {
             if (mesh_ && mesh_->garbage()) while (mesh_->is_valid(hnd_) && mesh_->is_deleted(hnd_)) ++hnd_.idx_;
         }
@@ -442,7 +440,7 @@ public: //------------------------------------------------------ iterator types
 
     private:
         Face  hnd_;
-        const Surface_mesh* mesh_;
+        const SurfaceMesh* mesh_;
     };
 
 
@@ -521,7 +519,7 @@ public: //---------------------------------------------------- circulator types
     public:
 
         /// default constructor
-        Vertex_around_vertex_circulator(const Surface_mesh* m=NULL, Vertex v=Vertex())
+        Vertex_around_vertex_circulator(const SurfaceMesh* m=NULL, Vertex v=Vertex())
         : mesh_(m), active_(true)
         {
             if (mesh_) halfedge_ = mesh_->halfedge(v);
@@ -576,7 +574,7 @@ public: //---------------------------------------------------- circulator types
         Vertex_around_vertex_circulator& end()   { active_=true;  return *this; }
 
     private:
-        const Surface_mesh*  mesh_;
+        const SurfaceMesh*  mesh_;
         Halfedge         halfedge_;
         // helper for C++11 range-based for-loops
         bool active_;
@@ -591,7 +589,7 @@ public: //---------------------------------------------------- circulator types
     public:
 
         /// default constructor
-        Halfedge_around_vertex_circulator(const Surface_mesh* m=NULL, Vertex v=Vertex())
+        Halfedge_around_vertex_circulator(const SurfaceMesh* m=NULL, Vertex v=Vertex())
         : mesh_(m), active_(true)
         {
             if (mesh_) halfedge_ = mesh_->halfedge(v);
@@ -639,7 +637,7 @@ public: //---------------------------------------------------- circulator types
         Halfedge_around_vertex_circulator& end()   { active_=true;  return *this; }
 
     private:
-        const Surface_mesh*  mesh_;
+        const SurfaceMesh*  mesh_;
         Halfedge         halfedge_;
         // helper for C++11 range-based for-loops
         bool active_;
@@ -654,7 +652,7 @@ public: //---------------------------------------------------- circulator types
     public:
 
         /// construct with mesh and vertex (vertex should not be isolated!)
-        Face_around_vertex_circulator(const Surface_mesh* m=NULL, Vertex v=Vertex())
+        Face_around_vertex_circulator(const SurfaceMesh* m=NULL, Vertex v=Vertex())
         : mesh_(m), active_(true)
         {
             if (mesh_)
@@ -715,7 +713,7 @@ public: //---------------------------------------------------- circulator types
         Face_around_vertex_circulator& end()   { active_=true;  return *this; }
 
     private:
-        const Surface_mesh*  mesh_;
+        const SurfaceMesh*  mesh_;
         Halfedge         halfedge_;
         // helper for C++11 range-based for-loops
         bool active_;
@@ -730,7 +728,7 @@ public: //---------------------------------------------------- circulator types
     public:
 
         /// default constructor
-        Vertex_around_face_circulator(const Surface_mesh* m=NULL, Face f=Face())
+        Vertex_around_face_circulator(const SurfaceMesh* m=NULL, Face f=Face())
         : mesh_(m), active_(true)
         {
             if (mesh_) halfedge_ = mesh_->halfedge(f);
@@ -779,7 +777,7 @@ public: //---------------------------------------------------- circulator types
         Vertex_around_face_circulator& end()   { active_=true;  return *this; }
 
     private:
-        const Surface_mesh*  mesh_;
+        const SurfaceMesh*  mesh_;
         Halfedge         halfedge_;
         // helper for C++11 range-based for-loops
         bool active_;
@@ -794,7 +792,7 @@ public: //---------------------------------------------------- circulator types
     public:
 
         /// default constructur
-        Halfedge_around_face_circulator(const Surface_mesh* m=NULL, Face f=Face())
+        Halfedge_around_face_circulator(const SurfaceMesh* m=NULL, Face f=Face())
         : mesh_(m), active_(true)
         {
             if (mesh_) halfedge_ = mesh_->halfedge(f);
@@ -839,7 +837,7 @@ public: //---------------------------------------------------- circulator types
         Halfedge_around_face_circulator& end()   { active_=true;  return *this; }
 
     private:
-        const Surface_mesh*  mesh_;
+        const SurfaceMesh*  mesh_;
         Halfedge         halfedge_;
         // helper for C++11 range-based for-loops
         bool active_;
@@ -853,19 +851,19 @@ public: //-------------------------------------------- constructor / destructor
     //@{
 
     /// default constructor
-    HEADERONLY_INLINE Surface_mesh();
+    HEADERONLY_INLINE SurfaceMesh();
 
     // destructor (is virtual, since we inherit from Geometry_representation)
-    HEADERONLY_INLINE virtual ~Surface_mesh();
+    HEADERONLY_INLINE virtual ~SurfaceMesh();
 
     /// copy constructor: copies \c rhs to \c *this. performs a deep copy of all properties.
-    Surface_mesh(const Surface_mesh& rhs) { operator=(rhs); }
+    SurfaceMesh(const SurfaceMesh& rhs) { operator=(rhs); }
 
     /// assign \c rhs to \c *this. performs a deep copy of all properties.
-    HEADERONLY_INLINE Surface_mesh& operator=(const Surface_mesh& rhs);
+    HEADERONLY_INLINE SurfaceMesh& operator=(const SurfaceMesh& rhs);
 
     /// assign \c rhs to \c *this. does not copy custom properties.
-    HEADERONLY_INLINE Surface_mesh& assign(const Surface_mesh& rhs);
+    HEADERONLY_INLINE SurfaceMesh& assign(const SurfaceMesh& rhs);
 
     //@}
 
@@ -1713,7 +1711,7 @@ private: //--------------------------------------------------- helper functions
 
 private: //------------------------------------------------------- private data
 
-    HEADERONLY_INLINE friend bool read_poly(Surface_mesh& mesh, const std::string& filename);
+    HEADERONLY_INLINE friend bool read_poly(SurfaceMesh& mesh, const std::string& filename);
 
     Property_container vprops_;
     Property_container hprops_;
@@ -1751,22 +1749,22 @@ private: //------------------------------------------------------- private data
 //------------------------------------------------------------ output operators
 
 
-inline std::ostream& operator<<(std::ostream& os, Surface_mesh::Vertex v)
+inline std::ostream& operator<<(std::ostream& os, SurfaceMesh::Vertex v)
 {
     return (os << 'v' << v.idx());
 }
 
-inline std::ostream& operator<<(std::ostream& os, Surface_mesh::Halfedge h)
+inline std::ostream& operator<<(std::ostream& os, SurfaceMesh::Halfedge h)
 {
     return (os << 'h' << h.idx());
 }
 
-inline std::ostream& operator<<(std::ostream& os, Surface_mesh::Edge e)
+inline std::ostream& operator<<(std::ostream& os, SurfaceMesh::Edge e)
 {
     return (os << 'e' << e.idx());
 }
 
-inline std::ostream& operator<<(std::ostream& os, Surface_mesh::Face f)
+inline std::ostream& operator<<(std::ostream& os, SurfaceMesh::Face f)
 {
     return (os << 'f' << f.idx());
 }
@@ -1778,5 +1776,5 @@ inline std::ostream& operator<<(std::ostream& os, Surface_mesh::Face f)
 
 // Header only support
 #ifdef HEADERONLY
-    #include "Surface_mesh.cpp"
+    #include "SurfaceMesh.cpp"
 #endif

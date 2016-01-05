@@ -1,25 +1,25 @@
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 
 //=============================================================================
 namespace OpenGP{
 //=============================================================================
 
 namespace {
-    typedef Surface_mesh::Vertex Vertex;
+    typedef SurfaceMesh::Vertex Vertex;
 } /// ::anonymous
 
 /// @par mesh, not const as property is added (and then deleted)
-Surface_mesh sort(Surface_mesh& mesh, int dimension=0){
-    Surface_mesh sorted;
+SurfaceMesh sort(SurfaceMesh& mesh, int dimension=0){
+    SurfaceMesh sorted;
     
     ///--- Sort vertices accordin to a criteria
     {
-        class Sort_Functor{
+        class SortFunctor{
         private:
-            Surface_mesh::Vertex_property<Vec3> vpoints;
+            SurfaceMesh::Vertex_property<Vec3> vpoints;
             int sort_dimension;
         public:
-            Sort_Functor(const Surface_mesh& mesh, int dimension=0){
+            SortFunctor(const SurfaceMesh& mesh, int dimension=0){
                 assert(dimension>=0 && dimension<3); ///< x,y,z
                 sort_dimension = dimension;
                 vpoints = mesh.get_vertex_property<Vec3>("v:point");            
@@ -32,7 +32,7 @@ Surface_mesh sort(Surface_mesh& mesh, int dimension=0){
         std::vector<Vertex> sorted_vertices;
         for(auto vid: mesh.vertices())
             sorted_vertices.push_back(vid);
-        std::sort(sorted_vertices.begin(), sorted_vertices.end(), Sort_Functor(mesh,dimension));
+        std::sort(sorted_vertices.begin(), sorted_vertices.end(), SortFunctor(mesh,dimension));
        
 #define SHOW_DEBUG_OUTPUT
 #ifdef SHOW_DEBUG_OUTPUT

@@ -1,11 +1,11 @@
 /// Barycenter example re-written with C++11 syntax
 
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 using namespace OpenGP;
 using namespace std;
-int main(int argc, char** argv)
-{
-    Surface_mesh mesh;
+
+int main(int argc, char** argv){
+    SurfaceMesh mesh;
     if(!(argc==2 && mesh.read(argv[1]))){ 
         cout << "!!! file doesn't exist or no file provided" << endl;
         exit(0);

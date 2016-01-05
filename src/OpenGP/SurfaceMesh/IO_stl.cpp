@@ -1,7 +1,7 @@
 //== INCLUDES =================================================================
 
-#include <OpenGP/Surface_mesh.h>
-#include <OpenGP/surface_mesh/IO.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
+#include <OpenGP/SurfaceMesh/IO.h>
 
 #include <cstdio>
 #include <cfloat>
@@ -49,20 +49,20 @@ private:
 //-----------------------------------------------------------------------------
 
 
-bool read_stl(Surface_mesh& mesh, const std::string& filename){
+bool read_stl(SurfaceMesh& mesh, const std::string& filename){
     typedef Vec3 Normal;
     typedef Vec3 TextureCoordinate;
     
     char                            line[100], *c;
     unsigned int                    i, nT;
     Vec3                            p;
-    Surface_mesh::Vertex               v;
-    std::vector<Surface_mesh::Vertex>  vertices(3);
+    SurfaceMesh::Vertex               v;
+    std::vector<SurfaceMesh::Vertex>  vertices(3);
     size_t n_items(0);
 
     CmpVec comp(FLT_MIN);
-    std::map<Vec3, Surface_mesh::Vertex, CmpVec>            vMap(comp);
-    std::map<Vec3, Surface_mesh::Vertex, CmpVec>::iterator  vMapIt;
+    std::map<Vec3, SurfaceMesh::Vertex, CmpVec>            vMap(comp);
+    std::map<Vec3, SurfaceMesh::Vertex, CmpVec>::iterator  vMapIt;
 
     // clear mesh
     mesh.clear();

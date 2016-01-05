@@ -1,11 +1,11 @@
 #include <iostream>
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 using namespace OpenGP;
 using namespace std;
 
 int main(int /*argc*/, char** /*argv*/){
     /// Base mesh
-    Surface_mesh m;
+    SurfaceMesh m;
 
     /// Example #1: adding simple properties
     {

@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <OpenGP/MLogger.h>
-#include <OpenGP/Surface_mesh.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 #include <OpenGP/GL/SceneGraph.h>
 #include <OpenGP/GL/gl.h>
 
@@ -11,7 +11,7 @@ namespace OpenGP {
 
 class SurfaceMeshRenderShaded : public SceneObject{
 private:
-    Surface_mesh& mesh;
+    SurfaceMesh& mesh;
     VertexArrayObject vao;    
     ArrayBuffer<Vec3> v_buffer;
     ArrayBuffer<Vec3> n_buffer;
@@ -50,7 +50,7 @@ private:
     )GLSL";
     
 public:
-    SurfaceMeshRenderShaded(Surface_mesh& mesh) : mesh(mesh){}
+    SurfaceMeshRenderShaded(SurfaceMesh& mesh) : mesh(mesh){}
     
     void init(){
         ///--- Properties for upload

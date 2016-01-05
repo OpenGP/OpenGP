@@ -1,5 +1,5 @@
 #include "remesh.h"
-#include "OpenGP/Surface_mesh.h"
+#include "OpenGP/SurfaceMesh/SurfaceMesh.h"
 
 //=============================================================================
 namespace OpenGP {
@@ -36,7 +36,7 @@ static inline Scalar angle(Scalar _cos_angle, Scalar _sin_angle) {
 
 
 // Helper function
-static Scalar calc_dihedral_angle(Surface_mesh & mesh, Surface_mesh::Halfedge _heh) {
+static Scalar calc_dihedral_angle(SurfaceMesh & mesh, SurfaceMesh::Halfedge _heh) {
     if (mesh.is_boundary(mesh.edge(_heh))) {
         //the dihedral angle at a boundary edge is 0
         return 0;
@@ -247,16 +247,16 @@ void IsotropicRemesher::splitLongEdges(Scalar maxEdgeLength ) {
     
     const Scalar maxEdgeLengthSqr = maxEdgeLength * maxEdgeLength;
 
-    Surface_mesh::Edge_iterator e_it;
-    Surface_mesh::Edge_iterator e_end = mesh->edges_end();
+    SurfaceMesh::Edge_iterator e_it;
+    SurfaceMesh::Edge_iterator e_end = mesh->edges_end();
 
     // iterate over all edges
     int n_splits = 0;
     for (e_it = mesh->edges_begin(); e_it != e_end; ++e_it) {
-        const Surface_mesh::Halfedge & hh = mesh->halfedge( *e_it, 0 );
+        const SurfaceMesh::Halfedge & hh = mesh->halfedge( *e_it, 0 );
 
-        const Surface_mesh::Vertex & v0 = mesh->from_vertex(hh);
-        const Surface_mesh::Vertex & v1 = mesh->to_vertex(hh);
+        const SurfaceMesh::Vertex & v0 = mesh->from_vertex(hh);
+        const SurfaceMesh::Vertex & v1 = mesh->to_vertex(hh);
 
         Vec3 vec = points[v1] - points[v0];
 
@@ -266,7 +266,7 @@ void IsotropicRemesher::splitLongEdges(Scalar maxEdgeLength ) {
             const Vec3 midPoint = points[v0] + ( 0.5 * vec );
 
             // split at midpoint
-            Surface_mesh::Vertex vh = mesh->add_vertex( midPoint );
+            SurfaceMesh::Vertex vh = mesh->add_vertex( midPoint );
 
             bool hadFeature = efeature[*e_it];
 
@@ -274,7 +274,7 @@ void IsotropicRemesher::splitLongEdges(Scalar maxEdgeLength ) {
             n_splits++;
             
             if ( hadFeature ) {
-                for(Surface_mesh::Halfedge e: mesh->halfedges(vh)) {
+                for(SurfaceMesh::Halfedge e: mesh->halfedges(vh)) {
                     if ( mesh->to_vertex(e) == v0 || mesh->to_vertex(e) == v1 ) {
                         efeature[mesh->edge(e)] = true;
                     }
@@ -296,7 +296,7 @@ void IsotropicRemesher::collapseShortEdges(const Scalar _minEdgeLength, const Sc
     //add checked property
     auto checked = mesh->edge_property< bool >("e:checked", false);
 
-    Surface_mesh::Edge_iterator e_it;
+    SurfaceMesh::Edge_iterator e_it;
 
     bool finished = false;
 
@@ -310,10 +310,10 @@ void IsotropicRemesher::collapseShortEdges(const Scalar _minEdgeLength, const Sc
 
             checked[*e_it] = true;
 
-            const Surface_mesh::Halfedge & hh = mesh->halfedge(*e_it,0);
+            const SurfaceMesh::Halfedge & hh = mesh->halfedge(*e_it,0);
 
-            const Surface_mesh::Vertex & v0 = mesh->from_vertex(hh);
-            const Surface_mesh::Vertex & v1 = mesh->to_vertex(hh);
+            const SurfaceMesh::Vertex & v0 = mesh->from_vertex(hh);
+            const SurfaceMesh::Vertex & v1 = mesh->to_vertex(hh);
 
             const Vec3 vec = points[v1] - points[v0];
 
@@ -331,7 +331,7 @@ void IsotropicRemesher::collapseShortEdges(const Scalar _minEdgeLength, const Sc
 
                 bool collapse_ok = true;
 
-            for( Surface_mesh::Halfedge hvit: mesh->halfedges(v0) ) {
+            for( SurfaceMesh::Halfedge hvit: mesh->halfedges(v0) ) {
                     Scalar d = (B - points[ mesh->to_vertex(hvit) ]).squaredNorm();
 
                     if ( d > _maxEdgeLengthSqr || mesh->is_boundary( mesh->edge( hvit ) ) || efeature[mesh->edge(hvit)] ) {
@@ -358,24 +358,24 @@ void IsotropicRemesher::collapseShortEdges(const Scalar _minEdgeLength, const Sc
 void IsotropicRemesher::equalizeValences(){
     *myout << __FUNCTION__ << std::endl;
     
-    Surface_mesh::Edge_iterator e_it;
-    Surface_mesh::Edge_iterator e_end = mesh->edges_end();
+    SurfaceMesh::Edge_iterator e_it;
+    SurfaceMesh::Edge_iterator e_end = mesh->edges_end();
 
     for (e_it = mesh->edges_begin(); e_it != e_end; ++e_it) {
 
         if ( !mesh->is_flip_ok(*e_it) ) continue;
         if ( efeature[*e_it] ) continue;
 
-        const Surface_mesh::Halfedge & h0 = mesh->halfedge( *e_it, 0 );
-        const Surface_mesh::Halfedge & h1 = mesh->halfedge( *e_it, 1 );
+        const SurfaceMesh::Halfedge & h0 = mesh->halfedge( *e_it, 0 );
+        const SurfaceMesh::Halfedge & h1 = mesh->halfedge( *e_it, 1 );
 
         if (h0.is_valid() && h1.is_valid()) {
             if (mesh->face(h0).is_valid() && mesh->face(h1).is_valid()) {
                 //get vertices of corresponding faces
-                const Surface_mesh::Vertex & a = mesh->to_vertex(h0);
-                const Surface_mesh::Vertex & b = mesh->to_vertex(h1);
-                const Surface_mesh::Vertex & c = mesh->to_vertex(mesh->next_halfedge(h0));
-                const Surface_mesh::Vertex & d = mesh->to_vertex(mesh->next_halfedge(h1));
+                const SurfaceMesh::Vertex & a = mesh->to_vertex(h0);
+                const SurfaceMesh::Vertex & b = mesh->to_vertex(h1);
+                const SurfaceMesh::Vertex & c = mesh->to_vertex(mesh->next_halfedge(h0));
+                const SurfaceMesh::Vertex & d = mesh->to_vertex(mesh->next_halfedge(h1));
 
                 const int deviation_pre =  abs((int)(mesh->valence(a) - targetValence(a)))
                                            +abs((int)(mesh->valence(b) - targetValence(b)))
@@ -396,23 +396,23 @@ void IsotropicRemesher::equalizeValences(){
 }
 
 ///returns 4 for boundary vertices and 6 otherwise
-inline int IsotropicRemesher::targetValence(const Surface_mesh::Vertex& _vh ) {
+inline int IsotropicRemesher::targetValence(const SurfaceMesh::Vertex& _vh ) {
     if (isBoundary(_vh))
         return 4;
     else
         return 6;
 }
 
-inline bool IsotropicRemesher::isBoundary(const Surface_mesh::Vertex& _vh ) {
-    for(Surface_mesh::Halfedge hvit: mesh->halfedges(_vh) ) {
+inline bool IsotropicRemesher::isBoundary(const SurfaceMesh::Vertex& _vh ) {
+    for(SurfaceMesh::Halfedge hvit: mesh->halfedges(_vh) ) {
         if ( mesh->is_boundary( mesh->edge( hvit ) ) )
             return true;
     }
     return false;
 }
 
-inline bool IsotropicRemesher::isFeature(const Surface_mesh::Vertex& _vh ) {
-    for(Surface_mesh::Halfedge hvit: mesh->halfedges(_vh) ) {
+inline bool IsotropicRemesher::isFeature(const SurfaceMesh::Vertex& _vh ) {
+    for(SurfaceMesh::Halfedge hvit: mesh->halfedges(_vh) ) {
         if(efeature[mesh->edge(hvit)])
             return true;
     }
@@ -430,8 +430,8 @@ void IsotropicRemesher::tangentialRelaxation() {
     auto q = mesh->vertex_property<Vec3>("v:q");
     auto normal = mesh->vertex_property<Vec3>(VNORMAL);
 
-    Surface_mesh::Vertex_iterator v_it;
-    Surface_mesh::Vertex_iterator v_end = mesh->vertices_end();
+    SurfaceMesh::Vertex_iterator v_it;
+    SurfaceMesh::Vertex_iterator v_end = mesh->vertices_end();
 
     //first compute barycenters
     for (v_it = mesh->vertices_begin(); v_it != v_end; ++v_it) {
@@ -439,7 +439,7 @@ void IsotropicRemesher::tangentialRelaxation() {
         Vec3 tmp(0,0,0);
         unsigned int N = 0;
 
-        for( Surface_mesh::Halfedge hvit: mesh->halfedges(*v_it) ) {
+        for( SurfaceMesh::Halfedge hvit: mesh->halfedges(*v_it) ) {
             tmp += points[ mesh->to_vertex(hvit) ];
             N++;
         }
@@ -463,16 +463,16 @@ void IsotropicRemesher::tangentialRelaxation() {
     mesh->remove_vertex_property(q);
 }
 
-Vec3 IsotropicRemesher::findNearestPoint(Surface_mesh& original_mesh, const Vec3& _point, Surface_mesh::Face& _fh, Scalar& /*=*/ _dbest) {
+Vec3 IsotropicRemesher::findNearestPoint(SurfaceMesh& original_mesh, const Vec3& _point, SurfaceMesh::Face& _fh, Scalar& /*=*/ _dbest) {
     auto orig_points = original_mesh.vertex_property<Vec3>( VPOINT );
 
     Vec3 p_best(nan(), nan(), nan());
     Scalar d_best = inf();
-    Surface_mesh::Face fh_best;
+    SurfaceMesh::Face fh_best;
 
     // exhaustive search
-    for(Surface_mesh::Face f: original_mesh.faces()) {
-        Surface_mesh::Vertex_around_face_circulator cfv_it = original_mesh.vertices(f);
+    for(SurfaceMesh::Face f: original_mesh.faces()) {
+        SurfaceMesh::Vertex_around_face_circulator cfv_it = original_mesh.vertices(f);
 
         // Assume triangular
         const Vec3& pt0 = orig_points[     *cfv_it];
@@ -481,7 +481,7 @@ Vec3 IsotropicRemesher::findNearestPoint(Surface_mesh& original_mesh, const Vec3
 
         Vec3 ptn = _point;
 
-        //Surface_mesh::Scalar d = distPointTriangleSquared( _point, pt0, pt1, pt2, ptn );
+        //SurfaceMesh::Scalar d = distPointTriangleSquared( _point, pt0, pt1, pt2, ptn );
         Scalar d = ClosestPointTriangle( _point, pt0, pt1, pt2, ptn );
 
         if( d < d_best) {
@@ -505,18 +505,18 @@ void IsotropicRemesher::projectToSurface() {
     *myout << __FUNCTION__ << std::endl;
     
 #ifdef WITH_CGAL
-    for(Surface_mesh::Vertex v: mesh->vertices())
+    for(SurfaceMesh::Vertex v: mesh->vertices())
         points[v] = searcher.closest_point(points[v]);
 #else
-    Surface_mesh::Vertex_iterator v_it;
-    Surface_mesh::Vertex_iterator v_end = mesh->vertices_end();
+    SurfaceMesh::Vertex_iterator v_it;
+    SurfaceMesh::Vertex_iterator v_end = mesh->vertices_end();
     for (v_it = mesh->vertices_begin(); v_it != v_end; ++v_it) {
         if (isBoundary(*v_it)) continue;
         if ( isFeature(*v_it)) continue;
 
         Vec3 p = points[*v_it];
 
-        Surface_mesh::Face fhNear;
+        SurfaceMesh::Face fhNear;
         Scalar distance;
 
         Vec3 pNear = findNearestPoint(copy, p, fhNear, distance);
@@ -537,7 +537,7 @@ void IsotropicRemesher::phase_analyze(){
     Scalar TH = deg_to_rad(sharp_feature_deg);
 
     ///--- Identify feature edges
-    for(Surface_mesh::Edge e: mesh->edges()) {
+    for(SurfaceMesh::Edge e: mesh->edges()) {
         Scalar dihedral = calc_dihedral_angle(*mesh, mesh->halfedge(e,0));
         if(std::abs(dihedral)>TH)
             efeature[e] = true;
@@ -545,10 +545,10 @@ void IsotropicRemesher::phase_analyze(){
     
     ///--- Mark short edges as features
     if(keep_short_edges){
-        for(Surface_mesh::Edge e: mesh->edges()) {
-            const Surface_mesh::Halfedge & hh = mesh->halfedge( e, 0 );
-            const Surface_mesh::Vertex & v0 = mesh->from_vertex(hh);
-            const Surface_mesh::Vertex & v1 = mesh->to_vertex(hh);
+        for(SurfaceMesh::Edge e: mesh->edges()) {
+            const SurfaceMesh::Halfedge & hh = mesh->halfedge( e, 0 );
+            const SurfaceMesh::Vertex & v0 = mesh->from_vertex(hh);
+            const SurfaceMesh::Vertex & v1 = mesh->to_vertex(hh);
             const Vec3 vec = points[v1] - points[v0];
 
             if (vec.norm() <= longest_edge_length)
@@ -558,7 +558,7 @@ void IsotropicRemesher::phase_analyze(){
 
     ///--- Count num features
     int n_efeature = 0;
-    for(Surface_mesh::Edge e: mesh->edges())
+    for(SurfaceMesh::Edge e: mesh->edges())
         if(efeature[e])
             n_efeature++;
     *myout << "#edges: " << mesh->n_edges() << " #features: " << n_efeature << std::endl;
