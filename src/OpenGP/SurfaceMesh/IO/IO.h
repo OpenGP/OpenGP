@@ -1,28 +1,15 @@
-#ifndef SURFACE_MESH_IO_H
-#define SURFACE_MESH_IO_H
-
-
-//== INCLUDES =================================================================
-
-
+#pragma once
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 #include <string>
 
-
-//== NAMESPACE ================================================================
-
-
-namespace OpenGP {
-
-
 //=============================================================================
-
+namespace OpenGP {
+//=============================================================================
 
 HEADERONLY_INLINE bool read_mesh(SurfaceMesh& mesh, const std::string& filename);
 HEADERONLY_INLINE bool read_off(SurfaceMesh& mesh, const std::string& filename);
 HEADERONLY_INLINE bool read_obj(SurfaceMesh& mesh, const std::string& filename);
 HEADERONLY_INLINE bool read_stl(SurfaceMesh& mesh, const std::string& filename);
-
 HEADERONLY_INLINE bool write_mesh(const SurfaceMesh& mesh, const std::string& filename);
 HEADERONLY_INLINE bool write_off(const SurfaceMesh& mesh, const std::string& filename);
 HEADERONLY_INLINE bool write_obj(const SurfaceMesh& mesh, const std::string& filename);
@@ -37,6 +24,7 @@ template <typename T> void read(FILE* in, T& t)
 
 //=============================================================================
 } // namespace OpenGP
+//=============================================================================
 
 #ifdef HEADERONLY
     #include "IO.cpp"
@@ -45,7 +33,3 @@ template <typename T> void read(FILE* in, T& t)
     #include "IO_poly.cpp"
     #include "IO_stl.cpp"
 #endif
-
-//=============================================================================
-#endif // SURFACE_MESH_IO_H
-//=============================================================================

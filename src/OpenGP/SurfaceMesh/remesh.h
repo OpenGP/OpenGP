@@ -5,7 +5,7 @@
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 
 #ifdef WITH_CGAL
-    #include <OpenGP/SurfaceMesh/eigen.h>
+    #include <OpenGP/SurfaceMesh/Eigen.h>
     #include <OpenGP/CGAL/AABBSearcher.h>
 #endif
 

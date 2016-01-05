@@ -1,5 +1,5 @@
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
-#include <OpenGP/SurfaceMesh/IO.h>
+#include <OpenGP/SurfaceMesh/IO/IO.h>
 #include <cmath>
 
 //== NAMESPACE ================================================================
