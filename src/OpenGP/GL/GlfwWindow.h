@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include <OpenGP/GL/glfw.h>
 #include <OpenGP/GL/SceneGraph.h>
 #include <OpenGP/GL/GlfwFpsCounter.h>
@@ -14,20 +15,22 @@ void glfw_error_callback(int error, const char* description){
 class GlfwWindow{
 /// @{
 private:
-    GLFWwindow *window = nullptr;
+    bool _enable_wait_events = false; ///< glfw3 poll v.s. wait
+    GLFWwindow* _window = nullptr;
     int _width = 640;
     int _height = 480;
     
 public:
     SceneGraph scene;
     GlfwFpsCounter fps_counter;
-/// @}  
-   
+/// @}
+    
 public:
+    ~GlfwWindow(){ active_windows()->erase(_window); }
     GlfwWindow(std::string title, int width, int height){
         this->_width = width;
         this->_height = height;
-        
+
         {
             if( !glfwInit() )
                 mFatal() << "Failed to initialize GLFW";
@@ -46,19 +49,19 @@ public:
             
             /// Attempt to open the window: fails if required version unavailable
             /// @note Intel GPUs do not support OpenGL 3.0
-            if( !(window = glfwCreateWindow(_width, _height, title.c_str(), nullptr, nullptr)) )
+            if( !(_window = glfwCreateWindow(_width, _height, title.c_str(), nullptr, nullptr)) )
                 mFatal() << "Failed to open OpenGL 3 GLFW window.";
             
             /// Outputs the OpenGL version
-            int major = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MAJOR);
-            int minor = glfwGetWindowAttrib(window, GLFW_CONTEXT_VERSION_MINOR);
-            int revision = glfwGetWindowAttrib(window, GLFW_CONTEXT_REVISION);
+            int major = glfwGetWindowAttrib(_window, GLFW_CONTEXT_VERSION_MAJOR);
+            int minor = glfwGetWindowAttrib(_window, GLFW_CONTEXT_VERSION_MINOR);
+            int revision = glfwGetWindowAttrib(_window, GLFW_CONTEXT_REVISION);
             std::cout << "Opened GLFW OpenGL " << major << "." << minor << "." << revision << std::endl;
         
-            glfwMakeContextCurrent(window);
+            glfwMakeContextCurrent(_window);
             if(!glfwGetCurrentContext())
                 mFatal() << "Failed to make GLFW context current.";
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // can be GLFW_CURSOR_HIDDEN
+            glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // can be GLFW_CURSOR_HIDDEN
         
             // GLEW Initialization (must have a context)
             glewExperimental = GL_TRUE;
@@ -70,7 +73,13 @@ public:
             while (glGetError() != GL_NO_ERROR) {}            
         }
         
-        ///--- OPENGL GLOBALS
+        ///--- Event Callbacks and Dispatcher
+        {
+            active_windows()->emplace(_window,this);
+            glfwSetKeyCallback(_window, glfw_key_callback);
+        }
+        
+        ///--- OpenGL globals
         {
             glClearColor(1.0f, 1.0f, 1.0f, 0.0f); ///< background
             glEnable(GL_DEPTH_TEST); // Enable depth test
@@ -84,10 +93,10 @@ public:
     }
 
     int run(){
-        while(glfwGetKey(window, GLFW_KEY_ESCAPE)!=GLFW_PRESS && !glfwWindowShouldClose(window)){
+        while(glfwGetKey(_window, GLFW_KEY_ESCAPE)!=GLFW_PRESS && !glfwWindowShouldClose(_window)){
             scene.display();
-            glfwSwapBuffers(window);
-            glfwPollEvents();
+            glfwSwapBuffers(_window);
+            _enable_wait_events ? glfwWaitEvents() : glfwPollEvents();
             fps_counter.tick();
         }
         
@@ -95,6 +104,26 @@ public:
         glfwTerminate();
         return EXIT_SUCCESS;
     }
+    
+/// @{ TODO: add more callbacks
+    virtual void key_callback(int /*key*/, int /*scancode*/, int /*action*/, int /*mods*/){ 
+        // mDebug() << key << scancode << action << mods; 
+    }
+/// @}
+
+/// @{ GLFW Event dispatching
+private:    
+    /// @note workaround to allow initialization of static member
+    /// TODO: verify this doesn't cause problems across compilation units
+    static std::map<GLFWwindow*, GlfwWindow*>* active_windows(){
+        static std::map<GLFWwindow*, GlfwWindow*> _active_windows;
+        return &_active_windows;
+    }    
+    static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+        /// Asks the dispatcher which callback we should invoke
+        active_windows()->at(window)->key_callback(key, scancode, action, mods);
+    }
+/// @} 
 };
 
 //=============================================================================
