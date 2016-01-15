@@ -57,11 +57,11 @@ bool read_poly(SurfaceMesh& mesh, const std::string& filename)
     n_items = fread((char*)hconn.data(), sizeof(SurfaceMesh::Halfedge_connectivity), nh, in);
     n_items = fread((char*)fconn.data(), sizeof(SurfaceMesh::Face_connectivity),     nf, in);
     n_items = fread((char*)point.data(), sizeof(Vec3),                               nv, in);
+    (void)n_items; //< unused warning
 
     fclose(in);
     return true;
 }
-
 
 //=============================================================================
 } // namespace OpenGP

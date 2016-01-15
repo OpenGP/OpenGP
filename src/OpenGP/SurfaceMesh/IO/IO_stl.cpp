@@ -50,8 +50,8 @@ private:
 
 
 bool read_stl(SurfaceMesh& mesh, const std::string& filename){
-    typedef Vec3 Normal;
-    typedef Vec3 TextureCoordinate;
+    // typedef Vec3 Normal;
+    // typedef Vec3 TextureCoordinate;
     
     char                            line[100], *c;
     unsigned int                    i, nT;

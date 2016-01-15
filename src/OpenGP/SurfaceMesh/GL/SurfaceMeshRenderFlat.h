@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
-#include <OpenGP/GL/glfw_helpers.h>
+#include <OpenGP/GL/glfw.h>
 #include <OpenGP/GL/check_error_gl.h>
 #include <OpenGP/MLogger.h>
 

@@ -1,6 +1,7 @@
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 #include <OpenGP/SurfaceMesh/IO/IO.h>
 #include <clocale>
+#include <locale>
 #include <algorithm>
 #include <string>
 

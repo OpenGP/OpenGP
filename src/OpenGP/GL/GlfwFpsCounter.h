@@ -23,7 +23,7 @@ public:
     void tick(){
         frame_count++;
         float time = glfwGetTime();
-        float _tDelta = time - _tLast;
+        // float _tDelta = time - _tLast;
         _tLast = time;
         if (time - _tMark > eval_fps_every) {
             _tMark = time;
