@@ -1,5 +1,5 @@
 #pragma once
-#include <OpenGP/types.h>
+#include <Eigen/Dense>
 #include <OpenGP/GL/gl.h>
 #include <OpenGP/MLogger.h>
 #include <OpenGP/GL/Buffer.h>
@@ -18,6 +18,7 @@ namespace{
 }
 
 /// @note Inspired by QOpenGLShaderProgram
+/// @note Important not to use Scalar
 class ShaderProgram{
 /// @{
 private:
