@@ -30,32 +30,48 @@ public:
 public:
     ShaderProgram(){ pid = glCreateProgram(); }
     GLuint programId() const { return pid; }
-    void bind(){ glUseProgram(pid); }
+    void bind(){ glUseProgram(pid); } // TODO: check program valid
     void release(){ glUseProgram(0); }
     
-    void set_uniform(const char* name, const Scalar& scalar){
-        bind();
+    void set_uniform(const char* name, const float& scalar){
+        bind(); ///< todo: rather than binding check for bound?
             GLint loc = glGetUniformLocation(pid, name);
             glUniform1f(loc, scalar);
         release();
     }
     
     void set_uniform(const char* name, const Eigen::Vector3f& vector){
-        bind(); ///< todo: check bound
+        bind(); //< todo: rather than binding check for bound?
             GLint loc = glGetUniformLocation(pid, name);
             glUniform4fv(loc, 3, vector.data());
         release();
     }
     
     void set_uniform(const char* name, const Eigen::Matrix4f& matrix){
-        bind(); ///< todo: check bound
+        bind(); //< todo: check if bound instead
             GLint loc = glGetUniformLocation(pid, name);
             glUniformMatrix4fv(loc, 1, GL_FALSE, matrix.data());
         release();
     }
     
+    /// Set vertex attribute that is *constant* across vertices
+    void set_attribute(const char* name, float value){
+        bind(); //< todo: check if bound instead
+            GLint loc = glGetAttribLocation(pid, name);
+            glVertexAttrib1f(loc, value);
+        release();
+    }
+    
+    /// Set vertex attribute that is *constant* across vertices
+    void set_attribute(const char* name, const Eigen::Vector3f& vector){
+        bind(); //< todo: check if bound instead
+            GLint loc = glGetAttribLocation(pid, name);
+            glVertexAttrib3fv(loc, vector.data());
+        release();
+    }
+    
     void set_attribute(const char* name, ArrayBuffer<Eigen::Vector3f>& buffer){
-        bind(); ///< todo: check bound
+        bind(); //< todo: check if bound instead
             GLint location = glGetAttribLocation(pid, name); ///< property to modify
             glEnableVertexAttribArray(location); ///< cached in VAO
             buffer.bind(); ///< memory the description below refers to
