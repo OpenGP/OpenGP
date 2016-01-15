@@ -4,12 +4,11 @@
 
 \tableofcontents
 
-
 <!-- ---------------------------------------------------------------------- -->
 \section coding_conventions Coding Conventions
 <!-- ---------------------------------------------------------------------- -->
 
-If you would like to contribute to Surface_mesh please make sure
+If you would like to contribute to OpenGP please make sure
 your code adheres to the following coding conventions. For
 general best practices we recommend consulting the JSF coding
 standard available
@@ -25,15 +24,14 @@ standard available
 
 The names of user-defined types (such as classes, structs and
 enums) are begin with a capital letter. Words within the name are
-written using lower-case letters only and separated by
-underscores. Acronyms are written in all capital letters. The
+written camelcase. Acronyms are written in all capital letters. The
 names of persons such as Cholesky or Delaunay are properly
 capitalized as well.
 
 \code
-class Sparse_matrix { ... };
-enum RGB_colors { red, green, blue };
-class Sparse_Cholesky_solver { ... };
+class SparseMatrix { ... };
+enum RGBColors { red, green, blue };
+class SparseCholeskySolver { ... };
 \endcode
 
 
@@ -43,7 +41,7 @@ Function names are written in lower-case letters only. Words
 within the function name are separated by underscores.
 
 \code
-class Example_class_name
+class ExampleClassName
 {
 public:
     double example_function_name(void);
@@ -55,16 +53,16 @@ public:
 
 Variables are named in lower-case letters only. Words within
 the variable name are separated by underscores. Member
-variables have a trailing underscore as a suffix.
+variables have a trailing underscore as a prefix (suffix: obsolete).
 
 \code
 int globals_considered_harmful;
 
-class Example_class_name
+class ExampleClassName
 {
 protected:
-    double member_variable_name_;
-    static double static_variable_name_;
+    double _member_variable_name;
+    static double _static_variable_name;
 };
 \endcode
 
@@ -73,8 +71,8 @@ protected:
 
  File names follow the naming rules for user-defined types. Implementation
 files end with <code>.cpp</code> and header files end with
-<code>.h</code>. Examples: <code>Sparse_matrix.cpp</code> for the
-implementation file. <code>Sparse_matrix.h</code> for the header
+<code>.h</code>. Examples: <code>SparseMatrix.cpp</code> for the
+implementation file. <code>SparseMatrix.h</code> for the header
 file.
 
 
@@ -88,12 +86,10 @@ The expressions following an <code>if, else, while, do ... while </code> or
 enclosing a block should be placed in the same column, on separate lines.
 
 \code
-if (foo_bar == baz)
-{
+if (foo_bar == baz){
     std::cout << "hurz" << std::endl;
 }
-else
-{
+else{
     std::cout << "asdf" << std::endl;
 }
 \endcode
@@ -122,31 +118,30 @@ developers should adhere to in order to avoid common pitfalls.
 <li>
 <p>
         Use header guards in order to protect against multiple
-        inclusion. The name of the guard should be prefixed with
-        SURFACE_MESH in order to avoid any conflicts with external
-        libraries. For the file Your_class.h
+        inclusion. We use #pragma once which is widely adopted by
+        many modern C++ compilers. For the file YourClass.h
         the header guard should look like this:
 </p>
 <p>
 \code
-#ifndef SURFACE_MESH_YOUR_CLASS_H
-#define SURFACE_MESH_TOUR_CLASS_H
-...
-#endif // SURFACE_MESH_YOUR_CLASS_H
+#pragma once
+class YourClass{
+    ///...
+}
 \endcode
 </p>
 </li>
 <li>
 <p>
-        Use the surface_mesh namespace in order to avoid
+        Use the OpenGP namespace in order to avoid
         conflicts. In source files, do not add an additional level of
         indentation due to the namespace:
 </p>
 <p>
 \code
-namespace surface_mesh {
+namespace OpenGP {
 
-class Example_class
+class ExampleClass
 {
 ...
 };

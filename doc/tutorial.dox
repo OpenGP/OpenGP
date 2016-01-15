@@ -1,12 +1,12 @@
 /*!
-\page tutorial Surface_mesh Tutorial
+\page tutorial SurfaceMesh Tutorial
 
 \tableofcontents
 
 \section surface_mesh_intro Introduction
 
 In general, a polygonal surface mesh is composed of vertices, edges and
-faces as well as the incidence relationships between them. Surface_mesh
+faces as well as the incidence relationships between them. SurfaceMesh
 stores the connectivity information based on halfedges, i.e. pairs of
 directed edges with opposing direction. To be more precise:
 
@@ -25,14 +25,14 @@ The halfedge connectivity is illustrated in the figure below:
 
 \section surface_mesh_usage Usage
 
-In the following sections we describe the basic usage of Surface_mesh by
+In the following sections we describe the basic usage of SurfaceMesh by
 means of simple example programs and code excerpts.
 
 
 \subsection surface_mesh_basics Basics
 
-The very basic usage of Surface_mesh is demonstrated in the example
-below. The program first instantiates a Surface_mesh object as well as four
+The very basic usage of SurfaceMesh is demonstrated in the example
+below. The program first instantiates a SurfaceMesh object as well as four
 vertex handles. These handles, as well as the handles for the other mesh
 entities <code>Halfedge</code>, <code>Edge</code>, and <code>Face</code>
 are basically indices. Four vertices are added to the mesh, as well as four
@@ -46,9 +46,9 @@ edges, and faces is printed to standard output.
 
 \subsection surface_mesh_io File I/O
 
-Surface_mesh currently supports reading OFF, OBJ, and STL files. Write
+SurfaceMesh currently supports reading OFF, OBJ, and STL files. Write
 support is currently limited to OFF files. All I/O operations are handled
-by the Surface_mesh::read() and Surface_mesh::write() member functions,
+by the SurfaceMesh::read() and SurfaceMesh::write() member functions,
 with the target file name being their only argument. An example is given
 below.
 
@@ -57,10 +57,10 @@ below.
 
 \subsection surface_mesh_iterators Iterators and Circulators
 
-In order to sequentially access mesh entities Surface_mesh provides
+In order to sequentially access mesh entities SurfaceMesh provides
 iterators for each entity type, namely <code>Vertex_iterator</code>,
 <code>Halfedge_iterator</code>, <code>Edge_iterator</code>, and
-<code>Face_iterator</code>. Similar to iterators, Surface_mesh also
+<code>Face_iterator</code>. Similar to iterators, SurfaceMesh also
 provides circulators for the ordered enumeration of all incident vertices,
 halfedges, or faces around a given face or vertex. Since there is no clear
 begin- and end-circulator, <code>do-while</code> loops are used for circulators. The
@@ -73,7 +73,7 @@ computing the mean valence of a mesh.
 \subsection surface_mesh_properties Properties
 
 Attaching additional attributes to mesh entities is important for many
-applications. Surface_mesh supports properties by means of synchronized
+applications. SurfaceMesh supports properties by means of synchronized
 arrays that can be (de-)allocated dynamically at run-time. Property arrays
 are also used internally, e.g., to store vertex coordinates. The example
 program below shows how to access vertex coordinates through the
@@ -128,13 +128,13 @@ The code excerpt below demonstrates how to allocate, use and remove a custom
 edge property.
 
 \code
-Surface_mesh mesh;
+SurfaceMesh mesh;
 
 // allocate property storing a point per edge
-Surface_mesh::Edge_property<Point> edge_points = mesh.add_edge_property<Point>("property-name");
+SurfaceMesh::Edge_property<Point> edge_points = mesh.add_edge_property<Point>("property-name");
 
 // access the edge property like an array
-Surface_mesh::Edge e;
+SurfaceMesh::Edge e;
 edge_points[e] = Point(x,y,z);
 
 // remove property and free memory
@@ -151,13 +151,13 @@ halfedge or the target vertex of an halfedge are illustrated below.
 <tr>
 <td>
 \code
-Surface_mesh::Halfedge h;
-Surface_mesh::Halfedge h0 = mesh.next_halfedge_handle(h);
-Surface_mesh::Halfedge h1 = mesh.prev_halfedge_handle(h);
-Surface_mesh::Halfedge h2 = mesh.opposite_halfedge_handle(h);
-Surface_mesh::Face     f  = mesh.face_handle(h);
-Surface_mesh::Vertex   v0 = mesh.from_vertex_handle(h);
-Surface_mesh::Vertex   v1 = mesh.to_vertex_handle(h);
+SurfaceMesh::Halfedge h;
+SurfaceMesh::Halfedge h0 = mesh.next_halfedge_handle(h);
+SurfaceMesh::Halfedge h1 = mesh.prev_halfedge_handle(h);
+SurfaceMesh::Halfedge h2 = mesh.opposite_halfedge_handle(h);
+SurfaceMesh::Face     f  = mesh.face_handle(h);
+SurfaceMesh::Vertex   v0 = mesh.from_vertex_handle(h);
+SurfaceMesh::Vertex   v1 = mesh.to_vertex_handle(h);
 \endcode
 </td>
 <td>
@@ -178,10 +178,10 @@ The corresponding member functions and their syntax is demonstrated in the
 pseudo-code below.
 
 \code
-Surface_mesh::Vertex   v;
-Surface_mesh::Edge     e;
-Surface_mesh::Halfedge h;
-Surface_mesh::Face     f;
+SurfaceMesh::Vertex   v;
+SurfaceMesh::Edge     e;
+SurfaceMesh::Halfedge h;
+SurfaceMesh::Face     f;
 
 mesh.split(f, v);
 mesh.split(e, v);
