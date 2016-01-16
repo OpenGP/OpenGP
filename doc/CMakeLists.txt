@@ -1,7 +1,8 @@
-find_package(Doxygen REQUIRED)
+find_package(Doxygen)
 
 if(DOXYGEN_FOUND STREQUAL "NO")
-  message(STATUS "Doxygen not found. Please get a copy http://www.doxygen.org")
+  message(STATUS "You have added the documentation build system, but Doxygen not found.")
+  message(STATUS "Please get a copy through your package manager or at http://www.doxygen.org")
 endif()
 
 if("${DOXYGEN_VERSION}" VERSION_LESS 1.8.3.1)
