@@ -24,8 +24,8 @@ typedef Vec3 TextureCoordinate;           ///< Texture coordinate type
 
 ///--- Matrices
 typedef Eigen::Matrix<Scalar, 4, 4> Mat4x4; ///< 4x4 matrix 
+typedef Eigen::Matrix<Scalar, 3, Eigen::Dynamic> Mat3xN;
 typedef Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> MatMxN;
-
 
 /// Bindings for special values
 inline Scalar nan(){ return std::numeric_limits<Scalar>::quiet_NaN(); }
