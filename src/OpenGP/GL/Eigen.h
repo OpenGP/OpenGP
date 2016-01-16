@@ -51,6 +51,8 @@ Mat4x4 scale(Scalar x, Scalar y, Scalar z) {
     return tr.matrix();
 }
 
+Mat4x4 scale(Scalar s) { return scale(s,s,s); }
+
 Mat4x4 translate(Scalar tx, Scalar ty, Scalar tz){
     typedef Eigen::Transform<Scalar,3,Eigen::Affine> Transform;
     Transform M = Transform::Identity();
