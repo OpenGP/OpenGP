@@ -6,12 +6,21 @@
 namespace OpenGP {
 //=============================================================================
 
-class PointCloudRenderer : public SceneObject{
+class PointsRenderer : public SceneObject{
+protected:
     VertexArrayObject _vao;  
     MatMxN _data; ///< reference to data to be rendered
     ArrayBuffer<Vec3> _buffer_vpos;   ///< per-vertex position
     ArrayBuffer<Vec3> _buffer_vcolor; ///< per-vertex color (optional)
 
+/// @{ constructors
+public:
+    PointsRenderer(){}
+    PointsRenderer(const MatMxN& data){ load(data); }
+protected:
+    void load(const MatMxN& data){ _data=data; }
+/// @}
+    
     const GLchar* vshader = R"GLSL( 
         #version 330
         uniform mat4 M;    
@@ -36,8 +45,6 @@ class PointCloudRenderer : public SceneObject{
     )GLSL";
 
 public:
-    PointCloudRenderer(const MatMxN& data) : _data(data){}
-        
     void init(){
         ///--- Shader
         program.add_vshader_from_source(vshader);
