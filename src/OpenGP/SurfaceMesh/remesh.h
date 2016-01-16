@@ -44,7 +44,7 @@ public:
         
 #ifdef WITH_CGAL
         VerticesMatrixMap vertices = vertices_matrix(*mesh);
-        FacesMatrix faces = faces_matrix(*mesh);
+        TrianglesMatrix faces = faces_matrix(*mesh);
         std::cout << vertices.cols() << " " << vertices.rows() << std::endl;
         std::cout << faces.cols() << " " << faces.rows() << std::endl;
         searcher.build(vertices, faces);
@@ -85,7 +85,7 @@ public:
     
 #ifdef WITH_CGAL
 private:
-    AABBSearcher<VerticesMatrixMap, FacesMatrix> searcher;
+    AABBSearcher<VerticesMatrixMap, TrianglesMatrix> searcher;
 #endif
     
 /// @{ utilities
