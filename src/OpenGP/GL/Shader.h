@@ -79,6 +79,15 @@ public:
         release();
     }
     
+    void set_attribute(const char* name, ArrayBuffer<float>& buffer){
+        bind(); //< todo: check if bound instead
+            GLint location = glGetAttribLocation(pid, name); ///< property to modify
+            glEnableVertexAttribArray(location); ///< cached in VAO
+            buffer.bind(); ///< memory the description below refers to
+            glVertexAttribPointer(location, /*vec1*/ 1, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);   
+        release();
+    }
+    
     void set_attribute(const char* name, ArrayBuffer<Eigen::Vector3f>& buffer){
         bind(); //< todo: check if bound instead
             GLint location = glGetAttribLocation(pid, name); ///< property to modify
