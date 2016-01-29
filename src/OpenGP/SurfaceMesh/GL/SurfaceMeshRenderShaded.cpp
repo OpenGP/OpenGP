@@ -8,14 +8,32 @@ const static GLchar* SurfaceMeshRenderShaded_vshader = R"GLSL(
     #version 330 core 
     uniform mat4 M;
     uniform mat4 MV;
-    uniform mat4 MVP; 
+    uniform mat4 MVP;
+                                                        
+    ///--- Colormap 1D texture
+    uniform sampler1D colormap; 
+    uniform int use_colormap; ///< 0
+    uniform float colormap_min; ///< 0.0;
+    uniform float colormap_max; ///< 1.0;
+                                                       
+    ///--- Attributes
     in vec3 vposition;  ///< per-vertex position
     in vec3 vnormal;    ///< per-vertex normal
+    in float vquality;  ///< per-vertex quality
+                                                       
+    ///--- Outputs
     out vec3 fnormal;   ///< per-fragment normal
-    
+    out vec3 fcolor;    ///< per-fragment color
+
     void main(){ 
         gl_Position = MVP * vec4(vposition, 1.0); 
         fnormal = normalize( inverse(transpose(mat3(MV))) * vnormal );
+        if(use_colormap==0)
+            fcolor = vec3(1,0,0);
+        else{
+            float vquality_normalized = (vquality - colormap_min) / (colormap_max - colormap_min);
+            fcolor = texture(colormap, vquality_normalized).rgb; 
+        }
     }
 )GLSL";
     
@@ -23,46 +41,82 @@ const static char* SurfaceMeshRenderShaded_fshader = R"GLSL(
     #version 330 core
     // uniform vec3 LDIR; ///< TODO: fix me
     in vec3 fnormal; ///< normal camera coords
-    out vec4 fcolor;
+    in vec3 fcolor;
+    out vec4 FragColor;
 
     void main(){
         vec3 LDIR = vec3(0,0,1);
         vec3 ldir = normalize(LDIR);
         float albedo = max( dot( normalize(fnormal), ldir ), 0 );   
-        vec3 basecolor = vec3(1,0,0);
-        fcolor = vec4(basecolor*albedo, 1);        
-        // fcolor = vec4(fnormal,1); ///< normal map
+        vec3 basecolor = fcolor;
+        FragColor = vec4(basecolor*albedo, 1);        
+        // FragColor = vec4(fnormal,1); ///< normal map
     }
 )GLSL";
 
 void SurfaceMeshRenderShaded::init(){
-    ///--- Properties for upload
-    auto vpoints = mesh.get_vertex_property<Vec3>("v:point");
-    auto vnormals = mesh.get_vertex_property<Vec3>("v:normal");
-    CHECK(vpoints);
-    CHECK(vnormals);
-    
-    ///--- Creates index buffer data
-    std::vector<unsigned int> triangles;
-    for(auto f: mesh.faces())
-        for(auto v: mesh.vertices(f))
-            triangles.push_back(v.idx());
-    
-    ///--- Shader
+    ///--- Shaders
     program.add_vshader_from_source(SurfaceMeshRenderShaded_vshader);
     program.add_fshader_from_source(SurfaceMeshRenderShaded_fshader);
     program.link();
     
-    ///--- Data
+    ///--- Vertex positions
+    auto vpoints = mesh.get_vertex_property<Vec3>("v:point"); CHECK(vpoints);    
     v_buffer.upload(vpoints.data(), mesh.n_vertices(), sizeof(Vec3));
-    n_buffer.upload(vnormals.data(), mesh.n_vertices(), sizeof(Vec3));
+    check_error_gl();
+    
+    ///--- Vertex normals    
+    auto vnormals = mesh.get_vertex_property<Vec3>("v:normal"); CHECK(vnormals);
+    n_buffer.upload(vnormals.data(), mesh.n_vertices(), sizeof(Vec3));   
+    check_error_gl();
+
+    ///--- Vertex quality (Optional)
+    auto vqualitys = mesh.get_vertex_property<float>("v:quality");
+    if(vqualitys) q_buffer.upload(vqualitys.data(), mesh.n_vertices(), sizeof(Scalar));
+    check_error_gl();
+    
+    ///--- Creates index/element buffer data
+    CHECK(mesh.n_faces()>0);
+    std::vector<unsigned int> triangles;
+    for(auto f: mesh.faces())
+        for(auto v: mesh.vertices(f))
+            triangles.push_back(v.idx());
     i_buffer.upload(triangles);
     
     ///--- Attributes
     program.bind();
     vao.bind();
-    program.set_attribute("vposition", v_buffer);
-    program.set_attribute("vnormal", n_buffer);
+        ///--- Defaulted attributes
+        program.set_attribute("vquality", 0.0f);
+        colormap_enabled(false);
+        colormap_set_range(0.0f, 1.0f);
+        
+        ///--- Attributes
+        program.set_attribute("vposition", v_buffer);
+        program.set_attribute("vnormal", n_buffer);
+        if(vqualitys) program.set_attribute("vquality", q_buffer);
+        
+        ///--- Colormap texture setup
+        {
+            // TODO: wrap this within the Game Engine
+            check_error_gl();
+            const int sz=3; 
+            GLfloat _tex_data[3*sz] = {/*red*/    1.0, 0.0, 0.0, 
+                                       /*yellow*/ 1.0, 1.0, 0.0, 
+                                       /*green*/  0.0, 1.0, 0.0};
+            glGenTextures(1, &_tex);
+            glBindTexture(GL_TEXTURE_1D, _tex);
+            glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, sz, 0, GL_RGB, GL_FLOAT, _tex_data);
+            glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);            
+            glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            program.bind(); ///< note set_attribute unbound them
+                GLint tex_id = glGetUniformLocation(program.programId(), "colormap");
+                int active_texture = 0;
+                glActiveTexture(GL_TEXTURE0+active_texture);
+                glUniform1i(tex_id, active_texture);
+            program.release();
+        }
     vao.release();
     program.release();        
 }
@@ -70,9 +124,24 @@ void SurfaceMeshRenderShaded::init(){
 void OpenGP::SurfaceMeshRenderShaded::display(){
     program.bind();        
     vao.bind();
-    glDrawElements(GL_TRIANGLES, i_buffer.size(), GL_UNSIGNED_INT, ZERO_BUFFER_OFFSET);
+        ///--- Bind textures
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, _tex);
+        
+        ///--- Draw data
+        glDrawElements(GL_TRIANGLES, i_buffer.size(), GL_UNSIGNED_INT, ZERO_BUFFER_OFFSET);
     vao.release();
     program.release();
+}
+
+void SurfaceMeshRenderShaded::colormap_enabled(bool predicate){
+    CHECK(program.is_valid());
+    program.set_uniform("use_colormap", (int)predicate);
+}
+void SurfaceMeshRenderShaded::colormap_set_range(Scalar _min, Scalar _max){
+    CHECK(program.is_valid());
+    program.set_uniform("colormap_min", (float)_min);
+    program.set_uniform("colormap_max", (float)_max);
 }
 
 //=============================================================================
