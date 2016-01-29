@@ -35,7 +35,14 @@ public:
     void release(){ glUseProgram(0); }
     bool is_valid(){ return _is_valid; }
     
-    void set_uniform(const char* name, const float& scalar){
+    void set_uniform(const char* name, int scalar){
+        bind(); ///< todo: rather than binding check for bound?
+            GLint loc = glGetUniformLocation(pid, name);
+            glUniform1i(loc, scalar);
+        release();
+    }
+    
+    void set_uniform(const char* name, float scalar){
         bind(); ///< todo: rather than binding check for bound?
             GLint loc = glGetUniformLocation(pid, name);
             glUniform1f(loc, scalar);
