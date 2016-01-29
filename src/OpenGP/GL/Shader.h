@@ -23,6 +23,7 @@ class ShaderProgram{
 /// @{
 private:
     GLuint pid = 0; ///< 0: invalid
+    bool _is_valid = false;
 public:
     bool verbose = false; ///< prints messages
 /// @}
@@ -32,6 +33,7 @@ public:
     GLuint programId() const { return pid; }
     void bind(){ glUseProgram(pid); } // TODO: check program valid
     void release(){ glUseProgram(0); }
+    bool is_valid(){ return _is_valid; }
     
     void set_uniform(const char* name, const float& scalar){
         bind(); ///< todo: rather than binding check for bound?
@@ -147,6 +149,7 @@ public:
             mDebug() << "Failed: " << &ProgramErrorMessage[0];
         } 
         
+        _is_valid = true;
         return Success;
     
         // TODO: should this be done?
