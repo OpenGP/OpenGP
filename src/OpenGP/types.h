@@ -6,6 +6,7 @@ namespace OpenGP {
 //=============================================================================
 
 /// Customizable (yet global) scalar type
+/// WARNING: OpenGL behavior undefined if type is changed!
 #ifdef OPENGP_SCALAR_TYPE
     typedef OPENGP_SCALAR_TYPE Scalar
 #else
