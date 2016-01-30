@@ -1,5 +1,6 @@
 #pragma once
 #include <OpenGP/types.h>
+#include <OpenGP/MLogger.h>
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 
 //=============================================================================
@@ -14,7 +15,7 @@ typedef Eigen::Map<NormalsMatrix> NormalsMatrixMap;
 
 typedef Eigen::Matrix<int, 3, Eigen::Dynamic> TrianglesMatrix;
 
-TrianglesMatrix faces_matrix(SurfaceMesh& mesh){
+inline TrianglesMatrix faces_matrix(SurfaceMesh& mesh){
     /// TODO check there is no garbage
     CHECK(mesh.is_triangle_mesh());
     
@@ -31,12 +32,12 @@ TrianglesMatrix faces_matrix(SurfaceMesh& mesh){
     return faces;
 }
 
-VerticesMatrixMap vertices_matrix(SurfaceMesh& mesh){
+inline VerticesMatrixMap vertices_matrix(SurfaceMesh& mesh){
     auto _vpoints = mesh.vertex_property<Vec3>("v:point");
     return VerticesMatrixMap((Scalar *)(_vpoints.data()), 3, mesh.n_vertices());
 } 
 
-NormalsMatrixMap normals_matrix(SurfaceMesh& mesh){
+inline NormalsMatrixMap normals_matrix(SurfaceMesh& mesh){
     auto _vnormals = mesh.vertex_property<Vec3>("v:normal");
     return NormalsMatrixMap((Scalar*)(_vnormals.data()), 3, mesh.n_vertices());
 }

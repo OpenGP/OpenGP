@@ -16,17 +16,21 @@ namespace OpenGP {
 typedef	unsigned char uchar;
 typedef	unsigned int uint;
 
-typedef Eigen::Matrix<Scalar, 2, 1> Vec2; ///< 2D vector type
-typedef Eigen::Matrix<Scalar, 3, 1> Vec3; ///< 3D vector type
-typedef Vec3 Point;                       ///< Point type
-typedef Vec3 Normal;                      ///< Normal type
-typedef Vec3 Color;                       ///< Color type
-typedef Vec3 TextureCoordinate;           ///< Texture coordinate type
+///--- Vectors
+typedef Eigen::Matrix<Scalar, Eigen::Dynamic, 1> VecN; ///< nD vector type
+typedef Eigen::Matrix<Scalar, 2, 1> Vec2;              ///< 2D vector type
+typedef Eigen::Matrix<Scalar, 3, 1> Vec3;              ///< 3D vector type
+typedef Vec3 Point;                                    ///< Point type
+typedef Vec3 Normal;                                   ///< Normal type
+typedef Vec3 Color;                                    ///< Color type
+typedef Vec3 TextureCoordinate;                        ///< Texture coordinate type
 
 ///--- Matrices
 typedef Eigen::Matrix<Scalar, 4, 4> Mat4x4; ///< 4x4 matrix 
-typedef Eigen::Matrix<Scalar, 3, Eigen::Dynamic> Mat3xN;
-typedef Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> MatMxN;
+typedef Eigen::Matrix<Scalar, 3, 3> Mat3x3; ///< 3x3 matrix
+typedef Eigen::Matrix<Scalar, 3, Eigen::Dynamic> Mat3xN; ///< 3xN matrix
+typedef Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> MatMxN; ///< MxN matrix
+
 
 /// Bindings for special values
 inline Scalar nan(){ return std::numeric_limits<Scalar>::quiet_NaN(); }

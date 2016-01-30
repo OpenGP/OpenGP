@@ -3,6 +3,7 @@
 #include <OpenGP/GL/glfw.h>
 #include <OpenGP/GL/SceneGraph.h>
 #include <OpenGP/GL/GlfwFpsCounter.h>
+#include <OpenGP/GL/ArcballCamera.h>
 
 //=============================================================================
 namespace OpenGP {
@@ -12,9 +13,10 @@ void glfw_error_callback(int error, const char* description){
     mFatal("ERROR%d: %s", error, description);
 }
 
+// TODO: factor out methods in GlfwWindow.cpp
 class GlfwWindow{
 /// @{
-private:
+protected:
     bool _enable_wait_events = false; ///< glfw3 poll v.s. wait
     GLFWwindow* _window = nullptr;
     int _width = 640;
@@ -27,7 +29,7 @@ public:
     
 public:
     ~GlfwWindow(){ active_windows()->erase(_window); }
-    GlfwWindow(std::string title, int width, int height){
+    GlfwWindow(const std::string& title, int width, int height){
         this->_width = width;
         this->_height = height;
 
@@ -77,6 +79,11 @@ public:
         {
             active_windows()->emplace(_window,this);
             glfwSetKeyCallback(_window, glfw_key_callback);
+            glfwSetMouseButtonCallback(_window, glfw_mouse_press_callback);
+            glfwSetCursorPosCallback(_window, glfw_mouse_move_callback);
+            glfwSetWindowSizeCallback(_window, glfw_window_size_callback);
+            glfwSetScrollCallback(_window, glfw_scroll_callback);
+
         }
         
         ///--- OpenGL globals
@@ -90,10 +97,11 @@ public:
             glEnable (GL_BLEND);
             glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
+        scene.screen_resize(width, height);
     }
 
     int run(){
-        while(glfwGetKey(_window, GLFW_KEY_ESCAPE)!=GLFW_PRESS && !glfwWindowShouldClose(_window)){
+        while(!glfwWindowShouldClose(_window)){
             scene.display();
             glfwSwapBuffers(_window);
             _enable_wait_events ? glfwWaitEvents() : glfwPollEvents();
@@ -106,8 +114,21 @@ public:
     }
     
 /// @{ TODO: add more callbacks
-    virtual void key_callback(int /*key*/, int /*scancode*/, int /*action*/, int /*mods*/){ 
-        // mDebug() << key << scancode << action << mods; 
+    virtual void key_callback(int key, int /*scancode*/, int action, int /*mods*/){ 
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+            glfwSetWindowShouldClose(_window, GL_TRUE);
+        }
+    }
+    virtual void mouse_press_callback(int /*button*/, int /*action*/, int /*mods*/) {}
+    virtual void mouse_move_callback(double /*xPos*/, double /*yPos*/) {}
+    virtual void scroll_callback(double /*xOffset*/, double /*yOffset*/) {}    
+    virtual void window_size_callback(int width, int height) {
+        _width = width;
+        _height = height;
+    }
+    virtual void frame_buffer_size_callback(int width, int height) {
+        _width = width;
+        _height = height;
     }
 /// @}
 
@@ -122,6 +143,26 @@ private:
     static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
         /// Asks the dispatcher which callback we should invoke
         active_windows()->at(window)->key_callback(key, scancode, action, mods);
+    }
+
+    static void glfw_mouse_press_callback(GLFWwindow* window, int button, int action, int mods) {
+        active_windows()->at(window)->mouse_press_callback(button, action, mods);
+    }
+
+    static void glfw_mouse_move_callback(GLFWwindow* window, double xPos, double yPos) {
+        active_windows()->at(window)->mouse_move_callback(xPos, yPos);
+    }
+
+    static void glfw_window_size_callback(GLFWwindow* window, int width, int height) {
+        active_windows()->at(window)->window_size_callback(width, height);
+    }
+
+    static void glfw_frame_buffer_size_callback(GLFWwindow* window, int width, int height) {
+        active_windows()->at(window)->frame_buffer_size_callback(width, height);
+    }
+
+    static void glfw_scroll_callback(GLFWwindow* window, double xOffset, double yOffset) {
+        active_windows()->at(window)->scroll_callback(xOffset, yOffset);
     }
 /// @} 
 };

@@ -22,6 +22,7 @@ bool read_obj(SurfaceMesh& mesh, const std::string& filename)
     std::vector<Vec3> all_tex_coords;   //individual texture coordinates
     std::vector<int> halfedge_tex_idx; //texture coordinates sorted for halfedges
     SurfaceMesh::Halfedge_property <Vec3> tex_coords = mesh.halfedge_property<Vec3>("h:texcoord");
+    auto vnormals = mesh.vertex_property<Vec3>("v:normal");
     bool with_tex_coord=false;
 
     // clear mesh
@@ -35,30 +36,52 @@ bool read_obj(SurfaceMesh& mesh, const std::string& filename)
 
     // clear line once
     memset(&s, 0, 200);
-
-
-    // parse line by line (currently only supports vertex positions & faces
-    while(in && !feof(in) && fgets(s, 200, in))
+     
+    // pre-parse to find out the number of vertices
     {
+        uint vnormal_counter = 0; // number of vertex normals parsed        
+        while(in && !feof(in) && fgets(s, 200, in)){
+            if (s[0] == '#' || isspace(s[0])) continue; // comment
+            else if(strncmp(s, "v ", 2) == 0){ if (sscanf(s, "v %f %f %f", &x, &y, &z)) mesh.add_vertex(Vec3(0,0,0)); }
+            else if(strncmp(s, "vn ", 3) == 0){ if (sscanf(s, "vn %f %f %f", &x, &y, &z)) vnormal_counter++; }
+            else continue;
+        }
+        
+        // If we have read any vertex normals, it must match the number of vertices
+        if(vnormal_counter!=0)
+            assert(vnormal_counter==mesh.n_vertices());
+        
+        // Start from the beginning again
+        in = freopen(filename.c_str(),"r",in);
+    }
+    
+    // parse line by line (currently only supports vertex positions & faces
+    uint vpoint_counter = 0;  //< number of vertex positions parsed        
+    uint vnormal_counter = 0; //< number of vertex normals parsed
+    auto vpoints = mesh.get_vertex_property<Vec3>("v:point");
+    while(in && !feof(in) && fgets(s, 200, in)){
         // comment
         if (s[0] == '#' || isspace(s[0])) continue;
 
         // vertex
         else if (strncmp(s, "v ", 2) == 0)
         {
-            if (sscanf(s, "v %f %f %f", &x, &y, &z))
-            {
-                mesh.add_vertex(Vec3(x,y,z));
+            if (sscanf(s, "v %f %f %f", &x, &y, &z)){
+                vpoints[ SurfaceMesh::Vertex(vpoint_counter++) ] = Vec3(x,y,z);
+                // mesh.add_vertex(Vec3(x,y,z));
             }
         }
         // normal
         else if (strncmp(s, "vn ", 3) == 0)
         {
-          if (sscanf(s, "vn %f %f %f", &x, &y, &z))
-          {
-            // problematic as it can be either a vertex property when interpolated
-            // or a halfedge property for hard edges
-          }
+            int n_read = sscanf(s, "vn %f %f %f", &x, &y, &z);
+            assert((n_read==0) || (n_read==3));
+            if (n_read){
+                // note: problematic as it can be either a vertex property when interpolated or a halfedge property for hard edges
+                assert(vnormal_counter<mesh.n_vertices());
+                vnormals[ SurfaceMesh::Vertex(vnormal_counter) ] = Vec3(x,y,z);
+                vnormal_counter++;
+            }
         }
 
         // texture coordinate
@@ -165,7 +188,7 @@ bool read_obj(SurfaceMesh& mesh, const std::string& filename)
         // clear line
         memset(&s, 0, 200);
     }
-
+    
     fclose(in);
     return true;
 }

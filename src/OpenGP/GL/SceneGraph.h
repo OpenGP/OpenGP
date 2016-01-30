@@ -9,6 +9,7 @@
 #include <OpenGP/GL/Shader.h>
 #include <OpenGP/GL/Buffer.h>
 #include <OpenGP/GL/SceneObject.h>
+#include <OpenGP/GL/ArcballCamera.h>
 
 //=============================================================================
 namespace OpenGP {
@@ -19,6 +20,7 @@ public:
     Mat4x4 _projection;
     Mat4x4 _view;  
     Vec3 _light_dir = Vec3(0,0,1);
+    ArcballCamera camera;
     
     ///--- Set of objects that needs to be rendered
     std::vector<SceneObject*> objects;
@@ -49,6 +51,8 @@ public:
               
             ///--- Upload time information
             obj->program.set_uniform("time", time);
+
+            _view = camera.getCameraMatrix();
             
             ///--- Update Matrix Stack
             obj->program.set_uniform("M",   Mat4x4(obj->model));
@@ -58,6 +62,11 @@ public:
             ///--- Display
             obj->display();
         }
+    }
+
+    void screen_resize(int width, int height) {
+        glViewport(0, 0, width, height);
+        _projection = OpenGP::perspective(45.0f, (float)width / height, 0.1f, 10.f);
     }
 };
 
