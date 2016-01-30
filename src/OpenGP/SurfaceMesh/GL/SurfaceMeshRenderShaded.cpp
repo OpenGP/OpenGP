@@ -63,17 +63,14 @@ void SurfaceMeshRenderShaded::init(){
     ///--- Vertex positions
     auto vpoints = mesh.get_vertex_property<Vec3>("v:point"); CHECK(vpoints);    
     v_buffer.upload(vpoints.data(), mesh.n_vertices(), sizeof(Vec3));
-    check_error_gl();
     
     ///--- Vertex normals    
     auto vnormals = mesh.get_vertex_property<Vec3>("v:normal"); CHECK(vnormals);
     n_buffer.upload(vnormals.data(), mesh.n_vertices(), sizeof(Vec3));   
-    check_error_gl();
-
+    
     ///--- Vertex quality (Optional)
     auto vqualitys = mesh.get_vertex_property<float>("v:quality");
     if(vqualitys) q_buffer.upload(vqualitys.data(), mesh.n_vertices(), sizeof(Scalar));
-    check_error_gl();
     
     ///--- Creates index/element buffer data
     CHECK(mesh.n_faces()>0);
@@ -99,7 +96,6 @@ void SurfaceMeshRenderShaded::init(){
         ///--- Colormap texture setup
         {
             // TODO: wrap this within the Game Engine
-            check_error_gl();
             const int sz=3; 
             GLfloat _tex_data[3*sz] = {/*red*/    1.0, 0.0, 0.0, 
                                        /*yellow*/ 1.0, 1.0, 0.0, 

@@ -19,4 +19,5 @@ add_subdirectory(src)      # builds the dynamic library
 add_subdirectory(apps/glfwviewer)
 add_subdirectory(apps/baker)
 add_subdirectory(apps/isoremesh)
+add_subdirectory(apps/glfwviewer_vquality)
 #add_subdirectory(apps/qglviewer) # UNSTABLE
