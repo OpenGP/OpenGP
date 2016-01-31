@@ -1,5 +1,6 @@
 #pragma once
 #include <OpenGP/GL/gl.h>
+#include <vector>
 
 //=============================================================================
 namespace OpenGP {

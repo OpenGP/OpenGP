@@ -16,7 +16,7 @@ namespace OpenGP {
 class SceneObject{
 // TODO: split public/private
 public:
-    ShaderProgram program;
+    Shader program;
     /// Model Transformation Matrix
     Mat4x4 model = Mat4x4::Identity();
     /// Per-object color

@@ -24,9 +24,13 @@ public:
     HEADERONLY_INLINE Box3 bounding_box();
     
 /// @{ color quality mapping
+private:
+    bool _use_colormap = false;
+    Scalar _colormap_min = 0.0f;
+    Scalar _colormap_max = 1.0f;
 public:
     HEADERONLY_INLINE void colormap_enabled(bool);
-    HEADERONLY_INLINE void colormap_set_range(Scalar _min, Scalar _max);
+    HEADERONLY_INLINE void colormap_set_range(Scalar min, Scalar max);
 /// @}
 };
     

@@ -86,8 +86,6 @@ void SurfaceMeshRenderShaded::init(){
     vao.bind();
         ///--- Defaulted attributes
         program.set_attribute("vquality", 0.0f);
-        colormap_enabled(false);
-        colormap_set_range(0.0f, 1.0f);
         
         ///--- Attributes
         program.set_attribute("vposition", v_buffer);
@@ -125,6 +123,11 @@ void OpenGP::SurfaceMeshRenderShaded::display(){
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, _tex);
         
+        ///--- Upload settings
+        program.set_uniform("use_colormap", (int)  _use_colormap);
+        program.set_uniform("colormap_min", (float)_colormap_min);
+        program.set_uniform("colormap_max", (float)_colormap_max);
+        
         ///--- Draw data
         glDrawElements(GL_TRIANGLES, i_buffer.size(), GL_UNSIGNED_INT, ZERO_BUFFER_OFFSET);
     vao.release();
@@ -135,14 +138,13 @@ Box3 SurfaceMeshRenderShaded::bounding_box(){
     return OpenGP::bounding_box(mesh);
 }
 
-void SurfaceMeshRenderShaded::colormap_enabled(bool predicate){
-    CHECK(program.is_valid());
-    program.set_uniform("use_colormap", (int)predicate);
+void SurfaceMeshRenderShaded::colormap_enabled(bool enabled){
+    _use_colormap = enabled;
 }
-void SurfaceMeshRenderShaded::colormap_set_range(Scalar _min, Scalar _max){
-    CHECK(program.is_valid());
-    program.set_uniform("colormap_min", (float)_min);
-    program.set_uniform("colormap_max", (float)_max);
+
+void SurfaceMeshRenderShaded::colormap_set_range(Scalar min, Scalar max){
+    _colormap_min = min;
+    _colormap_max = max;
 }
 
 //=============================================================================
