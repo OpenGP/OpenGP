@@ -1,4 +1,7 @@
-# A simple OpenGL viewer using the OpenGP GL engine
+# Example to illustrate how to use the color-mapping capabilities
+# A scalar is stored in the v:quality property and it is mapped 
+# to a color via 1D texture mapping.
+# The ranges for the texture mapping can be specified
 get_filename_component(PROJNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
 project(${PROJNAME})
 
