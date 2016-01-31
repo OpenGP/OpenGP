@@ -1,4 +1,5 @@
 #include <OpenGP/SurfaceMesh/GL/SurfaceMeshRenderShaded.h>
+#include <OpenGP/SurfaceMesh/bounding_box.h>
 
 //=============================================================================
 namespace OpenGP {
@@ -128,6 +129,10 @@ void OpenGP::SurfaceMeshRenderShaded::display(){
         glDrawElements(GL_TRIANGLES, i_buffer.size(), GL_UNSIGNED_INT, ZERO_BUFFER_OFFSET);
     vao.release();
     program.release();
+}
+
+Box3 SurfaceMeshRenderShaded::bounding_box(){
+    return OpenGP::bounding_box(mesh);
 }
 
 void SurfaceMeshRenderShaded::colormap_enabled(bool predicate){

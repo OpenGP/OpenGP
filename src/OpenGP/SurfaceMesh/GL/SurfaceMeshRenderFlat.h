@@ -7,6 +7,7 @@
 
 #include <OpenGP/GL/Buffer.h>
 #include <OpenGP/GL/SceneGraph.h>
+#include <OpenGP/SurfaceMesh/bounding_box.h>
 
 //=============================================================================
 namespace OpenGP {
@@ -119,6 +120,8 @@ public:
         vao.release();
         program.release();
     }
+    
+    Box3 bounding_box(){ return OpenGP::bounding_box(mesh); }
     
     void display(){
         program.bind();        

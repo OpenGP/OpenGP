@@ -21,6 +21,7 @@ public:
     SurfaceMeshRenderShaded(SurfaceMesh& mesh) : mesh(mesh){}
     HEADERONLY_INLINE void init();
     HEADERONLY_INLINE void display();
+    HEADERONLY_INLINE Box3 bounding_box();
     
 /// @{ color quality mapping
 public:
