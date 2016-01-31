@@ -107,9 +107,8 @@ void SurfaceMeshRenderShaded::init(){
             glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             program.bind(); ///< note set_attribute unbound them
                 GLint tex_id = glGetUniformLocation(program.programId(), "colormap");
-                int active_texture = 0;
-                glActiveTexture(GL_TEXTURE0+active_texture);
-                glUniform1i(tex_id, active_texture);
+                glActiveTexture(GL_TEXTURE0+0);
+                glUniform1i(tex_id, 0);
             program.release();
         }
     vao.release();
@@ -120,8 +119,8 @@ void OpenGP::SurfaceMeshRenderShaded::display(){
     program.bind();        
     vao.bind();
         ///--- Bind textures
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, _tex);
+        glActiveTexture(GL_TEXTURE0+0);
+        glBindTexture(GL_TEXTURE_1D, _tex);
         
         ///--- Upload settings
         program.set_uniform("use_colormap", (int)  _use_colormap);
