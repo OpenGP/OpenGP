@@ -12,23 +12,24 @@ namespace OpenGP {
 
 class ArcballCamera{
 private:
-    Scalar dolly = 4.0f;
-    Scalar dollyStep = 0.5f;
-    Vec2   lastPos = Vec2(.0f, .0f);
-    Vec3   tumbleVector = Vec3(45.0f, 45.0f, 45.0f);
+    const Scalar dollyStep = 0.5f;
+    Scalar dolly;
+    Vec2   lastPos;
+    Vec3   tumbleVector; ///< Euler rotation angles XYZ
     Mat4x4 dollyMatrix;
     Mat4x4 tumbleMatrix;
    
 public:
     ArcballCamera(){
+        resetCamera();
         resetMatrices();
     }
 
-    void mouse_down_tumble(Vec2 const& point){
+    void mouse_down_tumble(const Vec2& point){
         lastPos = point;
     }
 
-    void mouse_drag_tumble(Vec2 const& point){
+    void mouse_drag_tumble(const Vec2& point){
         using namespace Eigen;
 
         float deltaX = point[0] - lastPos[0];
@@ -37,20 +38,19 @@ public:
         tumbleVector[0] += 0.005f * deltaY;
         tumbleVector[1] += 0.005f * deltaX;
         tumbleMatrix =
-            Affine3f(AngleAxis<float>(radians(tumbleVector[0]), Vec3(1, 0, 0))).matrix() *
-            Affine3f(AngleAxis<float>(radians(tumbleVector[1]), Vec3(0, 1, 0))).matrix();
+            Affine3f(AngleAxis<Scalar>(radians(tumbleVector[0]), Vec3(1, 0, 0))).matrix() *
+            Affine3f(AngleAxis<Scalar>(radians(tumbleVector[1]), Vec3(0, 1, 0))).matrix();
     }
 
     void mouse_scroll(float deltaY){
         using namespace Eigen;
-
         dolly -= dollyStep * deltaY;
-        dollyMatrix = Affine3f(Translation<float, 3>(0, 0, -1.0f * dolly)).matrix();
+        dollyMatrix = Affine3f(Translation<Scalar, 3>(0, 0, -1.0f * dolly)).matrix();
     }
 
     void resetCamera(){
-        dolly = 100.0f;
-        tumbleVector = Vec3(45.0f, 45.0f, 45.0f);
+        dolly = 2.0f;
+        tumbleVector = Vec3(0.0f, 0.0f, 0.0f);
         resetMatrices();
     }
 
