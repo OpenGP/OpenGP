@@ -35,7 +35,7 @@ typedef Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> MatMxN; ///< MxN m
 ///--- Geometric types (Eigen/Geometry)
 typedef Eigen::AlignedBox<Scalar,3> Box3; 
 
-/// Bindings for special values
+///--- Bindings for special values
 inline Scalar nan(){ return std::numeric_limits<Scalar>::quiet_NaN(); }
 inline Scalar inf(){ return std::numeric_limits<Scalar>::max(); } 
 

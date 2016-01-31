@@ -1,5 +1,6 @@
 #pragma once
 #include <OpenGP/types.h>
+#include <OpenGP/headeronly.h>
 #include <OpenGP/GL/SceneObject.h>
 
 //=============================================================================
@@ -45,59 +46,21 @@ protected:
     )GLSL";
 
 public:
-    void init(){
-        ///--- Shader
-        program.add_vshader_from_source(vshader);
-        program.add_fshader_from_source(fshader);
-        program.link();
-
-        ///--- Data
-        _buffer_vpos.upload(_data.data(), _data.cols(), sizeof(Vec3));
-        
-        ///--- Attributes
-        program.bind();
-        _vao.bind();
-            program.set_attribute("vpoint", _buffer_vpos);  
-            program.set_attribute("vcolor", color); ///< default use object color
-            program.set_attribute("vsize", 3.0f); ///< default point size
-        _vao.release();
-        program.release();        
-    }
-        
-    /// Sets the per-point color to the given values
-    void set_colors(const MatMxN& M){
-        CHECK(M.rows()==_data.rows());
-        CHECK(M.cols()==_data.cols());
-        
-        ///--- Upload data
-        _buffer_vcolor.upload(M.data(), M.cols(), M.rows()*sizeof(Scalar) );
-        ///--- Set attribute
-        program.bind();
-        _vao.bind();
-            program.set_attribute("vcolor", _buffer_vcolor);
-        _vao.release();
-        program.release();        
-    }
-        
-    /// Sets the size of splats to a value (same across points)
-    void set_vsize(float val){
-        program.bind();
-            program.set_attribute("vsize", val);
-        program.release();
-    }
+    HEADERONLY_INLINE void init();  
+    HEADERONLY_INLINE void display();
+    HEADERONLY_INLINE Box3 bounding_box();
     
-    void display(){
-        if (_data.cols()==0) return;
-        _vao.bind();
-        program.bind();
-            glEnable(GL_PROGRAM_POINT_SIZE);
-                glDrawArrays(GL_POINTS, 0, _data.cols());
-            glDisable(GL_PROGRAM_POINT_SIZE);
-        program.release();
-        _vao.release();
-    }
+    /// Sets the per-point color to the given values
+    HEADERONLY_INLINE void set_colors(const MatMxN& M);
+    
+    /// Sets the size of splats to a value (same across points)
+    HEADERONLY_INLINE void set_vsize(float val);
 };
 
 //=============================================================================
 } // namespace OpenGP
 //=============================================================================
+
+#ifdef HEADERONLY
+    #include "PointsRenderer.cpp"
+#endif
