@@ -99,9 +99,8 @@ public:
         }
 
         ///--- Hack (manual) for retina display
-        bool retina_display = false;
-        int f = retina_display ? 2 : 1;
-        scene.screen_resize(f*width, f*height);
+        glfwGetFramebufferSize(_window,&_width,&_height);
+        scene.screen_resize(_width,_height);       
     }
 
     virtual int run(){
