@@ -20,23 +20,21 @@ int main(int argc, char** argv){
     mesh.update_face_normals();
     mesh.update_vertex_normals();
 
-    GlfwWindow window("glfwviewer",1000,300);
+    GlfwWindow window("glfwviewer",800,300);
 
     ///--- Smooth shading
     SurfaceMeshRenderShaded shaded(mesh);
-    shaded.model = translate(-.6,0,0) * scale(.5);
+    shaded.model = translate(-1.0,0,0);
     window.scene.add(shaded);
     
     ///--- Flat shading (with wiremesh)
     SurfaceMeshRenderFlat flat(mesh);
-    flat.model = translate(+.6,0,0) * scale(.5);
+    flat.model = translate(+1.0,0,0);
     window.scene.add(flat);
         
     ///--- Point cloud w/ normals
     SurfaceMeshRenderCloud cloud(mesh);
     SurfaceMeshRenderVertexNormals vnormals(mesh, .05);
-    cloud.model = scale(.5);
-    vnormals.model = scale(.5);
     window.scene.add(cloud);
     window.scene.add(vnormals);
     

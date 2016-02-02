@@ -46,21 +46,24 @@ public:
     void display(float time=0){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         for(SceneObject* obj: objects) {
-            ///--- TODO: Upload Light Specs
-            // obj->program.setUniformValue("LDIR", _light_dir);
-              
-            ///--- Upload time information
-            obj->program.set_uniform("time", time);
-
             _view = camera.getCameraMatrix();
-            
-            ///--- Update Matrix Stack
-            obj->program.set_uniform("M",   Mat4x4(obj->model));
-            obj->program.set_uniform("MV",  Mat4x4(_view*obj->model));
-            obj->program.set_uniform("MVP", Mat4x4(_projection*_view*obj->model));
-            
-            ///--- Display
-            obj->display();
+            obj->program.bind();
+            {
+                ///--- Upload Light Specs TODO
+                // obj->program.setUniformValue("LDIR", _light_dir);
+                
+                ///--- Upload time information
+                obj->program.set_uniform("time", time);
+                
+                ///--- Update Matrix Stack
+                obj->program.set_uniform("M",   Mat4x4(obj->model));
+                obj->program.set_uniform("MV",  Mat4x4(_view*obj->model));
+                obj->program.set_uniform("MVP", Mat4x4(_projection*_view*obj->model));
+                
+                ///--- Display
+                obj->display();
+            }
+            obj->program.release();            
         }
     }
 

@@ -1,4 +1,5 @@
 #include <OpenGP/SurfaceMesh/GL/SurfaceMeshRenderShaded.h>
+#include <OpenGP/SurfaceMesh/bounding_box.h>
 
 //=============================================================================
 namespace OpenGP {
@@ -85,8 +86,6 @@ void SurfaceMeshRenderShaded::init(){
     vao.bind();
         ///--- Defaulted attributes
         program.set_attribute("vquality", 0.0f);
-        colormap_enabled(false);
-        colormap_set_range(0.0f, 1.0f);
         
         ///--- Attributes
         program.set_attribute("vposition", v_buffer);
@@ -108,9 +107,8 @@ void SurfaceMeshRenderShaded::init(){
             glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             program.bind(); ///< note set_attribute unbound them
                 GLint tex_id = glGetUniformLocation(program.programId(), "colormap");
-                int active_texture = 0;
-                glActiveTexture(GL_TEXTURE0+active_texture);
-                glUniform1i(tex_id, active_texture);
+                glActiveTexture(GL_TEXTURE0+0);
+                glUniform1i(tex_id, 0);
             program.release();
         }
     vao.release();
@@ -121,8 +119,13 @@ void OpenGP::SurfaceMeshRenderShaded::display(){
     program.bind();        
     vao.bind();
         ///--- Bind textures
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, _tex);
+        glActiveTexture(GL_TEXTURE0+0);
+        glBindTexture(GL_TEXTURE_1D, _tex);
+        
+        ///--- Upload settings
+        program.set_uniform("use_colormap", (int)  _use_colormap);
+        program.set_uniform("colormap_min", (float)_colormap_min);
+        program.set_uniform("colormap_max", (float)_colormap_max);
         
         ///--- Draw data
         glDrawElements(GL_TRIANGLES, i_buffer.size(), GL_UNSIGNED_INT, ZERO_BUFFER_OFFSET);
@@ -130,14 +133,17 @@ void OpenGP::SurfaceMeshRenderShaded::display(){
     program.release();
 }
 
-void SurfaceMeshRenderShaded::colormap_enabled(bool predicate){
-    CHECK(program.is_valid());
-    program.set_uniform("use_colormap", (int)predicate);
+Box3 SurfaceMeshRenderShaded::bounding_box(){
+    return OpenGP::bounding_box(mesh);
 }
-void SurfaceMeshRenderShaded::colormap_set_range(Scalar _min, Scalar _max){
-    CHECK(program.is_valid());
-    program.set_uniform("colormap_min", (float)_min);
-    program.set_uniform("colormap_max", (float)_max);
+
+void SurfaceMeshRenderShaded::colormap_enabled(bool enabled){
+    _use_colormap = enabled;
+}
+
+void SurfaceMeshRenderShaded::colormap_set_range(Scalar min, Scalar max){
+    _colormap_min = min;
+    _colormap_max = max;
 }
 
 //=============================================================================

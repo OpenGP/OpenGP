@@ -1,6 +1,5 @@
 #pragma once
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
-#include <Eigen/Geometry>
 
 //=============================================================================
 namespace Eigen{
@@ -20,7 +19,6 @@ inline std::ostream& operator<<(std::ostream& os, const Eigen::AlignedBox<Scalar
 namespace OpenGP{
 //=============================================================================
 
-typedef Eigen::AlignedBox<Scalar,3> Box3; 
 inline Box3 bounding_box(const SurfaceMesh& mesh)
 {
     auto vpoints = mesh.get_vertex_property<Vec3>("v:point");

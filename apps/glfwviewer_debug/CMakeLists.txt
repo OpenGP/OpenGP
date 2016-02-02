@@ -1,7 +1,4 @@
-# Example to illustrate how to use the color-mapping capabilities
-# A scalar is stored in the v:quality property and it is mapped 
-# to a color via 1D texture mapping.
-# The ranges for the texture mapping can be specified
+# Examples for the OpenGL rendering classes in OpenGP/GL
 get_filename_component(PROJNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
 project(${PROJNAME})
 
@@ -17,6 +14,3 @@ file(GLOB_RECURSE HEADERS "*.h")
 file(GLOB_RECURSE SHADERS "*.glsl")
 add_executable(${PROJNAME} ${SOURCES} ${HEADERS} ${SHADERS})
 target_link_libraries(${PROJNAME} ${LIBRARIES})
-
-#--- data need to be copied to run folder
-file(COPY ../../data/bunny.obj DESTINATION ${PROJECT_BINARY_DIR})

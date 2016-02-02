@@ -1,5 +1,6 @@
 #pragma once
 #include <Eigen/Dense>
+#include <Eigen/Geometry>
 
 //=============================================================================
 namespace OpenGP {
@@ -31,8 +32,10 @@ typedef Eigen::Matrix<Scalar, 3, 3> Mat3x3; ///< 3x3 matrix
 typedef Eigen::Matrix<Scalar, 3, Eigen::Dynamic> Mat3xN; ///< 3xN matrix
 typedef Eigen::Matrix<Scalar, Eigen::Dynamic, Eigen::Dynamic> MatMxN; ///< MxN matrix
 
+///--- Geometric types (Eigen/Geometry)
+typedef Eigen::AlignedBox<Scalar,3> Box3; 
 
-/// Bindings for special values
+///--- Bindings for special values
 inline Scalar nan(){ return std::numeric_limits<Scalar>::quiet_NaN(); }
 inline Scalar inf(){ return std::numeric_limits<Scalar>::max(); } 
 
