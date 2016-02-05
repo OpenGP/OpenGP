@@ -70,9 +70,32 @@ private:
 public:
     SurfaceMeshRenderFlat(SurfaceMesh& mesh) : mesh(mesh){}
     
-    void init(){        
-        // compile_shaders(vshader, fshader);
+    void init(){
+        ///--- Shader
+        program.add_vshader_from_source(vshader);
+        program.add_fshader_from_source(fshader);
+        program.link();
+
+        ///--- Data
+        init_data();
+        
+        ///--- Attributes
+        program.bind();
+        vao.bind();
+            program.set_attribute("vposition", vertexbuffer);
+            program.set_attribute("vnormal", normalbuffer);
+            program.set_attribute("vbaryc", barycbuffer);
+        vao.release();
+        program.release();
+    }
+    
+    void init_data(){
         CHECK(mesh.is_triangle_mesh());
+        CHECK(program.is_valid());
+        
+        std::vector<Vec3> v_tri; ///< per-vertex positions
+        std::vector<Vec3> n_tri; ///< per-vertex (flat) normals
+        std::vector<Vec3> b_tri; ///< per-vertex barycentric [1,0,0]
         
         auto vpoints = mesh.get_vertex_property<Vec3>("v:point");
         auto fnormals = mesh.get_face_property<Vec3>("f:normal");
@@ -85,9 +108,6 @@ public:
         baryc[2] = Vec3(0,0,1);
         
         ///--- Splits mesh in independent triangles
-        std::vector<Vec3> v_tri; ///< per-vertex positions
-        std::vector<Vec3> n_tri; ///< per-vertex (flat) normals
-        std::vector<Vec3> b_tri; ///< per-vertex barycentric [1,0,0]
         {
             for(auto f: mesh.faces()){
                 Vec3 fnormal = fnormals[f];
@@ -100,26 +120,11 @@ public:
                 }
             }
         }
-
-        ///--- Shader
-        program.add_vshader_from_source(vshader);
-        program.add_fshader_from_source(fshader);
-        program.link();
-
-        ///--- Data
+        
         vertexbuffer.upload(v_tri);
         normalbuffer.upload(n_tri);
         barycbuffer.upload(b_tri);
-        
-        ///--- Attributes
-        program.bind();
-        vao.bind();
-            program.set_attribute("vposition", vertexbuffer);
-            program.set_attribute("vnormal", normalbuffer);
-            program.set_attribute("vbaryc", barycbuffer);
-        vao.release();
-        program.release();
-    }
+    }    
     
     Box3 bounding_box(){ return OpenGP::bounding_box(mesh); }
     
