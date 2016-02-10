@@ -1,6 +1,4 @@
 #pragma once
-
-#include <AntTweakBar.h>
 #include "GL/glew.h" ///< must be included before GLFW
 #include "GLFW/glfw3.h"
 #include "shader_helpers.h"
