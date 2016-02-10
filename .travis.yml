@@ -1,0 +1,9 @@
+language: cpp
+compiler:
+  - clang
+os:
+- osx
+script:
+  - mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && cmake --build .
+notifications:
+  email: true
