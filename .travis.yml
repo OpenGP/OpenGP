@@ -5,6 +5,8 @@ script:
   - mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && cmake --build .
 before_install:
   - brew update
+  - brew install glew
   - brew install eigen
+  - brew install glfw3
 notifications:
   email: true
