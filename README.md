@@ -11,6 +11,8 @@ OpenGP uses <a href="http://www.cmake.org">CMake</a> as its build system. Versio
   <tr><td> Windows </td> <td> Visual Studio 2008 </td> </tr>
 </table>
 
+Continuous integration with Travis-CI!
+
 # Installing OpenGP - Header Only
 To install the header-only version of the library you can just copy&paste the OpenGP folder in the "src" subdirectory in your favorite include folder. In MaxOSX you can also just install it using <a href="http://brew.sh/">homebrew</a> as:
 
