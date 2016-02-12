@@ -1,7 +1,5 @@
-# Simple mesh viewer based on GLFW
-# minimal dependency 
+# Simple mesh viewer based on GLFW (with minimal dependencies)
 # See: https://code.google.com/p/opengl-tutorial-org/source/browse/tutorial08_basic_shading/tutorial08.cpp
-
 get_filename_component(FOLDERNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
 
 include(ConfigureOpenGL)
