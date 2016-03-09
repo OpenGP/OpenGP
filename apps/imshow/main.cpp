@@ -1,4 +1,4 @@
-#include "EigenImage.h"
+#include <OpenGP/Eigen/Image.h>
 using namespace OpenGP;
 
 int main_show_gray(){
