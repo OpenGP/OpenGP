@@ -48,6 +48,14 @@ void OpenGP::Shader::set_attribute(const char* name, ArrayBuffer<float>& buffer)
     glVertexAttribPointer(location, /*vec1*/ 1, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
 }
 
+void OpenGP::Shader::set_attribute(const char* name, ArrayBuffer<Eigen::Vector2f>& buffer) {
+    assert( check_is_current() );
+    GLint location = glGetAttribLocation(pid, name); ///< property to modify
+    glEnableVertexAttribArray(location); ///< cached in VAO
+    buffer.bind(); ///< memory the description below refers to
+    glVertexAttribPointer(location, /*vec3*/ 2, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
+}
+
 void OpenGP::Shader::set_attribute(const char* name, ArrayBuffer<Eigen::Vector3f>& buffer) {
     assert( check_is_current() );
     GLint location = glGetAttribLocation(pid, name); ///< property to modify
