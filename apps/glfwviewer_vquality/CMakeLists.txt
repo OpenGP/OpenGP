@@ -2,8 +2,7 @@
 # A scalar is stored in the v:quality property and it is mapped 
 # to a color via 1D texture mapping.
 # The ranges for the texture mapping can be specified
-get_filename_component(PROJNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
-project(${PROJNAME})
+get_filename_component(FOLDERNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
 
 include(ConfigureCompiler)
 include(ConfigureEigen)
@@ -15,8 +14,8 @@ include(ConfigureGLEW)
 file(GLOB_RECURSE SOURCES "*.cpp")
 file(GLOB_RECURSE HEADERS "*.h")
 file(GLOB_RECURSE SHADERS "*.glsl")
-add_executable(${PROJNAME} ${SOURCES} ${HEADERS} ${SHADERS})
-target_link_libraries(${PROJNAME} ${LIBRARIES})
+add_executable(${FOLDERNAME} ${SOURCES} ${HEADERS} ${SHADERS})
+target_link_libraries(${FOLDERNAME} ${LIBRARIES})
 
 #--- data need to be copied to run folder
-file(COPY ../../data/bunny.obj DESTINATION ${PROJECT_BINARY_DIR})
+file(COPY ${PROJECT_SOURCE_DIR}/data/bunny.obj DESTINATION ${PROJECT_BINARY_DIR})

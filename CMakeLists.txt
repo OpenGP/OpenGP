@@ -1,4 +1,4 @@
-project(OpenGP)
+project(OpenGP) #< do not use "project" anywhere else!
 cmake_minimum_required(VERSION 2.8)
 
 #--- where should I look for cmake config files?
