@@ -81,7 +81,7 @@ void SegmentsRenderer::init(){
     program.link();
     
     ///--- Data
-    _buffer_vpos.upload(_data.data(), _data.cols(), sizeof(Vec3));
+    _buffer_vpos.upload_raw(_data.data(), _data.cols());
     
     ///--- Attributes
     program.bind();

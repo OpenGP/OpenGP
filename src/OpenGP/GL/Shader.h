@@ -67,6 +67,7 @@ public:
     HEADERONLY_INLINE void set_attribute(const char* name, float value);
     HEADERONLY_INLINE void set_attribute(const char* name, const Eigen::Vector3f& vector);
     HEADERONLY_INLINE void set_attribute(const char* name, ArrayBuffer<float>& buffer);
+    HEADERONLY_INLINE void set_attribute(const char* name, ArrayBuffer<Eigen::Vector2f>& buffer);
     HEADERONLY_INLINE void set_attribute(const char* name, ArrayBuffer<Eigen::Vector3f>& buffer);
 /// @}
 
