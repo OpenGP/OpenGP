@@ -4,6 +4,7 @@
 #include <OpenGP/GL/glfw.h>
 #include <OpenGP/GL/SceneObject.h>
 #include <OpenGP/GL/GlfwWindow.h>
+#include <stdio.h> //< to read targa file
 
 //=============================================================================
 namespace OpenGP{
@@ -81,10 +82,10 @@ public:
         _buffer_vpos.upload_raw(vpoint, 4);
         
         ///--- Texture coordinates
-        const GLfloat vtexcoord[] = { /*v0*/ 1.0f, 0.0f, 
-                                      /*v1*/ 1.0f, 1.0f,
-                                      /*v2*/ 0.0f, 0.0f, 
-                                      /*v3*/ 0.0f, 1.0f };
+        const GLfloat vtexcoord[] = { /*v0*/ 0.0f, 0.0f, 
+                                      /*v1*/ 1.0f, 0.0f,
+                                      /*v2*/ 0.0f, 1.0f, 
+                                      /*v3*/ 1.0f, 1.0f };
         _buffer_vtex.upload_raw(vtexcoord, 4);
                 
         ///--- Load texture
@@ -134,6 +135,65 @@ inline int imshow( EigenImage<PixelType>& I, const char* title="" ){
     ImageRenderer<PixelType> renderer(I);
     window.scene.add(renderer); 
     return window.run();
+}
+
+// http://geekchef.com/using-targa-files
+// http://stackoverflow.com/questions/16538945/writing-uncompressed-tga-to-file-in-c
+// https://github.com/nlguillemot/JustGL/blob/f8566ed540413e7b0503a6a08396df7363891a62/ext/justgl_image.cpp#L30
+// http://nehe.gamedev.net/tutorial/loading_compressed_and_uncompressed_tga's/22001
+/// A pixel is represented as a 3-channel [0,256] tuple.
+struct TargaVec3b{ 
+    uchar rgb[3]; 
+    operator Vec3() const{return Vec3(rgb[2]/255.0,rgb[1]/255.0,rgb[0]/255.0);} 
+};
+
+/// Targa 24bits (3 channels) internal image representation    
+typedef Eigen::Matrix<TargaVec3b, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> TargaImage;
+    
+static void imwrite(const char* path, const EigenImage<Vec3>& _I){
+    TargaImage I(_I.rows(), _I.cols());
+    for (int row = 0; row < I.rows(); row++){
+        for (int col = 0; col < I.cols(); col++){
+            uchar r = 255 * _I(row,col)[0];
+            uchar g = 255 * _I(row,col)[1];
+            uchar b = 255 * _I(row,col)[2];
+            // Note: R<==>B colors are swapped in file format
+            I(row,col) = {b, g, r};
+        }
+    }
+    
+    FILE* fid = fopen(path,"wb");
+    GLubyte header[18]={0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    header[12] = (I.cols())       & 0xFF;
+    header[13] = (I.cols() >> 8)  & 0xFF;
+    header[14] = (I.rows())       & 0xFF; 
+    header[15] = (I.rows() >> 8)  & 0xFF;
+    header[16] = 24;
+    fwrite(header,sizeof(GLubyte),18,fid);
+    fwrite(I.data(),sizeof(GLubyte), I.rows() * I.cols() * 3 ,fid);
+    fclose(fid);
+}
+
+static void imread(const char* path, EigenImage<Vec3>& I_out){
+    /// TODO: TGA images are stored on a per row basis. *However* image can be flipped vertically. 
+    /// Its actually an option in the image format. You can encode images both from top to bottom 
+    /// or from bottom to top... And even though most programs seem to output TGA files in bottom 
+    /// to top encoding, your loader should still make sure to support both
+    FILE* fid = fopen(path,"rb");
+        GLubyte header[18];
+        if( fread(header, sizeof(header), 1, fid) != 1 ) 
+            mFatal() << "Cannot read TGA header";
+        int width  = (header[13] << 8) + header[12];
+        int height = (header[15] << 8) + header[14];
+        if(header[16]!=24)
+            mFatal() << "Only 24bits TGA supported";
+        int channels = header[16] / 8;
+        // mDebug("%d x %d @ %d", width, height, channels);
+        TargaImage I(height, width);
+        if( fread(I.data(), channels * width * height, 1, fid) != 1 )
+            mFatal() << "Failed to read TGA data";
+    fclose(fid);   
+    I_out = I.cast<Vec3>();
 }
 
 //=============================================================================
