@@ -63,15 +63,15 @@ void SurfaceMeshRenderShaded::init(){
     
     ///--- Vertex positions
     auto vpoints = mesh.get_vertex_property<Vec3>("v:point"); CHECK(vpoints);    
-    v_buffer.upload(vpoints.data(), mesh.n_vertices(), sizeof(Vec3));
+    v_buffer.upload_raw(vpoints.data(), mesh.n_vertices());
     
     ///--- Vertex normals    
     auto vnormals = mesh.get_vertex_property<Vec3>("v:normal"); CHECK(vnormals);
-    n_buffer.upload(vnormals.data(), mesh.n_vertices(), sizeof(Vec3));   
+    n_buffer.upload_raw(vnormals.data(), mesh.n_vertices());   
     
     ///--- Vertex quality (Optional)
     auto vqualitys = mesh.get_vertex_property<float>("v:quality");
-    if(vqualitys) q_buffer.upload(vqualitys.data(), mesh.n_vertices(), sizeof(Scalar));
+    if(vqualitys) q_buffer.upload_raw(vqualitys.data(), mesh.n_vertices());
     
     ///--- Creates index/element buffer data
     CHECK(mesh.n_faces()>0);

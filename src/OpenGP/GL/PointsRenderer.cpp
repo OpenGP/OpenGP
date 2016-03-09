@@ -12,7 +12,7 @@ void PointsRenderer::init(){
     program.link();
     
     ///--- Data
-    _buffer_vpos.upload(_data.data(), _data.cols(), sizeof(Vec3));
+    _buffer_vpos.upload_raw(_data.data(), _data.cols());
     
     ///--- Attributes
     program.bind();
@@ -48,7 +48,7 @@ void PointsRenderer::set_colors(const MatMxN &M){
     CHECK(M.cols()==_data.cols());
     
     ///--- Upload data
-    _buffer_vcolor.upload(M.data(), M.cols(), M.rows()*sizeof(Scalar) );
+    _buffer_vcolor.upload_raw(M.data(), M.cols());
     ///--- Set attribute
     program.bind();
     _vao.bind();
