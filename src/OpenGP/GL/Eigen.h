@@ -9,7 +9,7 @@ namespace OpenGP {
 /// @brief Returns a perspective transformation matrix like the one from gluPerspective
 /// @see http://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml
 /// @see glm::perspective
-Mat4x4 perspective(Scalar fovy, Scalar aspect, Scalar zNear, Scalar zFar) {
+inline Mat4x4 perspective(Scalar fovy, Scalar aspect, Scalar zNear, Scalar zFar) {
     Eigen::Transform<Scalar,3,Eigen::Projective> tr;
     tr.matrix().setZero();
     assert(aspect > 0);
@@ -27,7 +27,7 @@ Mat4x4 perspective(Scalar fovy, Scalar aspect, Scalar zNear, Scalar zFar) {
 
 /// @see glm::ortho
 template<typename Scalar>
-Mat4x4 ortho( Scalar const& left, Scalar const& right, 
+inline Mat4x4 ortho( Scalar const& left, Scalar const& right, 
               Scalar const& bottom, Scalar const& top,
               Scalar const& zNear, Scalar const& zFar ) 
 {
@@ -41,7 +41,7 @@ Mat4x4 ortho( Scalar const& left, Scalar const& right,
     return mat;
 }
 
-Mat4x4 scale(Scalar x, Scalar y, Scalar z) {
+inline Mat4x4 scale(Scalar x, Scalar y, Scalar z) {
     Eigen::Transform<Scalar,3,Eigen::Affine> tr;
     tr.matrix().setZero();
     tr(0,0) = x;
@@ -51,9 +51,9 @@ Mat4x4 scale(Scalar x, Scalar y, Scalar z) {
     return tr.matrix();
 }
 
-Mat4x4 scale(Scalar s) { return scale(s,s,s); }
+inline Mat4x4 scale(Scalar s) { return scale(s,s,s); }
 
-Mat4x4 translate(Scalar tx, Scalar ty, Scalar tz){
+inline Mat4x4 translate(Scalar tx, Scalar ty, Scalar tz){
     typedef Eigen::Transform<Scalar,3,Eigen::Affine> Transform;
     Transform M = Transform::Identity();
     M = Eigen::Translation<Scalar,3>(tx,ty,tz);
