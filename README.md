@@ -12,15 +12,23 @@ OpenGP uses <a href="http://www.cmake.org">CMake</a> as its build system. Versio
 </table>
 
 Continuous integration with Travis-CI!
+https://travis-ci.org/OpenGP/OpenGP
+
 ![https://travis-ci.org/OpenGP/OpenGP.svg?branch=master](https://travis-ci.org/OpenGP/OpenGP.svg?branch=master)
 
-# Installing OpenGP - Header Only
+# Installing OpenGP - Header Only Option
 To install the header-only version of the library you can just copy&paste the OpenGP folder in the "src" subdirectory in your favorite include folder. In MaxOSX you can also just install it using <a href="http://brew.sh/">homebrew</a> as:
 
     brew install https://raw.githubusercontent.com/OpenGP/OpenGP/master/opengp.rb
 
-# Installing OpenGP - Compiled Portions 
-The latest release is available from the GitHub at https://github.com/OpenGP. Note that as this library is header-only you can simply copy the src/OpenGP folder directly in your source tree. Nonetheless, it is also possible to compile the library into a DLL for larger scale projects.
+In your favorite build system simply define the macro ```OPENGP_HEADERONLY``` to use this method.
+
+# Installing OpenGP - Compiled Library Option 
+It is also possible to compile the library into a DLL for larger scale projects. To compile the library simply open ```cmake/ConfigureOpenGP.cmake``` and toggle the following line:
+
+    # set(OPENGP_HEADERONLY TRUE)
+    set(OPENGP_HEADERONLY FALSE)
+
 
 If you want to contribute to OpenGP, you can checkout a snapshot of the sources, compile them with <a href="http://www.cmake.org/">CMake</a>, and install them as follows:
 
