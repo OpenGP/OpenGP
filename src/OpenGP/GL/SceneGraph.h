@@ -37,7 +37,7 @@ public:
     void display(float time=0){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        const Mat4x4& view = trackball_camera.view_model_matrix();
+        const Mat4x4& view = trackball_camera.view_matrix();
         const Mat4x4& projection = trackball_camera.projection_matrix();
 
         for(SceneObject* obj: objects) {     
@@ -63,6 +63,7 @@ public:
 
     void screen_resize(int width, int height) {
         glViewport(0, 0, width, height);
+        trackball_camera.screen_resize(width, height);
     }
 };
 

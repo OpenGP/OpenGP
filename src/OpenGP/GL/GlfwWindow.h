@@ -114,11 +114,14 @@ public:
         return EXIT_SUCCESS;
     }
     
-/// @{ TODO: add more callbacks
-    virtual void key_callback(int key, int /*scancode*/, int action, int /*mods*/){ 
+/// @{ TODO: add remaining callbacks
+    /// @return true if the event has been managed
+    virtual bool key_callback(int key, int /*scancode*/, int action, int /*mods*/){
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
             glfwSetWindowShouldClose(_window, GL_TRUE);
+            return true;
         }
+        return false;
     }
     virtual void mouse_press_callback(int /*button*/, int /*action*/, int /*mods*/) {}
     virtual void mouse_move_callback(double /*xPos*/, double /*yPos*/) {}

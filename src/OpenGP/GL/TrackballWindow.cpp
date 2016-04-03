@@ -41,8 +41,6 @@ void OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int m
             scene.trackball_camera.focus(pos_clip);
         }
     }
-
-    current_state_ = mods;
 }
 
 void OpenGP::TrackballWindow::mouse_move_callback(double x_window, double y_window) {
@@ -52,29 +50,52 @@ void OpenGP::TrackballWindow::mouse_move_callback(double x_window, double y_wind
     Vec3 pos_clip = window_to_clip(pos_window);
 
     //Rotate
-    if (left_down && current_state_ == GLFW_MOD_NONE)
+    if (left_down && _mod_current == GLFW_MOD_NONE)
         scene.trackball_camera.rotate(pos_clip);
 
     //Pan
-    if (middle_down || (left_down && current_state_ == GLFW_MOD_CONTROL))
+    if (middle_down || (left_down && _mod_current == GLFW_MOD_SUPER))
         scene.trackball_camera.translate(pos_clip, old_pos_clip);
 
     //Scale
-    if (left_down && (current_state_ == GLFW_MOD_SHIFT))
+    if (left_down && (_mod_current == GLFW_MOD_SHIFT))
         scene.trackball_camera.scale(5.0f * (float)(pos_clip(1) - old_pos_clip(1)));
 
     old_pos_clip = pos_clip;
 }
 
 void OpenGP::TrackballWindow::scroll_callback(double, double y_offset) {
-    scene.trackball_camera.scale((float)y_offset);
+    if (_mod_current == GLFW_MOD_NONE)
+        scene.trackball_camera.scale(scroll_multiplier * (double)y_offset);
+    
+    /// BUG: when button is pressed y_offset just gives 0!
+    if (_mod_current == GLFW_MOD_SHIFT)
+        scene.trackball_camera.adjust_fov(y_offset);
 }
 
 void OpenGP::TrackballWindow::framebuffer_size_callback(int width, int height) {
     _width = width;
     _height = height;
     glViewport(0, 0, _width, _height);
-    scene.trackball_camera.resize_projection(_width, _height);
+    scene.trackball_camera.screen_resize(_width, _height);
+}
+
+bool OpenGP::TrackballWindow::key_callback(int key, int scancode, int action, int mods){
+    if( Super::key_callback(key, scancode, action, mods) )
+        return true;
+        
+    if(action == GLFW_PRESS) 
+        _mod_current = mods;
+    if(action == GLFW_RELEASE && (_mod_current!=GLFW_MOD_NONE)) 
+        _mod_current = GLFW_MOD_NONE;
+    
+    /// Reset the camera
+    /// TODO: check meshlab bindings
+    if(key=='R'){
+        scene.trackball_camera = TrackballCamera(_width, _height);
+        return true;   
+    }
+    return false;
 }
 
 OpenGP::Vec3 OpenGP::TrackballWindow::window_to_clip(const Vec3& pos_window) {

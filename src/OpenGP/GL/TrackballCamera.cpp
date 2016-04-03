@@ -1,5 +1,6 @@
 #include "TrackballCamera.h"
 #include <OpenGP/GL/Eigen.h> 
+#include <OpenGP/MLogger.h>
 
 void OpenGP::TrackballCamera::begin_rotate(OpenGP::Vec3 pos) {
     _current_pos = pos;
@@ -56,9 +57,9 @@ void OpenGP::TrackballCamera::translate(OpenGP::Vec3 pos, OpenGP::Vec3 old_pos) 
     update_matrices();
 }
 
-void OpenGP::TrackballCamera::scale(float offset_y) {
-    _scale *= std::pow(1.2f, -offset_y);
-    _translation(0,0) = _translation(1,1) = _translation(2,2) = _scale;
+void OpenGP::TrackballCamera::scale(Scalar offset_y) {
+    _translation_scale *= std::pow(1.2f, -offset_y);
+    _translation(0,0) = _translation(1,1) = _translation(2,2) = _translation_scale;
     
     update_matrices();
 }
@@ -70,13 +71,22 @@ void OpenGP::TrackballCamera::focus(OpenGP::Vec3 pos) {
     //TODO: Really should be a better way of resetting these matrices
     _view_matrix = OpenGP::lookAt(_camera_position, _center, _camera_up);
     _translation = Mat4x4::Identity();
-    _translation(0,0) = _translation(1,1) = _translation(2,2) = _scale;
+    _translation(0,0) = _translation(1,1) = _translation(2,2) = _translation_scale;
     
     update_matrices();
 }
 
-void OpenGP::TrackballCamera::resize_projection(int width, int height) {
-    _projection_matrix = OpenGP::perspective(45.0f, (float)width/(float)height, 0.1f, 10.0f);
+void OpenGP::TrackballCamera::adjust_fov(Scalar offset){
+    /// TODO: this does not work like in meshlab, why?
+    _fov += offset;
+    /// Bound _fov [0, 90] (meshlab does the same)
+    _fov = std::max<Scalar>(0, std::min<Scalar>(_fov, 90));
+    _projection_matrix = OpenGP::perspective(_fov, _aspect_ratio, _near, _far);       
+}
+
+void OpenGP::TrackballCamera::screen_resize(int width, int height) {
+    _aspect_ratio = (Scalar)width / (Scalar)height;
+    _projection_matrix = OpenGP::perspective(_fov, _aspect_ratio, _near, _far);
 }
 
 void OpenGP::TrackballCamera::set_center(OpenGP::Vec3 center) {
@@ -85,39 +95,35 @@ void OpenGP::TrackballCamera::set_center(OpenGP::Vec3 center) {
     _translate_minus_center = Eigen::Affine3f(Eigen::Translation3f(-center)).matrix();
 }
 
-OpenGP::TrackballCamera::TrackballCamera() {
+OpenGP::TrackballCamera::TrackballCamera(Scalar aspect_ratio) {
+    _aspect_ratio = aspect_ratio;
     set_center(Vec3(0, 0, 0));
-    set_defaults();
-}
-
-OpenGP::TrackballCamera::TrackballCamera(float radius, OpenGP::Vec3 center) {
-    _radius = radius;
-    set_center(center);
     set_defaults();
 }
 
 void OpenGP::TrackballCamera::set_defaults() {
     //TODO: Make default parameters adjustable?
-    _model_matrix = Mat4x4::Identity();
+    _imodel_matrix = Mat4x4::Identity();
     
     _rotation = Mat4x4::Identity();
     _old_rotation = Mat4x4::Identity();
     _translation = Mat4x4::Identity();
-    _scale = 1.0f;
+    _translation_scale = 1.0f;
     
     //TODO: This should get resized
-    _projection_matrix = OpenGP::perspective(45.0f, 4.0/3.0, 0.1f, 10.f);
+    _projection_matrix = OpenGP::perspective(_fov, _aspect_ratio, _near, _far);
     
-    _camera_position = Vec3(0,0,5);
-    _camera_up= Vec3(0,1,0);
+    _camera_position = _camera_position_default;
+    _camera_up = Vec3(0,1,0);
     _view_matrix = OpenGP::lookAt(_camera_position, _center, _camera_up);
     
-    _view_model_matrix = _view_matrix * _model_matrix;
+    update_matrices();
+//    _view_imodel_matrix = _view_matrix * _imodel_matrix;
 }
 
 void OpenGP::TrackballCamera::update_matrices() {
-    _model_matrix =  _translate_center * _rotation * _translation * _translate_minus_center;
-    _view_model_matrix = _view_matrix * _model_matrix;
+    _imodel_matrix =  _translate_center * _rotation * _translation * _translate_minus_center;
+    _view_imodel_matrix = _view_matrix * _imodel_matrix;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -125,13 +131,13 @@ void OpenGP::TrackballCamera::update_matrices() {
 OpenGP::Vec3 OpenGP::TrackballCamera::camera_position() {
     // TODO: (Maybe) don't return by value?
     Vec4 result(0.0f, 0.0f, 0.0f, 1.0f);
-    result = _view_model_matrix.inverse() * result;
+    result = _view_imodel_matrix.inverse() * result;
     return Vec3(result(0), result(1), result(2));
 }
 
 OpenGP::Vec3 OpenGP::TrackballCamera::unproject(Vec3 pos) {
     Vec4 result(pos(0), pos(1), pos(2), 1.0f);
-    result = (_projection_matrix * _view_model_matrix).inverse() * result;
+    result = (_projection_matrix * _view_imodel_matrix).inverse() * result;
     return Vec3(result(0), result(1), result(2)) / result(3);;
 }
 
