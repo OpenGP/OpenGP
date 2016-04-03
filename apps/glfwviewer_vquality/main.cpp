@@ -11,10 +11,10 @@
 
 using namespace OpenGP;
 int main(int argc, char** argv){   
-    if(argc!=2) mFatal("usage: glfwviewer bunny.obj");
+    std::string file = (argc==2) ? argv[1] : "bunny.obj";
     
     SurfaceMesh mesh;
-    bool success = mesh.read(argv[1]);
+    bool success = mesh.read(file);
     if(!success) mFatal() << "File not found";
     mesh.triangulate();
     mesh.update_face_normals();
