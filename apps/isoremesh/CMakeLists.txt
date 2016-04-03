@@ -6,3 +6,6 @@ file(GLOB_RECURSE HEADERS "*.h")
 file(GLOB_RECURSE SHADERS "*.glsl")
 add_executable(${FOLDERNAME} ${SOURCES} ${HEADERS} ${SHADERS})
 target_link_libraries(${FOLDERNAME} ${LIBRARIES})
+
+#--- data needs to be copied to run folder
+file(COPY ${PROJECT_SOURCE_DIR}/data/bunny.obj DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

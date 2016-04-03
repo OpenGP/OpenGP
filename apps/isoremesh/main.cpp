@@ -1,25 +1,20 @@
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 #include <OpenGP/SurfaceMesh/remesh.h>
 #include <OpenGP/SurfaceMesh/bounding_box.h>
+#include <OpenGP/MLogger.h>
 
 using namespace std;
 using namespace OpenGP;
 
+// usage: isoremesh bunny.obj remeshed.obj
 int main(int argc, char** argv){
-    if(argc!=3){
-        cout << "usage:" << endl << "isoremesh bunny.obj remeshed.obj" << endl;
-        return EXIT_FAILURE;
-    }
-    std::string input(argv[1]);
-    std::string output(argv[2]);
+    std::string in_file = (argc>1) ? argv[1] : "bunny.obj";
+    std::string out_file = (argc>2) ? argv[2] : "remeshed.obj";
     
     ///--- Load mesh
     SurfaceMesh mesh;
-    mesh.read(input);
-    if(mesh.n_vertices()==0){
-        cout << "Input mesh has 0 vertices" << endl;
-        return EXIT_FAILURE;
-    }
+    bool success = mesh.read(in_file);
+    CHECK(success);
     
     ///--- Remesher is only for triangulations!
     mesh.triangulate();
@@ -40,7 +35,7 @@ int main(int argc, char** argv){
     remesher.execute();
     
     ///--- Write to file
-    mesh.write(output);
+    mesh.write(out_file);
     return EXIT_SUCCESS;
 }
 
