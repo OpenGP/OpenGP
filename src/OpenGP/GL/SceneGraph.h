@@ -37,8 +37,8 @@ public:
     void display(float time=0){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        const Mat4x4& view = trackball_camera.getViewModelMatrix();
-        const Mat4x4& projection = trackball_camera.getProjectionMatrix();
+        const Mat4x4& view = trackball_camera.view_model_matrix();
+        const Mat4x4& projection = trackball_camera.projection_matrix();
 
         for(SceneObject* obj: objects) {     
             obj->program.bind();
