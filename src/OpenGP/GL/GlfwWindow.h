@@ -86,6 +86,7 @@ public:
         ///--- OpenGL globals
         {
             glClearColor(1.0f, 1.0f, 1.0f, 0.0f); ///< background
+            glClearDepth(1.0f);
             glEnable(GL_DEPTH_TEST); // Enable depth test
             glEnable(GL_MULTISAMPLE);
             // glDisable(GL_CULL_FACE); // back face triangle cull
