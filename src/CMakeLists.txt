@@ -18,15 +18,19 @@ include_directories(${CMAKE_CURRENT_LIST_DIR})
 include(ConfigureOpenGL)
 include(ConfigureGLFW3)
 include(ConfigureGLEW)
+
+#--- Prevents OpenGP from self-linking!!
 #message(STATUS "LIBRARIES: ${LIBRARIES}")
+set(LIBRARIES_ ${LIBRARIES} )
+list(REMOVE_ITEM LIBRARIES_ OpenGP)
 
 #--- Compile the library
 if(UNIX)
     add_library(OpenGP SHARED ${SOURCES} ${HEADERS})
-    target_link_libraries(OpenGP ${LIBRARIES})
+    target_link_libraries(OpenGP ${LIBRARIES_})
 elseif(WIN32)
     add_library(OpenGP STATIC ${SOURCES} ${HEADERS})
-    target_link_libraries(OpenGP ${LIBRARIES})
+    target_link_libraries(OpenGP ${LIBRARIES_})
 endif()
 
 #--- It's a C++ library
