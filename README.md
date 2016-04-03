@@ -24,23 +24,25 @@ To install the header-only version of the library you can just copy&paste the Op
 In your favorite build system simply define the macro ```OPENGP_HEADERONLY``` to use this method.
 
 # Installing OpenGP - Compiled Library Option 
-It is also possible to compile the library into a DLL for larger scale projects. To compile the library simply open ```cmake/ConfigureOpenGP.cmake``` and toggle the following line:
+It is also possible to compile the library into a DLL for larger scale projects. You can checkout a snapshot of the sources as:
+
+	$ ~/Developer: git clone https://github.com/OpenGP/OpenGP.git
+	$ ~/Developer: cd OpenGP
+
+To compile the library simply open ```cmake/ConfigureOpenGP.cmake``` and toggle the following line:
 
     # set(OPENGP_HEADERONLY TRUE)
     set(OPENGP_HEADERONLY FALSE)
 
+After this change simply compile/install with <a href="http://www.cmake.org/">CMake</a>:
 
-If you want to contribute to OpenGP, you can checkout a snapshot of the sources, compile them with <a href="http://www.cmake.org/">CMake</a>, and install them as follows:
-
-	$ ~/Developer: git clone https://github.com/OpenGP/OpenGP.git
-	$ ~/Developer: cd OpenGP
 	$ ~/Developer/OpenGP: mkdir build
-    $ ~/Developer/OpenGP: cd build
+	$ ~/Developer/OpenGP: cd build
 	$ ~/Developer/OpenGP/build: cmake .. 
 	$ ~/Developer/OpenGP/build: make
 	$ ~/Developer/OpenGP/build: sudo make install
 
-To uninstall OpenGP, simply type: 
+To uninstall OpenGP (CURRENTLY BROKEN), simply type:
 
 	$ ~/Developer/OpenGP/build: sudo make uninstall
 
