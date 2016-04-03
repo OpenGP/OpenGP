@@ -38,6 +38,7 @@ typedef Eigen::AlignedBox<Scalar,3> Box3;
 
 ///--- Bindings for special values
 inline Scalar nan(){ return std::numeric_limits<Scalar>::quiet_NaN(); }
+inline bool isnan(Scalar v){ return std::isnan(v); }
 inline Scalar inf(){ return std::numeric_limits<Scalar>::max(); } 
 
 //=============================================================================
