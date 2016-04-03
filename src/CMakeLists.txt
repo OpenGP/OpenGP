@@ -1,11 +1,15 @@
-#--- Don't compile if in header only mode
-if(OPENGP_HEADERONLY)
-    return()
-endif()
-
 #--- Find all headers/sources
 file(GLOB_RECURSE SOURCES "OpenGP/*.cpp")
 file(GLOB_RECURSE HEADERS "OpenGP/*.h")
+
+#--- "make install" (always install source as well for headeronly support)
+install(FILES ${HEADERS} DESTINATION include/OpenGP)
+install(FILES ${SOURCES} DESTINATION include/OpenGP)
+
+#--- STOP HERE: do not compile if in header only mode
+if(OPENGP_HEADERONLY)
+    return()
+endif()
 
 #--- If we are building the library then we are not headeronly
 message(STATUS "Building libOpenGP.dylib")
@@ -37,15 +41,13 @@ elseif(WIN32)
     target_link_libraries(OpenGP ${LIBRARIES_})
 endif()
 
+#--- "make install" (always install source as well for headeronly support)
+install(TARGETS OpenGP DESTINATION lib/)
+
 #--- It's a C++ library
 set_target_properties(OpenGP PROPERTIES LINKER_LANGUAGE CXX)
 #--- Set the library version
 set_target_properties(OpenGP PROPERTIES VERSION 1.0)
-
-#--- "make install" (always install source as well for headeronly support)
-install(FILES ${HEADERS} DESTINATION include/OpenGP)
-install(FILES ${SOURCES} DESTINATION include/OpenGP)
-install(TARGETS OpenGP DESTINATION lib/)
 
 # TODO fix this
 #--- "make uninstall" (not fully supported by cmake)
