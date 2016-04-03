@@ -1,10 +1,14 @@
+#--- Don't compile if in header only mode
+if(OPENGP_HEADERONLY)
+    return()
+endif()
+
 #--- Find all headers/sources
 file(GLOB_RECURSE SOURCES "OpenGP/*.cpp")
 file(GLOB_RECURSE HEADERS "OpenGP/*.h")
 
 #--- If we are building the library then we are not headeronly
 message(STATUS "Building libOpenGP.dylib")
-add_definitions(-DDISABLE_HEADERONLY)
 
 #--- Gets rid of annoying CMake 3 warnings
 if(NOT (CMAKE_MAJOR_VERSION LESS 3))

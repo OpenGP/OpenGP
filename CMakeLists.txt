@@ -10,10 +10,10 @@ include(cmake/ConfigureEigen.cmake)
 include(cmake/ConfigureOpenGP.cmake)
 
 #--- basic components (only depend from Eigen & OpenGP)
-add_subdirectory(examples) # builds the examples
+add_subdirectory(src)      # builds the dynamic library
 add_subdirectory(data)     # deploys data to build folder
 add_subdirectory(doc)      # builds the documentation
-add_subdirectory(src)      # builds the dynamic library
+add_subdirectory(examples) # builds the examples
 
 #--- full-blown applications (can be compiled independently)
 add_subdirectory(apps/glfwviewer)
