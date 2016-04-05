@@ -4,9 +4,6 @@
 # The ranges for the texture mapping can be specified
 get_filename_component(FOLDERNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
 
-include(ConfigureCompiler)
-include(ConfigureEigen)
-include(ConfigureOpenGP)
 include(ConfigureOpenGL)
 include(ConfigureGLFW3)
 include(ConfigureGLEW)
