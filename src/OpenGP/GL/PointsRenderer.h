@@ -7,23 +7,22 @@
 namespace OpenGP {
 //=============================================================================
 
-class PointsRenderer : public SceneObject{
+class PointsRenderer : public SceneObject {
 protected:
-    VertexArrayObject _vao;  
+    VertexArrayObject _vao;
     MatMxN _data; ///< reference to data to be rendered
     ArrayBuffer<Vec3> _buffer_vpos;   ///< per-vertex position
     ArrayBuffer<Vec3> _buffer_vcolor; ///< per-vertex color (optional)
 
-/// @{ constructors
+    /// @{ constructors
 public:
-    PointsRenderer(){}
-    PointsRenderer(const MatMxN& data){ load(data); }
-    void load(const MatMxN& data){ _data=data; }
-/// @}
+    PointsRenderer() {}
+    PointsRenderer(const MatMxN& data) { load(data); }
+    void load(const MatMxN& data) { _data=data; }
+    /// @}
 
 protected:
-    
-    const GLchar* vshader = R"GLSL( 
+    const GLchar* vshader = R"GLSL(
         #version 330
         uniform mat4 M;    
         uniform mat4 MV; 
@@ -38,7 +37,7 @@ protected:
             fcolor = vcolor;
         }
     )GLSL";
-        
+
     const char* fshader = R"GLSL(
         #version 330
         in vec3 fcolor;
@@ -47,14 +46,14 @@ protected:
     )GLSL";
 
 public:
-    HEADERONLY_INLINE void init();  
+    HEADERONLY_INLINE void init();
     HEADERONLY_INLINE void init_data(MatMxN& data);
     HEADERONLY_INLINE void display();
     HEADERONLY_INLINE Box3 bounding_box();
 
     /// Sets the per-point color to the given values
     HEADERONLY_INLINE void set_colors(const MatMxN& M);
-    
+
     /// Sets the size of splats to a value (same across points)
     HEADERONLY_INLINE void set_vsize(float val);
 };
@@ -64,5 +63,5 @@ public:
 //=============================================================================
 
 #ifdef HEADERONLY
-    #include "PointsRenderer.cpp"
+#include "PointsRenderer.cpp"
 #endif
