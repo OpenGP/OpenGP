@@ -42,6 +42,12 @@ Box3 PointsRenderer::bounding_box(){
     return Box3(_min, _max);
 }
 
+void PointsRenderer::init_data(MatMxN& data){
+    _data = data;
+
+    _buffer_vpos.upload_raw(_data.data(), data.cols());
+}
+
 void PointsRenderer::set_colors(const MatMxN &M){
     CHECK(program.is_valid());
     CHECK(M.rows()==_data.rows());

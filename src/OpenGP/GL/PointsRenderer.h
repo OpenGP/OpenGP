@@ -18,9 +18,10 @@ protected:
 public:
     PointsRenderer(){}
     PointsRenderer(const MatMxN& data){ load(data); }
-protected:
     void load(const MatMxN& data){ _data=data; }
 /// @}
+
+protected:
     
     const GLchar* vshader = R"GLSL( 
         #version 330
@@ -47,9 +48,10 @@ protected:
 
 public:
     HEADERONLY_INLINE void init();  
+    HEADERONLY_INLINE void init_data(MatMxN& data);
     HEADERONLY_INLINE void display();
     HEADERONLY_INLINE Box3 bounding_box();
-    
+
     /// Sets the per-point color to the given values
     HEADERONLY_INLINE void set_colors(const MatMxN& M);
     

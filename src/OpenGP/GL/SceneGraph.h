@@ -9,7 +9,6 @@
 #include <OpenGP/GL/Shader.h>
 #include <OpenGP/GL/Buffer.h>
 #include <OpenGP/GL/SceneObject.h>
-#include <OpenGP/GL/ArcballCamera.h>
 #include <OpenGP/GL/TrackballCamera.h>
 
 //=============================================================================
