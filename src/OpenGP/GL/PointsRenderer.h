@@ -21,30 +21,6 @@ public:
     void load(const MatMxN& data) { _data=data; }
     /// @}
 
-protected:
-    const GLchar* vshader = R"GLSL(
-        #version 330
-        uniform mat4 M;    
-        uniform mat4 MV; 
-        uniform mat4 MVP; 
-        in vec3 vpoint;
-        in vec3 vcolor;
-        in float vsize;
-        out vec3 fcolor;
-        void main() {  
-            gl_Position = MVP * vec4(vpoint, 1.0);
-            gl_PointSize = vsize;
-            fcolor = vcolor;
-        }
-    )GLSL";
-
-    const char* fshader = R"GLSL(
-        #version 330
-        in vec3 fcolor;
-        out vec4 color;
-        void main(){ color = vec4(fcolor,1); }        
-    )GLSL";
-
 public:
     HEADERONLY_INLINE void init();
     HEADERONLY_INLINE void init_data(MatMxN& data);

@@ -5,10 +5,33 @@
 namespace OpenGP {
 //=============================================================================
 
+const static GLchar* PointsRenderer_vshader = R"GLSL(
+    #version 330
+    uniform mat4 M;    
+    uniform mat4 MV; 
+    uniform mat4 MVP; 
+    in vec3 vpoint;
+    in vec3 vcolor;
+    in float vsize;
+    out vec3 fcolor;
+    void main() {  
+        gl_Position = MVP * vec4(vpoint, 1.0);
+        gl_PointSize = vsize;
+        fcolor = vcolor;
+    }
+)GLSL";
+
+const static char* PointsRenderer_fshader = R"GLSL(
+    #version 330
+    in vec3 fcolor;
+    out vec4 color;
+    void main(){ color = vec4(fcolor,1); }        
+)GLSL";
+
 void PointsRenderer::init() {
     ///--- Shader
-    program.add_vshader_from_source(vshader);
-    program.add_fshader_from_source(fshader);
+    program.add_vshader_from_source(PointsRenderer_vshader);
+    program.add_fshader_from_source(PointsRenderer_fshader);
     program.link();
 
     ///--- Data
