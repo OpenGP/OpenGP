@@ -8,11 +8,11 @@ install(FILES ${SOURCES} DESTINATION include/OpenGP)
 
 #--- STOP HERE: do not compile if in header only mode
 if(OPENGP_HEADERONLY)
+    message("Compiling in header only (no library)")
     return()
+else()
+    message(STATUS "Building libOpenGP.dylib")    
 endif()
-
-#--- If we are building the library then we are not headeronly
-message(STATUS "Building libOpenGP.dylib")
 
 #--- Gets rid of annoying CMake 3 warnings
 if(NOT (CMAKE_MAJOR_VERSION LESS 3))
