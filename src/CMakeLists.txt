@@ -2,9 +2,17 @@
 file(GLOB_RECURSE SOURCES "OpenGP/*.cpp")
 file(GLOB_RECURSE HEADERS "OpenGP/*.h")
 
+#--- "make install" (always install source as well for headeronly support)
+install(FILES ${HEADERS} DESTINATION include/OpenGP)
+install(FILES ${SOURCES} DESTINATION include/OpenGP)
+
+#--- STOP HERE: do not compile if in header only mode
+if(OPENGP_HEADERONLY)
+    return()
+endif()
+
 #--- If we are building the library then we are not headeronly
 message(STATUS "Building libOpenGP.dylib")
-add_definitions(-DDISABLE_HEADERONLY)
 
 #--- Gets rid of annoying CMake 3 warnings
 if(NOT (CMAKE_MAJOR_VERSION LESS 3))
@@ -18,26 +26,28 @@ include_directories(${CMAKE_CURRENT_LIST_DIR})
 include(ConfigureOpenGL)
 include(ConfigureGLFW3)
 include(ConfigureGLEW)
+
+#--- Prevents OpenGP from self-linking!!
 #message(STATUS "LIBRARIES: ${LIBRARIES}")
+set(LIBRARIES_ ${LIBRARIES} )
+list(REMOVE_ITEM LIBRARIES_ OpenGP)
 
 #--- Compile the library
 if(UNIX)
     add_library(OpenGP SHARED ${SOURCES} ${HEADERS})
-    target_link_libraries(OpenGP ${LIBRARIES})
+    target_link_libraries(OpenGP ${LIBRARIES_})
 elseif(WIN32)
     add_library(OpenGP STATIC ${SOURCES} ${HEADERS})
-    target_link_libraries(OpenGP ${LIBRARIES})
+    target_link_libraries(OpenGP ${LIBRARIES_})
 endif()
+
+#--- "make install" (always install source as well for headeronly support)
+install(TARGETS OpenGP DESTINATION lib/)
 
 #--- It's a C++ library
 set_target_properties(OpenGP PROPERTIES LINKER_LANGUAGE CXX)
 #--- Set the library version
 set_target_properties(OpenGP PROPERTIES VERSION 1.0)
-
-#--- "make install" (always install source as well for headeronly support)
-install(FILES ${HEADERS} DESTINATION include/OpenGP)
-install(FILES ${SOURCES} DESTINATION include/OpenGP)
-install(TARGETS OpenGP DESTINATION lib/)
 
 # TODO fix this
 #--- "make uninstall" (not fully supported by cmake)

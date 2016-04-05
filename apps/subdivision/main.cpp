@@ -16,13 +16,16 @@ struct MainWindow : public GlfwWindow{
         this->scene.add(renderer);
     }
     
-    void key_callback(int key, int scancode, int action, int mods) override{
-        GlfwWindow::key_callback(key, scancode, action, mods);
+    bool key_callback(int key, int scancode, int action, int mods) override{
+        if( GlfwWindow::key_callback(key, scancode, action, mods) )
+            return true;
         if(key==GLFW_KEY_SPACE && action==GLFW_RELEASE){
             SurfaceMeshSubdivideLoop::exec(mesh);
             mesh.update_face_normals();
             renderer.init_data();
+            return true;
         }
+        return false;
     }
 };
 

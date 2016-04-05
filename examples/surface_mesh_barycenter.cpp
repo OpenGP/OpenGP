@@ -1,8 +1,7 @@
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 using namespace OpenGP;
 
-int main(int /*argc*/, char** argv)
-{
+int main(int /*argc*/, char** argv) {
     SurfaceMesh mesh;
 
     mesh.read(argv[1]);
@@ -14,8 +13,7 @@ int main(int /*argc*/, char** argv)
 
     Vec3 p(0,0,0);
 
-    for (vit = mesh.vertices_begin(); vit != vend; ++vit)
-    {
+    for (vit = mesh.vertices_begin(); vit != vend; ++vit) {
         // access point property like an array
         p += points[*vit];
     }

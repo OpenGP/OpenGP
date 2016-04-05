@@ -1,35 +1,42 @@
 #include <OpenGP/types.h>
 #include <OpenGP/MLogger.h>
 #include <OpenGP/GL/GlfwWindow.h>
+#include <OpenGP/GL/TrackballWindow.h>
 #include <OpenGP/MATLAB/random.h>
 
-///--- Mesh rendering
+///--- Surface mesh related
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
+#include <OpenGP/SurfaceMesh/bounding_box.h>
 #include <OpenGP/SurfaceMesh/GL/SurfaceMeshRenderShaded.h>
 
 using namespace OpenGP;
 int main(int argc, char** argv){   
-    if(argc!=2) mFatal("usage: glfwviewer bunny.obj");
+    std::string file = (argc==2) ? argv[1] : "bunny.obj";
     
     SurfaceMesh mesh;
-    bool success = mesh.read(argv[1]);
+    bool success = mesh.read(file);
     if(!success) mFatal() << "File not found";
     mesh.triangulate();
     mesh.update_face_normals();
     mesh.update_vertex_normals();
 
-    GlfwWindow window("glfwviewer",300,300);  
+    TrackballWindow window(__FILE__,640,480);  
     
     ///--- Create some test vertex quality
+    Box3 box = bounding_box(mesh);  
+    Scalar xmin = box.min()[0];
+    Scalar xmax = box.max()[0];
+    
+    ///--- Colormap according to vertex position
     auto vquality = mesh.vertex_property<Scalar>("v:quality");
     for(SurfaceMesh::Vertex v: mesh.vertices())
-        vquality[v] = OpenGP::_rand();
+        vquality[v] = mesh.position(v)[0];
     
-    ///--- Smooth shading w/ colormapped vertex quality
+    ///--- Smooth shading w/ colormapped vquality
     SurfaceMeshRenderShaded shaded(mesh);
     window.scene.add(shaded);
     shaded.colormap_enabled(true);
-    shaded.colormap_set_range(0.0,1.0);
+    shaded.colormap_set_range(xmin,xmax);
    
     return window.run();
 }
