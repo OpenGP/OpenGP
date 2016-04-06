@@ -10,8 +10,10 @@ if(NOT TARGET OPENGP)
     add_custom_target(OPENGP SOURCES ${HEADERS} ${SOURCES})
 endif()
 
-#--- Uncomment this SET to disable headeronly
-set(OPENGP_HEADERONLY TRUE)
+#--- Toggles the OpenGP configuration type
+# 1) interactive ccmake exposes this option directly
+# 2) command line can change this: "cmake -DOPENGP_HEADERONLY=False"
+SET(OPENGP_HEADERONLY True CACHE BOOL "Setup OpenGP in header only?")
 if(OPENGP_HEADERONLY)
     add_definitions(-DOPENGP_HEADERONLY)   
 else()

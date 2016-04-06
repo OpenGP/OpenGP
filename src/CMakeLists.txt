@@ -8,7 +8,7 @@ install(FILES ${SOURCES} DESTINATION include/OpenGP)
 
 #--- STOP HERE: do not compile if in header only mode
 if(OPENGP_HEADERONLY)
-    message("Compiling in header only (no library)")
+    message(STATUS "Not building libOpenGP.dylib (header-only)")
     return()
 else()
     message(STATUS "Building libOpenGP.dylib")    
