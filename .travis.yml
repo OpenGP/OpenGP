@@ -1,8 +1,11 @@
 language: cpp
 compiler: clang
 os: osx
+env:
+  - HEADERONLY=True
+  - HEADERONLY=False
 script:
-  - mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && cmake --build .
+  - mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DOPENGP_HEADERONLY=$HEADERONLY .. && cmake --build .
 before_install:
   - brew update
   - brew install glew
