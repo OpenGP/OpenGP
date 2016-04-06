@@ -1,9 +1,6 @@
 # Creates either a RGB or a Grayscale Image with eigen and shows it on screen
 get_filename_component(FOLDERNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
 
-include(ConfigureCompiler)
-include(ConfigureEigen)
-include(ConfigureOpenGP)
 include(ConfigureOpenGL)
 include(ConfigureGLFW3)
 include(ConfigureGLEW)
