@@ -11,34 +11,33 @@
 
 using namespace OpenGP;
 int main(int argc, char** argv){   
-    if(argc!=2) mFatal("usage: glfwviewer bunny.obj");
+    std::string file = (argc==2) ? argv[1] : "bunny.obj";
     
     SurfaceMesh mesh;
-    bool success = mesh.read(argv[1]);
+    bool success = mesh.read(file);
     if(!success) mFatal() << "File not found";
     mesh.triangulate();
     mesh.update_face_normals();
     mesh.update_vertex_normals();
 
-    GlfwWindow window("glfwviewer",800,300);
-
     ///--- Smooth shading
+    GlfwWindow window1("shaded",640,480);
     SurfaceMeshRenderShaded shaded(mesh);
-    shaded.model = translate(-1.0,0,0);
-    window.scene.add(shaded);
+    window1.scene.add(shaded);
     
     ///--- Flat shading (with wiremesh)
+    GlfwWindow window2("wiremesh",640,480);
     SurfaceMeshRenderFlat flat(mesh);
-    flat.model = translate(+1.0,0,0);
-    window.scene.add(flat);
+    window2.scene.add(flat);
         
     ///--- Point cloud w/ normals
+    GlfwWindow window3("cloud",640,480);
     SurfaceMeshRenderCloud cloud(mesh);
     SurfaceMeshRenderVertexNormals vnormals(mesh, .05);
-    window.scene.add(cloud);
-    window.scene.add(vnormals);
+    window3.scene.add(cloud);
+    window3.scene.add(vnormals);
     
-    return window.run();
+    return GlfwWindow::run();
 }
 
 
