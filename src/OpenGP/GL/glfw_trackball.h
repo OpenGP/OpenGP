@@ -3,6 +3,7 @@
 #include <OpenGP/GL/Trackball.h>
 
 #define GLFW_MOD_NONE 0
+#warning "glfw_trackball is obsolete"
 
 namespace OpenGP{
 

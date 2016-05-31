@@ -15,7 +15,7 @@ bool OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int m
     
     if ((button == GLFW_MOUSE_BUTTON_LEFT) && (action == GLFW_PRESS)) {
         double x_window, y_window;
-        glfwGetCursorPos(_window, &x_window, &y_window);
+        getFramebufferCursorPos(&x_window, &y_window);
         Vec3 pos_window(x_window, y_window, 0.0f);
         Vec3 pos_clip = window_to_clip(pos_window);
         scene.trackball_camera.begin_rotate(pos_clip);
@@ -29,7 +29,7 @@ bool OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int m
 
     if ((button == GLFW_MOUSE_BUTTON_LEFT) && (action == GLFW_DOUBLECLICK) && (mods == GLFW_MOD_NONE)) {
         double x_window, y_window;
-        glfwGetCursorPos(_window, &x_window, &y_window);
+        getFramebufferCursorPos(&x_window,&y_window);
 
         /// Fetch the depth by querying the OpenGL depth buffer
         float z_window = 1.0f;
@@ -49,6 +49,10 @@ bool OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int m
 }
 
 bool OpenGP::TrackballWindow::mouse_move_callback(double x_window, double y_window) {
+    x_window *= scale_factor_retina();
+    y_window *= scale_factor_retina();
+    // mLogger() << x_window << y_window;
+    
     bool left_down = (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS);
     bool middle_down = (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS);
     Vec3 pos_window(x_window, y_window, 0.0f);

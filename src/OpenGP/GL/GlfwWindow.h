@@ -34,6 +34,29 @@ public:
     /// @brief called in the main game look (once per frame)
     virtual void display(){ scene.display(); }
     
+    /// @brief the ratio between framebuffer and window sizes
+    /// (used to correct OpenGL behavior with retina displays)
+    float scale_factor_retina(){
+        int w_window, h_window;
+        int w_framebuffer, h_framebuffer;
+        glfwGetWindowSize(_window, &w_window, &h_window);
+        glfwGetFramebufferSize(_window, &w_framebuffer, &h_framebuffer);
+        int w_scale = w_framebuffer / w_window;
+        int h_scale = h_framebuffer / h_window;
+        assert(w_scale == h_scale);
+        return (float) w_scale;
+    }
+    
+    /// @brief retrieves the position of the cursor in the framebuffer
+    /// (used to correct point unproject on retina displays)
+    void getFramebufferCursorPos(double* x, double* y){
+        double x_window, y_window;
+        glfwGetCursorPos(_window, &x_window, &y_window);
+        float s = scale_factor_retina();
+        (*x) = x_window * s;
+        (*y) = y_window * s;
+    }
+    
     /// @brief Initializes GLFW and creates a 3.1 context
     GlfwWindow(const std::string& title="", int width=640, int height=480){
         //--- GLFW initialization
