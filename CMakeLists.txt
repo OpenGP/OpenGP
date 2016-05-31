@@ -18,10 +18,13 @@ add_subdirectory(examples) # builds the examples
 #--- full-blown applications (can be compiled independently)
 add_subdirectory(apps/glfwviewer)
 add_subdirectory(apps/glfwviewer_raw)
+add_subdirectory(apps/glfwviewer_multiwin)
 add_subdirectory(apps/glfwviewer_debug)
 add_subdirectory(apps/glfwviewer_vquality)
 add_subdirectory(apps/imshow)
 add_subdirectory(apps/baker)
 add_subdirectory(apps/subdivision)
 add_subdirectory(apps/isoremesh)
-#add_subdirectory(apps/qglviewer) # UNSTABLE / OBSOLETE
+
+#--- unstable / obsolete applications
+#add_subdirectory(apps/qglviewer) 
