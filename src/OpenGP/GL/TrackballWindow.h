@@ -37,10 +37,10 @@ public:
 
 public:
     TrackballWindow(const std::string& title, int width, int height) : GlfwWindow(title, width, height) {}
-    HEADERONLY_INLINE void mouse_press_callback(int button, int action, int mods) override;
-    HEADERONLY_INLINE void mouse_move_callback(double x_window, double y_window) override;
-    HEADERONLY_INLINE void scroll_callback(double /*x_offset*/, double y_offset) override;
-    HEADERONLY_INLINE void framebuffer_size_callback(int width, int height) override;
+    HEADERONLY_INLINE bool mouse_press_callback(int button, int action, int mods) override;
+    HEADERONLY_INLINE bool mouse_move_callback(double x_window, double y_window) override;
+    HEADERONLY_INLINE bool scroll_callback(double /*x_offset*/, double y_offset) override;
+    HEADERONLY_INLINE bool framebuffer_size_callback(int width, int height) override;
     HEADERONLY_INLINE bool key_callback(int key, int scancode, int action, int mods) override;
 
 private:

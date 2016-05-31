@@ -1,7 +1,7 @@
 #include "TrackballWindow.h"
 #include <chrono> ///< for double-click
 
-void OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int mods) {
+bool OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int mods) {
     if( action == GLFW_RELEASE ){
         static auto before = std::chrono::system_clock::now();
         auto now = std::chrono::system_clock::now();
@@ -19,10 +19,12 @@ void OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int m
         Vec3 pos_window(x_window, y_window, 0.0f);
         Vec3 pos_clip = window_to_clip(pos_window);
         scene.trackball_camera.begin_rotate(pos_clip);
+        return true;
     }
 
     if ((button == GLFW_MOUSE_BUTTON_LEFT) && (action == GLFW_RELEASE)) {
         scene.trackball_camera.finish_rotate();
+        return true;
     }
 
     if ((button == GLFW_MOUSE_BUTTON_LEFT) && (action == GLFW_DOUBLECLICK) && (mods == GLFW_MOD_NONE)) {
@@ -40,44 +42,63 @@ void OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int m
             Vec3 pos_clip = window_to_clip(pos_window);
             scene.trackball_camera.focus(pos_clip);
         }
+        return true;
     }
+    
+    return false;
 }
 
-void OpenGP::TrackballWindow::mouse_move_callback(double x_window, double y_window) {
+bool OpenGP::TrackballWindow::mouse_move_callback(double x_window, double y_window) {
     bool left_down = (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS);
     bool middle_down = (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS);
     Vec3 pos_window(x_window, y_window, 0.0f);
     Vec3 pos_clip = window_to_clip(pos_window);
 
-    //Rotate
-    if (left_down && _mod_current == GLFW_MOD_NONE)
+    bool managed = false;
+    
+    // Rotate
+    if (left_down && _mod_current == GLFW_MOD_NONE) {
         scene.trackball_camera.rotate(pos_clip);
+        managed = true;
+    }
 
-    //Pan
-    if (middle_down || (left_down && _mod_current == GLFW_MOD_SUPER))
+    // Pan
+    if (middle_down || (left_down && _mod_current == GLFW_MOD_SUPER)) {
         scene.trackball_camera.translate(pos_clip, old_pos_clip);
+        managed = true;
+    }
 
-    //Scale
-    if (left_down && (_mod_current == GLFW_MOD_SHIFT))
+    // Scale
+    if (left_down && (_mod_current == GLFW_MOD_SHIFT)) {
         scene.trackball_camera.scale(5.0f * (float)(pos_clip(1) - old_pos_clip(1)));
+        managed = true;
+    }
 
     old_pos_clip = pos_clip;
+    return managed;
 }
 
-void OpenGP::TrackballWindow::scroll_callback(double, double y_offset) {
-    if (_mod_current == GLFW_MOD_NONE)
+bool OpenGP::TrackballWindow::scroll_callback(double, double y_offset) {
+    if (_mod_current == GLFW_MOD_NONE) {
         scene.trackball_camera.scale(scroll_multiplier * (double)y_offset);
+        return true;
+    }
     
     /// BUG: when button is pressed y_offset just gives 0!
-    if (_mod_current == GLFW_MOD_SHIFT)
+    if (_mod_current == GLFW_MOD_SHIFT) {
         scene.trackball_camera.adjust_fov(y_offset);
+        return true;
+    }
+    
+    return false;
 }
 
-void OpenGP::TrackballWindow::framebuffer_size_callback(int width, int height) {
+bool OpenGP::TrackballWindow::framebuffer_size_callback(int width, int height) {
     _width = width;
     _height = height;
     glViewport(0, 0, _width, _height);
     scene.trackball_camera.screen_resize(_width, _height);
+    return true;
 }
 
 bool OpenGP::TrackballWindow::key_callback(int key, int scancode, int action, int mods){
