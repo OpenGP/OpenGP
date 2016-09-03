@@ -1,6 +1,6 @@
 #pragma once
-#include <OpenGP/headeronly.h>
 #include <OpenGP/types.h>
+#include <OpenGP/headeronly.h>
 #include <OpenGP/SurfaceMesh/internal/Global_properties.h>
 #include <OpenGP/SurfaceMesh/internal/properties.h>
 

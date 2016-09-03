@@ -1,6 +1,6 @@
 /// Barycenter example re-written with C++11 syntax
-#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 #include <OpenGP/MLogger.h>
+#include <OpenGP/SurfaceMesh/SurfaceMesh.h>
 using namespace OpenGP;
 using namespace std;
 
