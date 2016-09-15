@@ -1,10 +1,13 @@
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
+#include <OpenGP/MLogger.h>
 using namespace OpenGP;
 
-int main(int /*argc*/, char** argv) {
-    SurfaceMesh mesh;
+int main(int argc, char** argv) {
+    std::string file = (argc>1) ? argv[1] : "bunny.obj";
 
-    mesh.read(argv[1]);
+    SurfaceMesh mesh;
+    bool success = mesh.read(file);
+    CHECK(success);
 
     float mean_valence = 0.0f;
     unsigned int vertex_valence;

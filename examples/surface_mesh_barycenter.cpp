@@ -1,10 +1,13 @@
 #include <OpenGP/SurfaceMesh/SurfaceMesh.h>
+#include <OpenGP/MLogger.h>
 using namespace OpenGP;
 
-int main(int /*argc*/, char** argv) {
+int main(int argc, char** argv) {
+    std::string file = (argc>1) ? argv[1] : "bunny.obj";
+    
     SurfaceMesh mesh;
-
-    mesh.read(argv[1]);
+    bool success = mesh.read(file);
+    CHECK(success);
 
     // get (pre-defined) property storing vertex positions
     SurfaceMesh::Vertex_property<Vec3> points = mesh.get_vertex_property<Vec3>("v:point");
