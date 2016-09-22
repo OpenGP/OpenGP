@@ -1109,6 +1109,7 @@ public: //---------------------------------------------- low-level connectivity
     /// returns the opposite halfedge of \c h
     Halfedge opposite_halfedge(Halfedge h) const
     {
+        // @note optimized version of: return Halfedge((h.idx() & 1) ? h.idx()-1 : h.idx()+1);
         return Halfedge(h.idx() ^ 1);
     }
 
