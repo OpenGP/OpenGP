@@ -760,28 +760,31 @@ namespace nanoflann
 		int dim;  //!< Dimensionality of each data point
 
 
+                struct _Anonymous1
+                {
+                        /**
+                         * Indices of points in leaf node
+                         */
+                        IndexType left, right;
+                };
+                struct _Anonymous2
+                {
+                        /**
+                         * Dimension used for subdivision.
+                         */
+                        int divfeat;
+                        /**
+                         * The values used for subdivision.
+                         */
+                        DistanceType divlow, divhigh;
+                };
+                
 		/*--------------------- Internal Data Structures --------------------------*/
 		struct Node
 		{
 			union {
-				struct
-				{
-					/**
-					 * Indices of points in leaf node
-					 */
-					IndexType left, right;
-				} lr;
-				struct
-				{
-					/**
-					 * Dimension used for subdivision.
-					 */
-					int divfeat;
-					/**
-					 * The values used for subdivision.
-					 */
-					DistanceType divlow, divhigh;
-				} sub;
+				_Anonymous1 lr;
+				_Anonymous2 sub;
 			};
 			/**
 			 * The child nodes.
@@ -949,7 +952,7 @@ namespace nanoflann
 		 *  \sa radiusSearch, findNeighbors
 		 * \note nChecks_IGNORED is ignored but kept for compatibility with the original FLANN interface.
 		 */
-		inline void knnSearch(const ElementType *query_point, const size_t num_closest, IndexType *out_indices, DistanceType *out_distances_sq, const int nChecks_IGNORED = 10) const
+		inline void knnSearch(const ElementType *query_point, const size_t num_closest, IndexType *out_indices, DistanceType *out_distances_sq, const int /*nChecks_IGNORED*/ = 10) const
 		{
 			nanoflann::KNNResultSet<DistanceType,IndexType> resultSet(num_closest);
 			resultSet.init(out_indices, out_distances_sq);
@@ -1377,7 +1380,7 @@ namespace nanoflann
 		index_t* index; //! The kd-tree index for the user to call its methods as usual with any other FLANN index.
 
 		/// Constructor: takes a const ref to the matrix object with the data points
-		KDTreeEigenMatrixAdaptor(const int dimensionality, const MatrixType &mat, const int leaf_max_size = 10) : m_data_matrix(mat)
+		KDTreeEigenMatrixAdaptor(const int /*dimensionality*/, const MatrixType &mat, const int leaf_max_size = 10) : m_data_matrix(mat)
 		{
 			const size_t dims = mat.cols();
 			if (DIM>0 && static_cast<int>(dims)!=DIM)
@@ -1401,7 +1404,7 @@ namespace nanoflann
 		  *  The user can also call index->... methods as desired.
 		  * \note nChecks_IGNORED is ignored but kept for compatibility with the original FLANN interface.
 		  */
-		inline void query(const num_t *query_point, const size_t num_closest, IndexType *out_indices, num_t *out_distances_sq, const int nChecks_IGNORED = 10) const
+		inline void query(const num_t *query_point, const size_t num_closest, IndexType *out_indices, num_t *out_distances_sq, const int /*nChecks_IGNORED*/ = 10) const
 		{
 			nanoflann::KNNResultSet<typename MatrixType::Scalar,IndexType> resultSet(num_closest);
 			resultSet.init(out_indices, out_distances_sq);
@@ -1443,7 +1446,7 @@ namespace nanoflann
 		//   Return true if the BBOX was already computed by the class and returned in "bb" so it can be avoided to redo it again.
 		//   Look at bb.size() to find out the expected dimensionality (e.g. 2 or 3 for point clouds)
 		template <class BBOX>
-		bool kdtree_get_bbox(BBOX &bb) const {
+		bool kdtree_get_bbox(BBOX& /*bb*/) const {
 			return false;
 		}
 
