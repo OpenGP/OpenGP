@@ -25,6 +25,4 @@ add_subdirectory(apps/imshow)
 add_subdirectory(apps/baker)
 add_subdirectory(apps/subdivision)
 add_subdirectory(apps/isoremesh)
-
-#--- unstable / obsolete applications
-#add_subdirectory(apps/qglviewer) 
+#add_subdirectory(apps/qglviewer) # UNSTABLE / OBSOLETE

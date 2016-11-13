@@ -4,7 +4,6 @@
 #include <OpenGP/GL/glfw.h>
 #include <OpenGP/GL/SceneGraph.h>
 #include <OpenGP/GL/GlfwFpsCounter.h>
-#include <OpenGP/GL/ArcballCamera.h>
 
 //=============================================================================
 namespace OpenGP {

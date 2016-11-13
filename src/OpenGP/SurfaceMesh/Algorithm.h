@@ -18,6 +18,7 @@ protected:
     typedef SurfaceMesh::Halfedge_around_vertex_circulator Halfedge_around_vertex_circulator;
     typedef ::OpenGP::SurfaceMesh SurfaceMesh;
     typedef ::OpenGP::Point Point;
+    typedef ::OpenGP::Normal Normal;
     typedef ::OpenGP::Scalar Scalar;
     typedef SurfaceMesh::Vertex Vertex;
     typedef SurfaceMesh::Face Face;
