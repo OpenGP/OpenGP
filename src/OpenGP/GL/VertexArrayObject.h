@@ -8,13 +8,24 @@ namespace OpenGP {
 class VertexArrayObject{
     GLuint VAO;
 public:
+
     VertexArrayObject(){
         glGenVertexArrays(1, &VAO);
         glBindVertexArray(VAO);
     }
-    ~VertexArrayObject(){ glDeleteVertexArrays(1, &VAO); } 
+
+    VertexArrayObject(const VertexArrayObject&) = delete;
+    VertexArrayObject &operator=(const VertexArrayObject&) = delete;
+
+    ~VertexArrayObject(){ glDeleteVertexArrays(1, &VAO); }
+
     void bind(){ glBindVertexArray(VAO); }
+
+    [[deprecated]]
     void release(){ glBindVertexArray(0); }
+
+    void unbind(){ glBindVertexArray(0); }
+
 };
 
 //=============================================================================
