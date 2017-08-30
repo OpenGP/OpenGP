@@ -31,8 +31,8 @@ public:
         glGenTextures(1, &_id);
     }
 
-    void bind() { glBindTexture(GL_TEXTURE_2D, _id); }
-    void unbind() { glBindTexture(GL_TEXTURE_2D, 0); }
+    void bind() const { glBindTexture(GL_TEXTURE_2D, _id); }
+    void unbind() const { glBindTexture(GL_TEXTURE_2D, 0); }
 
     void enable_filter() {
         bind();
@@ -52,7 +52,7 @@ public:
         unbind();
     }
 
-    GLuint id() { return _id; }
+    GLuint id() const { return _id; }
 
 };
 
@@ -69,7 +69,7 @@ public:
         unbind();
 
     }
-    
+
 };
 
 using RGBA8Texture = Texture<GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE>;

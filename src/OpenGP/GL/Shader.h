@@ -83,6 +83,8 @@ public:
     HEADERONLY_INLINE void set_attribute(const char* name, ArrayBuffer<Eigen::Vector3f>& buffer);
 /// @}
 
+    HEADERONLY_INLINE bool has_attribute(const char* name);
+
 };
 
 //=============================================================================

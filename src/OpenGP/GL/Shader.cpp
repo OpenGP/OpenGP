@@ -64,6 +64,12 @@ void OpenGP::Shader::set_attribute(const char* name, ArrayBuffer<Eigen::Vector3f
     glVertexAttribPointer(location, /*vec3*/ 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
 }
 
+bool OpenGP::Shader::has_attribute(const char* name) {
+    assert( check_is_current() );
+    GLint location = glGetAttribLocation(pid, name);
+    return location != -1;
+}
+
 bool OpenGP::Shader::add_vshader_from_source(const char* code) {
     if (verbose) mDebug() << "Compiling Vertex shader";
 
