@@ -185,19 +185,33 @@ public:
         vpoint = add_vertex_property<Point>("v:point");
     }
 
-    //void add_vertex(Point vertex) { vpoint.push_back(vertex); }
-    //void add_sphere(SphereConnectivity sphere) { sconn.push_back(sphere); }
-    //void add_edge(EdgeConnectivity edge) { econn.push_back(edge); }
-    //void add_face(FaceConnectivity face) { fconn.push_back(face); }
+    void add_vertex(Point vertex) {
+        vprops.push_back();
+        vpoint[*(--(vertices_end()))] = vertex;
+    }
 
-    //Point get_vertex(int index) { assert(index < vpoint.size()); return vpoint[index]; }
-    //Sphere get_sphere(int index) { assert(index < sconn.size()); return sconn[index]; }
-    //Edge get_edge(int index) { assert(index < econn.size()); return econn[index]; }
-    //Face get_face(int index) { assert(index < fconn.size()); return fconn[index]; }
+    void add_sphere(Vertex vertex) {
+        sprops.push_back();
+        sconn[*(--(spheres_end()))] = vertex.idx();
+    }
+
+    void add_edge(Vertex v0, Vertex v1) {
+        eprops.push_back();
+        econn[*(--(edges_end()))] = EdgeConnectivity(v0.idx(), v1.idx());
+    }
+
+    void add_face(Vertex v0, Vertex v1, Vertex v2) {
+        fprops.push_back();
+        fconn[*(--(faces_end()))] = FaceConnectivity(v0.idx(), v1.idx(), v2.idx());
+    }
 
     //void delete_sphere(int sphere_index) { sconn[sphere_index] = -1; }
     //void delete_edge(int edge_index) { econn[edge_index] = Edge(-1, -1); }
     //void delete_face(int face_index) { fconn[face_index] = Face(-1, -1, -1); }
+
+    Vertex vertex(Sphere s) const { return Vertex(sconn[s]); }
+    Vertex vertex(Edge e, int i) const { assert(i < 2 && i > -1); return Vertex(econn[e](i)); }
+    Vertex vertex(Face f, int i) const { assert(i < 3 && i > -1); return Vertex(fconn[f](i)); }
 
     VertexIterator vertices_begin() const { return VertexIterator(Vertex(0), this); }
     SphereIterator spheres_begin() const { return SphereIterator(Sphere(0), this); }

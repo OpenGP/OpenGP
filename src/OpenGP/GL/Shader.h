@@ -74,6 +74,14 @@ public:
     HEADERONLY_INLINE void set_uniform(const char* name, const Eigen::Matrix4f& matrix);
 /// @}
 
+/// @{ uniforms getters
+public:
+    HEADERONLY_INLINE void get_uniform(const char* name, int &scalar);
+    HEADERONLY_INLINE void get_uniform(const char* name, float &scalar);
+    HEADERONLY_INLINE void get_uniform(const char* name, Eigen::Vector3f& vector);
+    HEADERONLY_INLINE void get_uniform(const char* name, Eigen::Matrix4f& matrix);
+/// @}
+
 /// @{ setters for *constant* vertex attributes
 public:
     HEADERONLY_INLINE void set_attribute(const char* name, float value);
