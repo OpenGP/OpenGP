@@ -64,19 +64,27 @@ public:
     }
 
     void set_vpoint(const std::vector<Vec3> &vpoint) {
+        vao.bind();
         this->vpoint.upload(vpoint);
+        vao.unbind();
     }
 
     void set_vnormal(const std::vector<Vec3> &vnormal) {
+        vao.bind();
         this->vnormal.upload(vnormal);
+        vao.unbind();
     }
 
     void set_vnormal(const std::vector<Vec2> &vtexcoord) {
+        vao.bind();
         this->vtexcoord.upload(vtexcoord);
+        vao.unbind();
     }
 
     void set_triangles(const std::vector<unsigned int> &triangles) {
+        vao.bind();
         this->triangles.upload(triangles);
+        vao.unbind();
         element_count = triangles.size();
     }
 
