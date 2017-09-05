@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <regex>
+#include <iostream>
+#include <fstream>
 
 #include <OpenGP/types.h>
 #include <OpenGP/SurfaceMesh/internal/Global_properties.h>
@@ -327,11 +329,23 @@ public:
     const std::type_info& get_face_property_type(const std::string& name) {
         return fprops.get_type(name);
     }
+    
 
+    bool read(const std::string& filename) {
 
-    static SphereMesh load_from_text(const std::string &text) {
+        std::ifstream file_stream(filename, std::ios_base::in);
 
-        SphereMesh result;
+        if (!file_stream.is_open()) {
+            return false;
+        }
+
+        std::string text((std::istreambuf_iterator<char>(file_stream)), std::istreambuf_iterator<char>());
+
+        return read_text(text);
+
+    }
+
+    bool read_text(const std::string& text) {
 
         std::regex vert_regex(R"regex(v\s+([\d\-\.]+)\s+([\d\-\.]+)\s+([\d\-\.]+)\s+([\d\-\.]+))regex");
 
@@ -342,9 +356,9 @@ public:
 
             auto match = *i;
 
-            result.vprops.push_back();
-            auto it = result.vertices_end();
-            result.vpoint[*(--it)] = Point(std::stof(match[1]), std::stof(match[2]), std::stof(match[3]), std::stof(match[4]));
+            vprops.push_back();
+            auto it = vertices_end();
+            vpoint[*(--it)] = Point(std::stof(match[1]), std::stof(match[2]), std::stof(match[3]), std::stof(match[4]));
 
         }
 
@@ -356,9 +370,9 @@ public:
 
             auto match = *i;
 
-            result.sprops.push_back();
-            auto it = result.spheres_end();
-            result.sconn[*(--it)] = std::stoi(match[1]);
+            sprops.push_back();
+            auto it = spheres_end();
+            sconn[*(--it)] = std::stoi(match[1]);
 
         }
 
@@ -370,9 +384,9 @@ public:
 
             auto match = *i;
 
-            result.eprops.push_back();
-            auto it = result.edges_end();
-            result.econn[*(--it)] = EdgeConnectivity(std::stoi(match[1]), std::stoi(match[2]));
+            eprops.push_back();
+            auto it = edges_end();
+            econn[*(--it)] = EdgeConnectivity(std::stoi(match[1]), std::stoi(match[2]));
 
         }
 
@@ -384,17 +398,31 @@ public:
 
             auto match = *i;
 
-            result.fprops.push_back();
-            auto it = result.faces_end();
-            result.fconn[*(--it)] = FaceConnectivity(std::stoi(match[1]), std::stoi(match[2]), std::stoi(match[3]));
+            fprops.push_back();
+            auto it = faces_end();
+            fconn[*(--it)] = FaceConnectivity(std::stoi(match[1]), std::stoi(match[2]), std::stoi(match[3]));
 
         }
 
-        return result;
+    }
+
+    bool write(const std::string& filename) const {
+
+        std::ifstream file_stream(filename, std::ios_base::out);
+
+        if (!file_stream.is_open()) {
+            return false;
+        }
+
+        auto text = write_text();
+
+        file_stream << text;
+
+        return true;
 
     }
 
-    std::string dump_to_text() const {
+    std::string write_text() const
 
         std::string text;
 
