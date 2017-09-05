@@ -163,6 +163,11 @@ public:
 
 private:
 
+    Property_container vprops;
+    Property_container sprops;
+    Property_container eprops;
+    Property_container fprops;
+
     typedef int SphereConnectivity;
     typedef Eigen::Matrix<int, 2, 1> EdgeConnectivity;
     typedef Eigen::Matrix<int, 3, 1> FaceConnectivity;
@@ -173,10 +178,17 @@ private:
     EdgeProperty<EdgeConnectivity> econn;
     FaceProperty<FaceConnectivity> fconn;
 
-    Property_container vprops;
-    Property_container sprops;
-    Property_container eprops;
-    Property_container fprops;
+    VertexProperty<bool> vdeleted;
+    SphereProperty<bool> sdeleted;
+    EdgeProperty<bool>   edeleted;
+    FaceProperty<bool>   fdeleted;
+
+    unsigned int deleted_vertices;
+    unsigned int deleted_spheres;
+    unsigned int deleted_edges;
+    unsigned int deleted_faces;
+
+    bool has_garbage;
 
 public:
 
@@ -207,9 +219,83 @@ public:
         fconn[*(--(faces_end()))] = FaceConnectivity(v0.idx(), v1.idx(), v2.idx());
     }
 
-    //void delete_sphere(int sphere_index) { sconn[sphere_index] = -1; }
-    //void delete_edge(int edge_index) { econn[edge_index] = Edge(-1, -1); }
-    //void delete_face(int face_index) { fconn[face_index] = Face(-1, -1, -1); }
+    void delete_vertex(Vertex v) {
+
+        if (vdeleted[v]) return;
+
+        std::vector<Sphere> spheres_to_delete;
+        std::vector<Edge> edges_to_delete;
+        std::vector<Face> faces_to_delete;
+
+        for (auto s : spheres()) {
+            if (Vertex(sconn[s]) == v) {
+                spheres_to_delete.push_back(s);
+            }
+        }
+
+        for (auto e : edges()) {
+            if (Vertex(econn[e](0)) == v || Vertex(econn[e](1)) == v) {
+                edges_to_delete.push_back(e);
+            }
+        }
+
+        for (auto f : faces()) {
+            if (Vertex(fconn[f](0)) == v || Vertex(fconn[f](1)) == v || Vertex(fconn[f](2)) == v) {
+                faces_to_delete.push_back(f);
+            }
+        }
+
+        for (auto s : spheres_to_delete) {
+            delete_sphere(s);
+        }
+
+        for (auto e : edges_to_delete) {
+            delete_edge(e);
+        }
+
+        for (auto f : faces_to_delete) {
+            delete_face(f);
+        }
+
+    }
+
+    void delete_sphere(Sphere s) {
+
+        if (sdeleted[s]) return;
+
+        sdeleted[s] = true;
+        deleted_spheres++;
+        has_garbage = true;
+
+    }
+
+    void delete_edge(Edge e) {
+
+        if (edeleted[e]) return;
+
+        edeleted[e] = true;
+        deleted_edges++;
+        has_garbage = true;
+
+    }
+
+    void delete_face(Face f) {
+
+        if (fdeleted[f]) return;
+
+        fdeleted[f] = true;
+        deleted_faces++;
+        has_garbage = true;
+
+    }
+
+    bool garbage() const { return has_garbage; }
+
+    void garbage_collection() {
+
+        
+
+    }
 
     Vertex vertex(Sphere s) const { return Vertex(sconn[s]); }
     Vertex vertex(Edge e, int i) const { assert(i < 2 && i > -1); return Vertex(econn[e](i)); }
