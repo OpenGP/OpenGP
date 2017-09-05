@@ -333,6 +333,8 @@ public:
 
     bool read(const std::string& filename) {
 
+    bool read(const std::string& filename) {
+
         std::ifstream file_stream(filename, std::ios_base::in);
 
         if (!file_stream.is_open()) {
