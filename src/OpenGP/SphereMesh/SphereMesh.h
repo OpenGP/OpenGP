@@ -257,6 +257,10 @@ public:
             delete_face(f);
         }
 
+        vdeleted[v] = true;
+        deleted_vertices++;
+        has_garbage = true;
+
     }
 
     void delete_sphere(Sphere s) {
@@ -289,14 +293,6 @@ public:
 
     }
 
-    bool garbage() const { return has_garbage; }
-
-    void garbage_collection() {
-
-        
-
-    }
-
     Vertex vertex(Sphere s) const { return Vertex(sconn[s]); }
     Vertex vertex(Edge e, int i) const { assert(i < 2 && i > -1); return Vertex(econn[e](i)); }
     Vertex vertex(Face f, int i) const { assert(i < 3 && i > -1); return Vertex(fconn[f](i)); }
@@ -316,6 +312,15 @@ public:
     EdgeContainer edges() const { return EdgeContainer(edges_begin(), edges_end()); }
     FaceContainer faces() const { return FaceContainer(faces_begin(), faces_end()); }
 
+    unsigned int vertices_size() const { return (unsigned int) vprops.size(); }
+    unsigned int spheres_size() const { return (unsigned int) sprops.size(); }
+    unsigned int edges_size() const { return (unsigned int) eprops.size(); }
+    unsigned int faces_size() const { return (unsigned int) fprops.size(); }
+
+    unsigned int n_vertices() const { return vertices_size() - deleted_vertices; }
+    unsigned int n_spheres() const { return spheres_size() - deleted_spheres; }
+    unsigned int n_edges() const { return edges_size() - deleted_edges; }
+    unsigned int n_faces() const { return faces_size() - deleted_faces; }
 
     template <class T>
     VertexProperty<T> add_vertex_property(const std::string& name, const T t=T()) {
@@ -415,9 +420,6 @@ public:
     const std::type_info& get_face_property_type(const std::string& name) {
         return fprops.get_type(name);
     }
-
-
-    bool read(const std::string& filename) {
 
     bool read(const std::string& filename) {
 
@@ -547,6 +549,145 @@ public:
         }
 
         return text;
+
+    }
+
+    bool garbage() const { return has_garbage; }
+
+    void garbage_collection() {
+
+        int  i, i0, i1,
+        nV(vertices_size()),
+        nS(spheres_size()),
+        nE(edges_size()),
+        nF(faces_size());
+
+        VertexProperty<Vertex> vmap = add_vertex_property<Vertex>("v:garbage-collection");
+
+        for (i = 0;i < nV;i++) {
+            vmap[Vertex(i)] = Vertex(i);
+        }
+
+        // remove deleted vertices
+        if (nV > 0) {
+            i0=0;  i1=nV-1;
+
+            while (1) {
+                // find first deleted and last un-deleted
+                while (!vdeleted[Vertex(i0)] && i0 < i1)  ++i0;
+                while ( vdeleted[Vertex(i1)] && i0 < i1)  --i1;
+                if (i0 >= i1) break;
+
+                // swap
+                vprops.swap(i0, i1);
+            };
+
+            // remember new size
+            nV = vdeleted[Vertex(i0)] ? i0 : i0+1;
+        }
+
+        VertexProperty<Vertex> vmap_reverse = add_vertex_property<Vertex>("v:garbage-collection-2");
+
+        for (i = 0;i < nV;i++) {
+
+            Vertex vnew(i);
+            Vertex vold = vmap[vnew];
+
+            vmap_reverse[vold] = vnew;
+
+        }
+
+        // remove deleted spheres
+        if (nS > 0) {
+            i0=0;  i1=nS-1;
+
+            while (1) {
+                // find first deleted and last un-deleted
+                while (!sdeleted[Sphere(i0)] && i0 < i1)  ++i0;
+                while ( sdeleted[Sphere(i1)] && i0 < i1)  --i1;
+                if (i0 >= i1) break;
+
+                // swap
+                sprops.swap(i0, i1);
+            };
+
+            // remember new size
+            nS = sdeleted[Sphere(i0)] ? i0 : i0+1;
+        }
+
+        // remove deleted edges
+        if (nE > 0) {
+            i0=0;  i1=nE-1;
+
+            while (1) {
+                // find first deleted and last un-deleted
+                while (!edeleted[Edge(i0)] && i0 < i1)  ++i0;
+                while ( edeleted[Edge(i1)] && i0 < i1)  --i1;
+                if (i0 >= i1) break;
+
+                // swap
+                eprops.swap(i0, i1);
+            };
+
+            // remember new size
+            nE = edeleted[Edge(i0)] ? i0 : i0+1;
+        }
+
+        // remove deleted faces
+        if (nF > 0) {
+            i0=0;  i1=nF-1;
+
+            while (1) {
+                // find first deleted and last un-deleted
+                while (!fdeleted[Face(i0)] && i0 < i1)  ++i0;
+                while ( fdeleted[Face(i1)] && i0 < i1)  --i1;
+                if (i0 >= i1) break;
+
+                // swap
+                fprops.swap(i0, i1);
+            };
+
+            // remember new size
+            nF = fdeleted[Face(i0)] ? i0 : i0+1;
+        }
+
+        for (i = 0;i < nV;i++) {
+
+            Sphere s(i);
+
+            sconn[s] = vmap_reverse[Vertex(sconn[s])].idx();
+
+        }
+
+        for (i = 0;i < nE;i++) {
+
+            Edge e(i);
+
+            econn[e](0) = vmap_reverse[Vertex(econn[e](0))].idx();
+            econn[e](1) = vmap_reverse[Vertex(econn[e](1))].idx();
+
+        }
+
+        for (i = 0;i < nF;i++) {
+
+            Face f(i);
+
+            fconn[f](0) = vmap_reverse[Vertex(fconn[f](0))].idx();
+            fconn[f](1) = vmap_reverse[Vertex(fconn[f](1))].idx();
+            fconn[f](2) = vmap_reverse[Vertex(fconn[f](2))].idx();
+
+        }
+
+        remove_vertex_property(vmap);
+        remove_vertex_property(vmap_reverse);
+
+        vprops.resize(nV); vprops.free_memory();
+        sprops.resize(nS); sprops.free_memory();
+        eprops.resize(nE); eprops.free_memory();
+        fprops.resize(nF); fprops.free_memory();
+
+        deleted_vertices = deleted_spheres = deleted_edges = deleted_faces = 0;
+        has_garbage = false;
 
     }
 
