@@ -199,6 +199,39 @@ public:
         vpoint = add_vertex_property<Point>("v:point");
     }
 
+    virtual ~SphereMesh() {}
+
+    void clear() {
+
+        vprops.resize(0);
+        sprops.resize(0);
+        eprops.resize(0);
+        fprops.resize(0);
+
+        vprops.free_memory();
+        sprops.free_memory();
+        eprops.free_memory();
+        fprops.free_memory();
+
+        deleted_vertices = deleted_spheres = deleted_edges = deleted_faces = 0;
+        has_garbage = false;
+
+    }
+
+    void free_memory() {
+        vprops.free_memory();
+        sprops.free_memory();
+        eprops.free_memory();
+        fprops.free_memory();
+    }
+
+    void reserve(int nv, int ns, int ne, int nf) {
+        vprops.reserve(nv);
+        sprops.reserve(ns);
+        eprops.reserve(ne);
+        fprops.reserve(nf);
+    }
+
     void add_vertex(Point vertex) {
         vprops.push_back();
         vpoint[*(--(vertices_end()))] = vertex;
@@ -321,6 +354,11 @@ public:
     unsigned int n_spheres() const { return spheres_size() - deleted_spheres; }
     unsigned int n_edges() const { return edges_size() - deleted_edges; }
     unsigned int n_faces() const { return faces_size() - deleted_faces; }
+
+    bool is_valid(Vertex v) const { return v.idx() != 0 && v.idx() < vertices_size(); }
+    bool is_valid(Sphere s) const { return s.idx() != 0 && s.idx() < spheres_size(); }
+    bool is_valid(Edge e) const { return e.idx() != 0 && e.idx() < edges_size(); }
+    bool is_valid(Face f) const { return f.idx() != 0 && f.idx() < faces_size(); }
 
     template <class T>
     VertexProperty<T> add_vertex_property(const std::string& name, const T t=T()) {
