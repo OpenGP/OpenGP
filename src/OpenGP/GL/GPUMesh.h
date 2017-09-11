@@ -31,6 +31,14 @@ public:
 
     GPUMesh(const SurfaceMesh &mesh) {
 
+        init_from_mesh(mesh);
+
+    }
+
+    virtual ~GPUMesh() {}
+
+    void init_from_mesh(const SurfaceMesh &mesh) {
+
         vao.bind();
 
         auto vpoints = mesh.get_vertex_property<Vec3>("v:point");
@@ -56,8 +64,6 @@ public:
         mode = GL_TRIANGLES;
 
     }
-
-    virtual ~GPUMesh() {}
 
     void set_mode(GLenum mode) {
         this->mode = mode;
