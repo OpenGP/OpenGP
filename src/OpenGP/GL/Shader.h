@@ -30,18 +30,30 @@ public:
 /// @}
 
 public:
+
     Shader(){ pid = glCreateProgram(); }
+
+    Shader(const Shader&) = delete;
+    Shader &operator=(const Shader&) = delete;
+
+    ~Shader() { glDeleteProgram(pid); }
+
     GLuint programId() const { return pid; }
+
     void bind(){ assert(_is_valid); glUseProgram(pid); }
+    void unbind(){ glUseProgram(0); }
+
+    [[deprecated]]
     void release(){ glUseProgram(0); }
+
     bool is_valid(){ return _is_valid; }
-    
+
     bool check_is_current(){
         assert(pid!=0);
         return (current_program_id() == pid);
     }
 
-    static GLuint current_program_id(){ 
+    static GLuint current_program_id(){
         GLint id;
         glGetIntegerv(GL_CURRENT_PROGRAM,&id);
         return (GLuint) id;
@@ -53,16 +65,24 @@ public:
     HEADERONLY_INLINE bool add_fshader_from_source(const char* code);
     HEADERONLY_INLINE bool link();
 /// @}
-    
+
 /// @{ uniforms setters
 public:
     HEADERONLY_INLINE void set_uniform(const char* name, int scalar);
     HEADERONLY_INLINE void set_uniform(const char* name, float scalar);
     HEADERONLY_INLINE void set_uniform(const char* name, const Eigen::Vector3f& vector);
     HEADERONLY_INLINE void set_uniform(const char* name, const Eigen::Matrix4f& matrix);
-/// @}    
+/// @}
 
-/// @{ setters for *constant* vertex attributes 
+/// @{ uniforms getters
+public:
+    HEADERONLY_INLINE void get_uniform(const char* name, int &scalar);
+    HEADERONLY_INLINE void get_uniform(const char* name, float &scalar);
+    HEADERONLY_INLINE void get_uniform(const char* name, Eigen::Vector3f& vector);
+    HEADERONLY_INLINE void get_uniform(const char* name, Eigen::Matrix4f& matrix);
+/// @}
+
+/// @{ setters for *constant* vertex attributes
 public:
     HEADERONLY_INLINE void set_attribute(const char* name, float value);
     HEADERONLY_INLINE void set_attribute(const char* name, const Eigen::Vector3f& vector);
@@ -70,6 +90,8 @@ public:
     HEADERONLY_INLINE void set_attribute(const char* name, ArrayBuffer<Eigen::Vector2f>& buffer);
     HEADERONLY_INLINE void set_attribute(const char* name, ArrayBuffer<Eigen::Vector3f>& buffer);
 /// @}
+
+    HEADERONLY_INLINE bool has_attribute(const char* name);
 
 };
 

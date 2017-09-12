@@ -19,13 +19,37 @@ void Shader::set_uniform(const char* name, float scalar) {
 void Shader::set_uniform(const char* name, const Eigen::Vector3f& vector) {
     assert( check_is_current() );
     GLint loc = glGetUniformLocation(pid, name);
-    glUniform4fv(loc, 3, vector.data());
+    glUniform3fv(loc, 1, vector.data());
 }
 
 void Shader::set_uniform(const char* name, const Eigen::Matrix4f& matrix) {
     assert( check_is_current() );
     GLint loc = glGetUniformLocation(pid, name);
     glUniformMatrix4fv(loc, 1, GL_FALSE, matrix.data());
+}
+
+void Shader::get_uniform(const char* name, int &scalar) {
+    assert( check_is_current() );
+    GLint loc = glGetUniformLocation(pid, name);
+    glGetUniformiv(pid, loc, &scalar);
+}
+
+void Shader::get_uniform(const char* name, float &scalar) {
+    assert( check_is_current() );
+    GLint loc = glGetUniformLocation(pid, name);
+    glGetUniformfv(pid, loc, &scalar);
+}
+
+void Shader::get_uniform(const char* name, Eigen::Vector3f& vector) {
+    assert( check_is_current() );
+    GLint loc = glGetUniformLocation(pid, name);
+    glGetUniformfv(pid, loc, vector.data());
+}
+
+void Shader::get_uniform(const char* name, Eigen::Matrix4f& matrix) {
+    assert( check_is_current() );
+    GLint loc = glGetUniformLocation(pid, name);
+    glGetUniformfv(pid, loc, matrix.data());
 }
 
 void Shader::set_attribute(const char* name, float value) {
@@ -62,6 +86,12 @@ void OpenGP::Shader::set_attribute(const char* name, ArrayBuffer<Eigen::Vector3f
     glEnableVertexAttribArray(location); ///< cached in VAO
     buffer.bind(); ///< memory the description below refers to
     glVertexAttribPointer(location, /*vec3*/ 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
+}
+
+bool OpenGP::Shader::has_attribute(const char* name) {
+    assert( check_is_current() );
+    GLint location = glGetAttribLocation(pid, name);
+    return location != -1;
 }
 
 bool OpenGP::Shader::add_vshader_from_source(const char* code) {
