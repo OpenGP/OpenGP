@@ -60,7 +60,7 @@ public:
                 ///--- Display
                 obj->display();
             }
-            obj->program.release();
+            obj->program.unbind();
         }
     }
 
