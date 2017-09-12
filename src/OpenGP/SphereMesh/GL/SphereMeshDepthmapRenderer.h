@@ -58,6 +58,8 @@ private:
         }
     )GLSL";
 
+    const float PI = 3.141592653589793238462643383;
+
     const int segments = 64;
 
     const SphereMesh &mesh;
@@ -86,8 +88,8 @@ public:
             int n = 0;
             for (int i = 0;i <= segments;i++) {
                 for (int j = 0;j <= segments;j++) {
-                    Scalar lon = 2 * M_PI * ((Scalar)i) / segments;
-                    Scalar lat = M_PI * (((Scalar)j) / segments - 0.5);
+                    Scalar lon = 2 * PI * ((Scalar)i) / segments;
+                    Scalar lat = PI * (((Scalar)j) / segments - 0.5);
                     Vec3 vert(std::cos(lon) * std::cos(lat), std::sin(lon) * std::cos(lat), std::sin(lat));
                     vpoint.push_back(vert);
                     vnormal.push_back(vert);
@@ -118,7 +120,7 @@ public:
             std::vector<unsigned int> triangles;
 
             for (int i = 0;i <= segments;i++) {
-                Scalar theta = 2 * M_PI * ((Scalar)i) / segments;
+                Scalar theta = 2 * PI * ((Scalar)i) / segments;
                 Vec3 vert(std::cos(theta), std::sin(theta), 0);
                 vpoint.push_back(vert);
                 vnormal.push_back(vert);
