@@ -1,6 +1,10 @@
 #include "TrackballWindow.h"
 #include <chrono> ///< for double-click
 
+#ifdef __NVCC__
+#error TrackballWindow is not currently compatible with NVCC. Please compile this unit with a different compiler.
+#endif
+
 bool OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int mods) {
     if( action == GLFW_RELEASE ){
         static auto before = std::chrono::system_clock::now();
@@ -11,8 +15,8 @@ bool OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int m
             action = GLFW_DOUBLECLICK;
             // mDebug() << "doubleclick";
         }
-    }   
-    
+    }
+
     if ((button == GLFW_MOUSE_BUTTON_LEFT) && (action == GLFW_PRESS)) {
         double x_window, y_window;
         getFramebufferCursorPos(&x_window, &y_window);
@@ -44,7 +48,7 @@ bool OpenGP::TrackballWindow::mouse_press_callback(int button, int action, int m
         }
         return true;
     }
-    
+
     return false;
 }
 
@@ -52,14 +56,14 @@ bool OpenGP::TrackballWindow::mouse_move_callback(double x_window, double y_wind
     x_window *= scale_factor_retina();
     y_window *= scale_factor_retina();
     // mLogger() << x_window << y_window;
-    
+
     bool left_down = (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS);
     bool middle_down = (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS);
     Vec3 pos_window(x_window, y_window, 0.0f);
     Vec3 pos_clip = window_to_clip(pos_window);
 
     bool managed = false;
-    
+
     // Rotate
     if (left_down && _mod_current == GLFW_MOD_NONE) {
         scene.trackball_camera.rotate(pos_clip);
@@ -87,13 +91,13 @@ bool OpenGP::TrackballWindow::scroll_callback(double, double y_offset) {
         scene.trackball_camera.scale(scroll_multiplier * (double)y_offset);
         return true;
     }
-    
+
     /// BUG: when button is pressed y_offset just gives 0!
     if (_mod_current == GLFW_MOD_SHIFT) {
         scene.trackball_camera.adjust_fov(y_offset);
         return true;
     }
-    
+
     return false;
 }
 
@@ -108,17 +112,17 @@ bool OpenGP::TrackballWindow::framebuffer_size_callback(int width, int height) {
 bool OpenGP::TrackballWindow::key_callback(int key, int scancode, int action, int mods){
     if( Super::key_callback(key, scancode, action, mods) )
         return true;
-        
-    if(action == GLFW_PRESS) 
+
+    if(action == GLFW_PRESS)
         _mod_current = mods;
-    if(action == GLFW_RELEASE && (_mod_current!=GLFW_MOD_NONE)) 
+    if(action == GLFW_RELEASE && (_mod_current!=GLFW_MOD_NONE))
         _mod_current = GLFW_MOD_NONE;
-    
+
     /// Reset the camera
     /// TODO: check meshlab bindings
     if(key=='R'){
         scene.trackball_camera = TrackballCamera(_width, _height);
-        return true;   
+        return true;
     }
     return false;
 }
