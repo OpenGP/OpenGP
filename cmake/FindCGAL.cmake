@@ -53,19 +53,19 @@ IF(CGAL_INCLUDE_DIR )
 
   IF(WIN32)
     include(CGAL_GeneratorSpecificSettings)
-    find_path(CGAL_LIBRARY_DIR 
+    find_path(CGAL_LIBRARY_DIR
                 NAMES "CGAL-${CGAL_TOOLSET}-mt.lib" "CGAL-${CGAL_TOOLSET}-mt-gd.lib"
                 PATHS "${CGAL_INCLUDE_DIR}/../lib"
                 DOC "Directory containing the CGAL library"
-               ) 
+               )
     #add_definitions (-DCGAL_AUTOLINK)
   ELSEIF( APPLE)
-    find_path(CGAL_LIBRARY_DIR 
+    find_path(CGAL_LIBRARY_DIR
                 NAMES "libCGAL.dylib"
                 PATHS "/opt/local/lib/"
                       "/usr/local/lib/"
                 DOC "Directory containing the CGAL library"
-               ) 
+               )
     list ( APPEND CGAL_LIBRARIES CGAL CGAL_Core mpfr gmp boost_thread-mt boost_system )
     if(NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -frounding-math")
@@ -74,10 +74,10 @@ IF(CGAL_INCLUDE_DIR )
   ELSE( WIN32 )
     find_path(CGAL_LIBRARY_DIR
               NAMES "libCGAL.so"
-              PATHS "/usr/lib/" "/usr/lib64" 
+              PATHS "/usr/lib/" "/usr/lib64"
               DOC "Directory containing the CGAL library"
              )
-    list ( APPEND CGAL_LIBRARIES CGAL CGAL_Core CGAL_ImageIO CGAL_Qt4) 
+    list ( APPEND CGAL_LIBRARIES CGAL CGAL_Core CGAL_ImageIO CGAL_Qt4)
     set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -frounding-math")
     set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -frounding-math")
 
@@ -87,7 +87,7 @@ IF(CGAL_INCLUDE_DIR )
   ENDIF(WIN32)
 
 
- 
+
 
 ELSE(CGAL_INCLUDE_DIR )
   SET(CGAL_FOUND 0)
@@ -95,7 +95,7 @@ ELSE(CGAL_INCLUDE_DIR )
 ENDIF(CGAL_INCLUDE_DIR )
 
 #use eigen if available
-find_package(EIGEN3 REQUIRED)
+find_package(Eigen3 REQUIRED)
 add_definitions(-DCGAL_EIGEN3_ENABLED)
 
 # Report the results.

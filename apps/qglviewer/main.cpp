@@ -133,8 +133,8 @@ public:
 #endif
         
         ///--- Unbind to avoid pollution
-        vao.release();
-        program.release();
+        vao.unbind();
+        program.unbind();
     }
 
     /// @overload QGLWidget
@@ -164,8 +164,8 @@ public:
             glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
             glDrawElements(GL_TRIANGLES, triangles.size(), GL_UNSIGNED_INT, 0);
         }
-        vao.release();
-        program.release();
+        vao.unbind();
+        program.unbind();
     }
 };
 

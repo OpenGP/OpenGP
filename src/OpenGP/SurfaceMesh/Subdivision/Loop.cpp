@@ -1,10 +1,10 @@
 #include "Loop.h"
 #include <OpenGP/MLogger.h>
 
-void SurfaceMeshSubdivideLoop::exec(SurfaceMesh& mesh){
+void SurfaceMeshSubdivideLoop::exec(OpenGP::SurfaceMesh& mesh){
     /// TODO: other pre-conditions?
     CHECK(mesh.is_triangle_mesh());
-    
+
     // reserve memory
     int nv = mesh.n_vertices();
     int ne = mesh.n_edges();
@@ -19,7 +19,7 @@ void SurfaceMeshSubdivideLoop::exec(SurfaceMesh& mesh){
     EdgeProperty<bool>    efeature = mesh.get_edge_property<bool>("e:feature");
 
     // compute vertex positions
-    for(Vertex v: mesh.vertices()){        
+    for(Vertex v: mesh.vertices()){
         if ( /*isolated vertex?*/ mesh.is_isolated(v)){
             vpoint[v] = points[v];
         }
@@ -120,4 +120,3 @@ void SurfaceMeshSubdivideLoop::exec(SurfaceMesh& mesh){
     mesh.remove_vertex_property(vpoint);
     mesh.remove_edge_property(epoint);
 }
-

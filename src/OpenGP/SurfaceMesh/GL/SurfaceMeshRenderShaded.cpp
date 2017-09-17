@@ -109,10 +109,10 @@ void SurfaceMeshRenderShaded::init(){
                 GLint tex_id = glGetUniformLocation(program.programId(), "colormap");
                 glActiveTexture(GL_TEXTURE0+0);
                 glUniform1i(tex_id, 0);
-            program.release();
+            program.unbind();
         }
-    vao.release();
-    program.release();        
+    vao.unbind();
+    program.unbind();        
 }
 
 void OpenGP::SurfaceMeshRenderShaded::display(){
@@ -129,8 +129,8 @@ void OpenGP::SurfaceMeshRenderShaded::display(){
         
         ///--- Draw data
         glDrawElements(GL_TRIANGLES, i_buffer.size(), GL_UNSIGNED_INT, ZERO_BUFFER_OFFSET);
-    vao.release();
-    program.release();
+    vao.unbind();
+    program.unbind();
 }
 
 Box3 SurfaceMeshRenderShaded::bounding_box(){
