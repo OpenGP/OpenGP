@@ -88,8 +88,8 @@ void SegmentsRenderer::init(){
     _vao.bind();
     program.set_attribute("vpoint", _buffer_vpos);  
     program.set_attribute("vcolor", color); ///< default use object color
-    _vao.release();
-    program.release();        
+    _vao.unbind();
+    program.unbind();        
 }
 
 void SegmentsRenderer::display(){
@@ -97,8 +97,8 @@ void SegmentsRenderer::display(){
     _vao.bind();
     program.bind();
     glDrawArrays(GL_LINES, 0, _data.cols());
-    program.release();
-    _vao.release();
+    program.unbind();
+    _vao.unbind();
 }
 
 Box3 SegmentsRenderer::bounding_box(){

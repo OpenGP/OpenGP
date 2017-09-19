@@ -4,7 +4,7 @@
 
 class SurfaceMeshSubdivideLoop : public OpenGP::SurfaceMeshAlgorithm{
 public:
-    static HEADERONLY_INLINE void exec(SurfaceMesh& mesh);
+    static HEADERONLY_INLINE void exec(OpenGP::SurfaceMesh& mesh);
 };
 
 #ifdef HEADERONLY

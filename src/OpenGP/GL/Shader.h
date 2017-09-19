@@ -43,7 +43,9 @@ public:
     void bind(){ assert(_is_valid); glUseProgram(pid); }
     void unbind(){ glUseProgram(0); }
 
+#if __cplusplus >= 201402L
     [[deprecated]]
+#endif
     void release(){ glUseProgram(0); }
 
     bool is_valid(){ return _is_valid; }

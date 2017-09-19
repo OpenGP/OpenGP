@@ -6,16 +6,16 @@ using namespace OpenGP;
 
 struct MainWindow : public GlfwWindow{
     SurfaceMesh mesh;
-    SurfaceMeshRenderFlat renderer = SurfaceMeshRenderFlat(mesh);
- 
-    MainWindow(int argc, char** argv) : GlfwWindow(__FILE__,400,400){
+    SurfaceMeshRenderFlat renderer;
+
+    MainWindow(int argc, char** argv) : GlfwWindow(__FILE__,400,400), renderer(mesh) {
         if(argc!=2) mFatal("application requires one parameter! e.g. sphere.obj");
         bool success = mesh.read(argv[1]);
         if(!success) mFatal() << "File not found: " << argv[1];
         mesh.update_face_normals(); ///< shading
         this->scene.add(renderer);
     }
-    
+
     bool key_callback(int key, int scancode, int action, int mods) override{
         if( GlfwWindow::key_callback(key, scancode, action, mods) )
             return true;

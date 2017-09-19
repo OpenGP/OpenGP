@@ -16,7 +16,7 @@ protected:
     typedef SurfaceMesh::Face_iterator Face_iterator;
     typedef SurfaceMesh::Vertex_around_vertex_circulator Vertex_around_vertex_circulator;
     typedef SurfaceMesh::Halfedge_around_vertex_circulator Halfedge_around_vertex_circulator;
-    typedef ::OpenGP::SurfaceMesh SurfaceMesh;
+    //typedef ::OpenGP::SurfaceMesh SurfaceMesh; // Causes compile error
     typedef ::OpenGP::Point Point;
     typedef ::OpenGP::Normal Normal;
     typedef ::OpenGP::Scalar Scalar;

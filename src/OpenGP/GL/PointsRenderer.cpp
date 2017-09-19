@@ -43,8 +43,8 @@ void PointsRenderer::init() {
     program.set_attribute("vpoint", _buffer_vpos);
     program.set_attribute("vcolor", color); ///< default use object color
     program.set_attribute("vsize", 3.0f); ///< default point size
-    _vao.release();
-    program.release();
+    _vao.unbind();
+    program.unbind();
 }
 
 void PointsRenderer::display() {
@@ -54,8 +54,8 @@ void PointsRenderer::display() {
     glEnable(GL_PROGRAM_POINT_SIZE);
     glDrawArrays(GL_POINTS, 0, _data.cols());
     glDisable(GL_PROGRAM_POINT_SIZE);
-    program.release();
-    _vao.release();
+    program.unbind();
+    _vao.unbind();
 }
 
 Box3 PointsRenderer::bounding_box() {
@@ -81,15 +81,15 @@ void PointsRenderer::set_colors(const MatMxN& M) {
     program.bind();
     _vao.bind();
     program.set_attribute("vcolor", _buffer_vcolor);
-    _vao.release();
-    program.release();
+    _vao.unbind();
+    program.unbind();
 }
 
 void PointsRenderer::set_vsize(float val) {
     CHECK(program.is_valid());
     program.bind();
     program.set_attribute("vsize", val);
-    program.release();
+    program.unbind();
 }
 
 //=============================================================================

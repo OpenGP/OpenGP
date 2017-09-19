@@ -21,7 +21,9 @@ public:
 
     void bind(){ glBindVertexArray(VAO); }
 
+#if __cplusplus >= 201402L
     [[deprecated]]
+#endif
     void release(){ glBindVertexArray(0); }
 
     void unbind(){ glBindVertexArray(0); }
