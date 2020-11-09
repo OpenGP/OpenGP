@@ -1,3 +1,6 @@
+> :warning: This project is not any longer under development (or being maintained).
+
+
 # OpenGP
 OpenGP is a *C++11* open source library for geometry processing. It has been designed and implemented with a focus on ease of use and performance while maintaining high flexibility. It follows the design principles of <a href="https://opensource.cit-ec.de/projects/surface_mesh">Surface_mesh</a>, a mesh data structure developed by the <a href="http://graphics.uni-bielefeld.de/">Bielefeld Graphics & Geometry Group</a> as a simpler to use version of <a href="http://www.openmesh.org/">OpenMesh</a>. The Reference Manual provides detailed information on the classes and functions provided by OpenGP. Code examples can be found in the respective tutorials. Installation instructions are reported below.
 
